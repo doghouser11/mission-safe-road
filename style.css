@@ -67,29 +67,37 @@ body, html {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: min(840px, 96vw, calc(100vh - 90px));
+  width: min(600px, 96vw);
   max-width: 100%;
   gap: 12px;
 }
 
-/* Visible Game Screen Box: Exact 1:1 Large Square with authentic Retro Arcade / CRT Bezel */
+/* Visible Game Screen Box */
 #game-screen-box {
   position: relative;
   width: 100%;
-  aspect-ratio: 1 / 1; /* EXACT SQUARE */
+  aspect-ratio: 3 / 4; /* Portrait rectangle — better use of screen */
   background: #10141a;
-  border-radius: 24px;
-  overflow: hidden; /* <--- CRITICAL: If image goes outside the square box, it is not visible! */
+  border-radius: 18px;
+  overflow: hidden;
   
-  /* Authentic Retro Arcade / CRT Monitor Bezel Border */
-  border: 12px solid #232834;
-  outline: 4px solid #f59e0b; /* Retro Arcade Golden Amber Accent Piping */
+  border: 6px solid #232834;
+  outline: 3px solid #f59e0b;
   box-shadow: 
-    0 0 0 8px #171b24,
-    0 0 0 12px #363d4e,
-    0 25px 60px rgba(0, 0, 0, 0.8),
-    inset 0 0 28px rgba(0, 0, 0, 0.65),
-    inset 0 0 4px rgba(255, 255, 255, 0.25);
+    0 0 0 4px #171b24,
+    0 15px 40px rgba(0, 0, 0, 0.6),
+    inset 0 0 18px rgba(0, 0, 0, 0.5);
+}
+
+/* On mobile: fill the screen */
+@media (max-width: 768px) {
+  #game-screen-box {
+    aspect-ratio: auto;
+    height: calc(100vh - 100px);
+    border-radius: 12px;
+    border-width: 3px;
+    outline-width: 2px;
+  }
 }
 
 /* Canvas fills the screen box */

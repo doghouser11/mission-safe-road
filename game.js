@@ -459,12 +459,12 @@ const sfx = new SoundEffects();
 const CHALLENGE_POOL = [
   {
     id: 'countdown_light',
-    tag: '🚦 CROSSWALK SIGNAL',
+    tag: '🚦 СИГНАЛ ЗА ПРЕСИЧАНЕ',
     icon: '✋',
     visualIcon: '⏱️',
-    visualText: 'Flashing red hand with only 3 seconds left on countdown!',
+    visualText: 'Мигаща червена ръка с 3 секунди до края!',
     title: 'Сигналът изтича преди пресичане!',
-    description: 'You are on the sidewalk curb ready to cross the street, but the red hand is flashing with only 3 seconds left.',
+    description: 'На бордюра си, готов да пресечеш, но червената ръка мига и остават само 3 секунди.',
     options: [
       { text: 'Чакай безопасно на тротоара за следващия зелен сигнал!', correct: true },
       { text: 'Изтичай колкото можеш по-бързо!', correct: false },
@@ -476,12 +476,12 @@ const CHALLENGE_POOL = [
   },
   {
     id: 'look_left_right',
-    tag: '👀 LOOK LEFT-RIGHT-LEFT',
+    tag: '👀 ПОГЛЕДНИ НАЛЯВО-НАДЯСНО-НАЛЯВО',
     icon: '🚚',
     visualIcon: '👀',
-    visualText: 'Cars are driving across the road. Always check both ways!',
+    visualText: 'Коли минават по пътя. Винаги проверявай и в двете посоки!',
     title: 'Коли се приближават към пешеходната пътека!',
-    description: 'Before stepping off the sidewalk curb onto the zebra crosswalk, what must you always do?',
+    description: 'Преди да стъпиш от бордюра на пешеходната пътека, какво трябва винаги да направиш?',
     options: [
       { text: 'Спри на бордюра: Погледни наляво, надясно, пак наляво и се увери, че шофьорите те виждат.', correct: true },
       { text: 'Стъпи директно без да гледаш — пешеходната пътека дава предимство.', correct: false },
@@ -493,12 +493,12 @@ const CHALLENGE_POOL = [
   },
   {
     id: 'group_crossing',
-    tag: '🚸 CROSSING WITH FRIENDS',
+    tag: '🚸 ПРЕСИЧАНЕ С ПРИЯТЕЛИ',
     icon: '🎒',
     visualIcon: '👥',
     visualText: 'A group от school friends is waiting on the sidewalk to cross!',
     title: 'Група приятели на пешеходната пътека!',
-    description: 'You reach the crosswalk where several students and friends are waiting to cross.',
+    description: 'Стигаш до пешеходната пътека, където няколко ученици и приятели чакат да пресекат.',
     options: [
       { text: 'Пресечете заедно като група, когато сигналът стане безопасен!', correct: true },
       { text: 'Изтичай напред сам.', correct: false },
@@ -510,10 +510,10 @@ const CHALLENGE_POOL = [
   },
   {
     id: 'pedestrian_bridge',
-    tag: '🌉 SAFE CROSSING CHOICE',
+    tag: '🌉 ИЗБОР ЗА БЕЗОПАСНО ПРЕСИЧАНЕ',
     icon: '🌉',
     visualIcon: '🛣️',
-    visualText: 'Busy 4-lane avenue with an overhead pedestrian walkway available!',
+    visualText: 'Натоварен булевард с 4 ленти и пешеходен надлез!',
     title: 'Пешеходен надлез!',
     description: 'This wide street has lots от fast-moving traffic, but there is a dedicated pedestrian bridge over it.',
     options: [
@@ -527,16 +527,16 @@ const CHALLENGE_POOL = [
   },
   {
     id: 'stranger_alert',
-    tag: '🚫 STRANGER SAFETY',
+    tag: '🚫 ВНИМАНИЕ: НЕПОЗНАТИ',
     icon: '🛑',
     visualIcon: '🚙',
-    visualText: 'An unfamiliar car slows down and someone calls over!',
+    visualText: 'Непозната кола забавя и някой те вика!',
     title: 'Непознат вика от спряла кола!',
-    description: 'As you wait on the sidewalk corner, an unfamiliar driver calls out: "Hey kid, come over here!"',
+    description: 'Докато чакаш на ъгъла, непознат шофьор вика: "Хей, ела тук!"',
     options: [
-      { text: 'Ignore them, stay well away on the sidewalk, and cross safely with the walk signal!', correct: true },
-      { text: 'Walk over to the car window to hear what they want.', correct: false },
-      { text: 'Get inside the vehicle to help them.', correct: false }
+      { text: 'Ignore them, stay well away on the sidewalk, and cross safely with the зелен сигнал!', correct: true },
+      { text: 'Отиди до прозореца на колата да чуеш какво искат.', correct: false },
+      { text: 'Качи се в колата да им помогнеш.', correct: false }
     ],
     feedbackCorrect: '🐕 Рони: Умно и безопасно! Никога не се приближавай към непознати коли. Стой на тротоара!',
     feedbackWrong: '🐕 Рони: Никога не се приближавай към непознат, който те вика от кола. Стой на тротоара!',
@@ -544,16 +544,16 @@ const CHALLENGE_POOL = [
   },
   {
     id: 'sidewalk_construction',
-    tag: '🚧 SIDEWALK DETOUR',
+    tag: '🚧 ОБХОДЕН МАРШРУТ',
     icon: '🚧',
     visualIcon: '⚠️',
-    visualText: 'Work zone barrels and cones near the curb ramp!',
+    visualText: 'Ремонтни бъчви и конуси до бордюра!',
     title: 'Строителство до пешеходната пътека!',
-    description: 'The regular curb ramp has repair cones and a sign pointing to the designated safe walkway detour.',
+    description: 'Обичайната рампа на бордюра има ремонтни конуси и знак, сочещ към безопасен обходен маршрут.',
     options: [
-      { text: 'Follow the marked pedestrian detour path across the street.', correct: true },
-      { text: 'Walk into live car lanes next to oncoming traffic.', correct: false },
-      { text: 'Climb over the construction fence and barrels.', correct: false }
+      { text: 'Следвай обозначения пешеходен обходен маршрут.', correct: true },
+      { text: 'Влез в активните ленти за коли.', correct: false },
+      { text: 'Прескочи строителната ограда и бъчвите.', correct: false }
     ],
     feedbackCorrect: '🐕 Рони: Страхотна преценка! Винаги следвай обозначените пешеходни обходни маршрути!',
     feedbackWrong: '🐕 Рони: Никога не стъпвай в активни ленти за коли! Следвай безопасния обходен маршрут.',
@@ -1163,7 +1163,7 @@ class PedestrianGame {
         zone.hasCrossingGuard = false;
         zone.hasBridge = false;
         zone.noCrosswalk = false;
-        zone.signalState = 'STOP';
+        zone.signalState = 'СТОП';
 
         zone.groupOf2 = {
           zoneId: zone.id,
@@ -1200,7 +1200,7 @@ class PedestrianGame {
         zone.hasGroupПресичане = false;
         zone.hasBridge = false;
         zone.noCrosswalk = false;
-        zone.signalState = 'STOP';
+        zone.signalState = 'СТОП';
 
         zone.crossingGuard = {
           zoneId: zone.id,
@@ -1239,7 +1239,7 @@ class PedestrianGame {
         zone.hasGroupПресичане = false;
         zone.hasCrossingGuard = false;
         // Sometimes solid STOP hand, sometimes FLASHING blinking light!
-        zone.initialSignalState = Math.random() < 0.5 ? 'STOP' : 'FLASHING';
+        zone.initialSignalState = Math.random() < 0.5 ? 'СТОП' : 'FLASHING';
         zone.signalState = zone.initialSignalState;
         zone.pedestrianButtonPressed = false;
       }
@@ -1247,8 +1247,8 @@ class PedestrianGame {
 
     // Generate Random Strangers with Dogs across intermediate sidewalk blocks [1 to numTrials-1]:
     const dogPool = [
-      { name: 'Елена и Бисквитка', spriteIndex: 3, decision: 'THUMBS_UP', speechText: 'Sure! You can pet Biscuit! Friendly pup! 🐶' },
-      { name: 'Давид и Рекс', spriteIndex: 5, decision: 'THUMBS_DOWN', speechText: 'No, please don’t pet! Rex is nervous! Walk away! ⚠️' },
+      { name: 'Елена и Бисквитка', spriteIndex: 3, decision: 'THUMBS_UP', speechText: 'Разбира се! Погали Бисквитка! 🐶' },
+      { name: 'Давид и Рекс', spriteIndex: 5, decision: 'THUMBS_DOWN', speechText: 'Не, моля! Рекс е нервен! Отдалечи се! ⚠️' },
       { name: 'Мила и Фъстъче', spriteIndex: 0, decision: 'THUMBS_UP', speechText: 'Обича приятели! Погали го нежно! 🐕' },
       { name: 'Виктор и Шаро', spriteIndex: 1, decision: 'THUMBS_DOWN', speechText: 'Гръ! Днес е сърдит! Моля, отдръпни се! 🛑' },
       { name: 'Хлое и Маргаритка', spriteIndex: 2, decision: 'THUMBS_UP', speechText: 'Много е кротка! Маха ти с опашка! 🌸' },
@@ -2352,7 +2352,7 @@ class PedestrianGame {
               }
             }
 
-            // B. WRONG TIME CHECK: Player walks forward into the road while signal is STOP!
+            // B. WRONG TIME CHECK: Player walks forward into the road while signal is СТОП!
             if (this.player.y < currentZone.southCurbY && this.player.y > currentZone.northCurbY) {
               this.triggerPlayerFall(currentZone);
               return;
@@ -2732,7 +2732,7 @@ class PedestrianGame {
 
     // Reset signal state on mistake so player must follow the safe sequence again
     if (zone.hasCrossingGuard) {
-      zone.signalState = 'STOP';
+      zone.signalState = 'СТОП';
       zone.waitTime = 0;
       zone.walkGranted = false;
       const guard = zone.crossingGuard || this.crossingGuard;
@@ -2750,7 +2750,7 @@ class PedestrianGame {
       zone.waitTime = 0;
       zone.walkGranted = false;
     } else {
-      zone.signalState = zone.initialSignalState || (Math.random() < 0.5 ? 'STOP' : 'FLASHING');
+      zone.signalState = zone.initialSignalState || (Math.random() < 0.5 ? 'СТОП' : 'FLASHING');
       zone.waitTime = 0;
       zone.walkGranted = false;
       zone.pedestrianButtonPressed = false;
@@ -2877,7 +2877,7 @@ class PedestrianGame {
       g3.state = 'WAITING';
     }
 
-    zone.signalState = 'STOP';
+    zone.signalState = 'СТОП';
     zone.waitTime = 0;
     zone.walkGranted = false;
 
@@ -2891,7 +2891,7 @@ class PedestrianGame {
       }
     });
 
-    this.showInWorldFeedback('💥 DON’T RUN AHEAD! 🛑 The group stopped! Cross together!' + chancesMsg, '#d32f2f');
+    this.showInWorldFeedback('💥 🐕 Рони: Не тичай напред! Групата спря! Пресичайте заедно!' + chancesMsg, '#d32f2f');
   }
 
   triggerPlayerFallFromDangerousRoad(zone) {
@@ -3032,7 +3032,7 @@ class PedestrianGame {
     // Keep player on the path center away from the stranger and van
     this.player.x = this.pathCenterX;
 
-    this.showInWorldFeedback('💥 STRANGER DANGER! 🛑 Never approach strangers near vans!' + chancesMsg, '#d32f2f');
+    this.showInWorldFeedback('💥 🐕 Рони: Никога не се приближавай до непознати край бусове!' + chancesMsg, '#d32f2f');
   }
 
   updateGroupCrossing(dt) {
@@ -3088,7 +3088,7 @@ class PedestrianGame {
           sfx.correct();
           this.safetyStars++;
           if (this.starCountEl) this.starCountEl.textContent = this.safetyStars;
-          this.showInWorldFeedback('⭐ Safe pedestrian! You respected the owner and walked away! 👍', '#2e7d32');
+          this.showInWorldFeedback('⭐ Браво! Уважи собственика и се отдалечи! 👍', '#2e7d32');
         }
       }
     });
@@ -3113,7 +3113,7 @@ class PedestrianGame {
         this.safetyStars++;
         if (this.starCountEl) this.starCountEl.textContent = this.safetyStars;
         sfx.correct();
-        this.showInWorldFeedback('⭐ Smart pedestrian! You avoided the stranger near the van! 👍', '#2e7d32');
+        this.showInWorldFeedback('⭐ Браво! Заобиколи непознатия край буса! 👍', '#2e7d32');
       }
     });
   }
@@ -3177,7 +3177,7 @@ class PedestrianGame {
         seq.heartTimer = 0;
         this.player.pettingFrame = 0;
         sfx.dogHappy();
-        this.showInWorldFeedback('🐾 Petting gently... Good doggy! ❤️', '#2e7d32');
+        this.showInWorldFeedback('🐾 Галиш нежно... Добро кученце! ❤️', '#2e7d32');
       }
     } else if (seq.stage === 'PETTING') {
       seq.timer += dt;
@@ -3223,7 +3223,7 @@ class PedestrianGame {
           if (this.starCountEl) this.starCountEl.textContent = this.safetyStars;
         }
         sfx.correct();
-        this.showInWorldFeedback('🎉 The dog loved being petted! Great job! ⭐🐾', '#2e7d32');
+        this.showInWorldFeedback('🎉 Кучето обича да го галят! Страхотно! ⭐🐾', '#2e7d32');
         this.player.isPettingDog = false;
         this.pettingSequence = null;
         this.state = 'WALKING_SIDEWALK';
@@ -3256,11 +3256,11 @@ class PedestrianGame {
           sfx.dogHappy();
           this.safetyStars++;
           if (this.starCountEl) this.starCountEl.textContent = this.safetyStars;
-          this.showInWorldFeedback('👍 Owner said YES! Press SPACE or PET DOG to pet! 🐾', '#2e7d32');
+          this.showInWorldFeedback('👍 Собственикът каза ДА! Натисни SPACE за да галиш! 🐾', '#2e7d32');
         } else {
           nearest.status = 'THUMBS_DOWN';
           sfx.dogWarning();
-          this.showInWorldFeedback('🛑 Owner said NO! Step away safely!', '#d32f2f');
+          this.showInWorldFeedback('🛑 Собственикът каза НЕ! Отдалечи се!', '#d32f2f');
         }
       } else if (nearest.status === 'THUMBS_UP') {
         this.startPettingDog(nearest);
@@ -3309,11 +3309,11 @@ class PedestrianGame {
         sfx.buttonPress();
         this.safetyStars++;
         if (this.starCountEl) this.starCountEl.textContent = this.safetyStars;
-        this.showInWorldFeedback('🛎️ BUTTON PRESSED! "Wait to cross!" ⏳', '#f57c00');
+        this.showInWorldFeedback('🛎️ БУТОНЪТ Е НАТИСНАТ! Чакай за зелено! ⏳', '#f57c00');
         return true;
       } else {
         sfx.buttonPress();
-        this.showInWorldFeedback('⏳ Signal already activated! Wait on sidewalk for green WALK sign!', '#f57c00');
+        this.showInWorldFeedback('⏳ Сигналът вече е активиран! Чакай на тротоара за зелено!', '#f57c00');
         return true;
       }
     }
@@ -4231,19 +4231,19 @@ class PedestrianGame {
             const badgeX = boxX + boxW / 2;
 
             let badgeBg = '#d32f2f';
-            let badgeIcon = '🛑 WAIT ON CURB';
+            let badgeIcon = '🛑 ЧАКАЙ НА БОРДЮРА';
             if (isWalk) {
               badgeBg = '#2e7d32';
-              badgeIcon = '🟢 SAFE TO WALK';
+              badgeIcon = '🟢 ПРЕСЕЧИ!';
             } else if (zone.trialType === 'TRAFFIC_LIGHT' && !zone.pedestrianButtonPressed) {
               badgeBg = '#d32f2f';
-              badgeIcon = '🛑 PRESS BUTTON TO CROSS [SPACE]';
+              badgeIcon = '🛑 НАТИСНИ БУТОНА [SPACE]';
             } else if (isFlashing) {
               badgeBg = '#f57c00';
-              badgeIcon = '⚠️ SIGNAL REQUESTED: WAIT FOR WALK!';
+              badgeIcon = '⚠️ ЧАКАЙ ЗЕЛЕНО!';
             } else {
               badgeBg = '#f57c00';
-              badgeIcon = '⏳ BUTTON PRESSED: WAIT FOR WALK!';
+              badgeIcon = '⏳ BUTTON PRESSED: ЧАКАЙ ЗЕЛЕНО!';
             }
 
             // Draw Badge Pill
@@ -4355,17 +4355,17 @@ class PedestrianGame {
       // Floating Guard Status Speech Badge above Guard's Head
       const distToPlayer = Math.abs(this.player.y - guard.y);
       if (distToPlayer < 550 && guard.state !== 'DONE') {
-        let badgeText = '🛑 GUARD: "Wait on curb!"';
+        let badgeText = '🛑 ПАЗАЧ: "Чакай на бордюра!"';
         let badgeBg = '#d32f2f';
 
         if (guard.state === 'STEPPING_OUT') {
-          badgeText = '🚸 GUARD: "Halting traffic!"';
+          badgeText = '🚸 ПАЗАЧ: "Спирам колите!"';
           badgeBg = '#f57c00';
         } else if (guard.state === 'WAVING_CROSS') {
-          badgeText = '🟢 GUARD: "Safe to cross! Walk now! 🚶"';
+          badgeText = '🟢 ПАЗАЧ: "Безопасно е! Пресечи! 🚶"';
           badgeBg = '#2e7d32';
         } else if (guard.state === 'RETURNING') {
-          badgeText = '👍 GUARD: "Great job crossing!"';
+          badgeText = '👍 ПАЗАЧ: "Браво, пресече безопасно!"';
           badgeBg = '#1976d2';
         }
 
@@ -4452,13 +4452,13 @@ class PedestrianGame {
 
         // Group Status Speech Bubble
         if (g2.state === 'STOPPED') {
-          this.drawSpeechBubble(ctx, 0, -g2.drawH / 2 - 20, "🛑 'Don't run ahead!'", '#d32f2f');
+          this.drawSpeechBubble(ctx, 0, -g2.drawH / 2 - 20, "🛑 'Не тичай напред!'", '#d32f2f');
         } else if (g2.state === 'CROSSING') {
-          this.drawSpeechBubble(ctx, 0, -g2.drawH / 2 - 20, "👥 'Пресичане together!'", '#1976d2');
+          this.drawSpeechBubble(ctx, 0, -g2.drawH / 2 - 20, "👥 'Пресичаме заедно!'", '#1976d2');
         } else if (g2.state === 'WAITING' && Math.abs(this.player.y - g2.y) < 140) {
-          this.drawSpeechBubble(ctx, 0, -g2.drawH / 2 - 20, "👥 'Wait with us!'", '#546e7a');
+          this.drawSpeechBubble(ctx, 0, -g2.drawH / 2 - 20, "👥 'Чакай с нас!'", '#546e7a');
         } else if (g2.state === 'SAFELY_CROSSED') {
-          this.drawSpeechBubble(ctx, 0, -g2.drawH / 2 - 20, "🎉 'Crossed safely!'", '#2e7d32');
+          this.drawSpeechBubble(ctx, 0, -g2.drawH / 2 - 20, "🎉 'Пресякохме безопасно!'", '#2e7d32');
         }
 
         ctx.restore();
@@ -4493,13 +4493,13 @@ class PedestrianGame {
 
         // Group Status Speech Bubble
         if (g3.state === 'STOPPED') {
-          this.drawSpeechBubble(ctx, 0, -g3.drawH / 2 - 20, "⚠️ 'Stay with the group!'", '#d32f2f');
+          this.drawSpeechBubble(ctx, 0, -g3.drawH / 2 - 20, "⚠️ 'Стой с групата!'", '#d32f2f');
         } else if (g3.state === 'CROSSING') {
-          this.drawSpeechBubble(ctx, 0, -g3.drawH / 2 - 20, "🚶 'Walk, don't run!'", '#2e7d32');
+          this.drawSpeechBubble(ctx, 0, -g3.drawH / 2 - 20, "🚶 'Ходи, не тичай!'", '#2e7d32');
         } else if (g3.state === 'WAITING' && Math.abs(this.player.y - g3.y) < 140) {
-          this.drawSpeechBubble(ctx, 0, -g3.drawH / 2 - 20, "👥 'Wait for the signal!'", '#546e7a');
+          this.drawSpeechBubble(ctx, 0, -g3.drawH / 2 - 20, "👥 'Чакай сигнала!'", '#546e7a');
         } else if (g3.state === 'SAFELY_CROSSED') {
-          this.drawSpeechBubble(ctx, 0, -g3.drawH / 2 - 20, "⭐ 'Great teamwork!'", '#1976d2');
+          this.drawSpeechBubble(ctx, 0, -g3.drawH / 2 - 20, "⭐ 'Страхотна работа в екип!'", '#1976d2');
         }
 
         ctx.restore();
@@ -4630,14 +4630,14 @@ class PedestrianGame {
             ctx,
             van.strangerX,
             van.strangerY - 42 + bounce,
-            '🍬 "Hey kid! Come check out my van!"',
+            '🍬 "Хей, ела да видиш нещо!"',
             '#d32f2f'
           );
 
           // Overhead Alert Pill to clearly instruct player
           const pillY = van.y - van.drawH / 2 - 28;
           ctx.save();
-          const pillText = '⚠️ STRANGER DANGER! WALK AROUND & AVOID! 🛑';
+          const pillText = '⚠️ ОПАСНОСТ! ЗАОБИКОЛИ И ИЗБЯГВАЙ! 🛑';
           ctx.font = 'bold 11px Fredoka, sans-serif';
           const textW = ctx.measureText(pillText).width;
           const pillW = textW + 24;
@@ -4725,7 +4725,7 @@ class PedestrianGame {
         ctx.fillStyle = '#ffffff';
         ctx.font = 'bold 11px Fredoka, sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('🌉 SAFE ON FOOTBRIDGE!', bridge.x, bannerY - 1);
+        ctx.fillText('🌉 БЕЗОПАСНО НА НАДЛЕЗА!', bridge.x, bannerY - 1);
       }
 
       ctx.restore();
@@ -5110,7 +5110,7 @@ class PedestrianGame {
       ctx.font = 'bold 9px Fredoka, sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText('🌉 ON FOOTBRIDGE', 0, badgeY);
+      ctx.fillText('🌉 НА НАДЛЕЗА', 0, badgeY);
       ctx.restore();
     }
 
@@ -5261,7 +5261,7 @@ class PedestrianGame {
 
       if (collectedCount >= this.shoppingList.length) {
         sfx.fanfare();
-        this.showInWorldFeedback('🎉 Shopping list complete! Go pay at the Cashier!', '#ca8a04');
+        this.showInWorldFeedback('', '#ca8a04');
       } else {
         this.showInWorldFeedback(`✨ Found: ${item.name}! (${collectedCount}/${this.shoppingList.length})`, '#16a34a');
       }
