@@ -1,0 +1,8 @@
+{
+  "name": "pazigrad",
+  "version": "1.0.0",
+  "description": "Пазиград — Безопасният път. Образователна игра за пътна безопасност за деца.",
+  "scripts": {
+    "start": "node server.js"
+  }
+}

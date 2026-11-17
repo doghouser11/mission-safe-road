@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Пазиград — Безопасният път | Образователна игра за деца</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <meta name="description" content="Пазиград — безплатна образователна игра за пътна безопасност за деца 5-8 години. Научи как да пресичаш безопасно!">
+  <meta name="keywords" content="пътна безопасност, деца, игра, образование, пешеходци, светофар, пресичане">
+  <meta property="og:title" content="Пазиград — Безопасният път">
+  <meta property="og:description" content="Безплатна образователна игра за пътна безопасност за деца.">
+  <meta property="og:type" content="website">
+</head>
+<body>
+  <div id="game-console-wrapper">
+    <div id="game-cabinet">
+      <!-- Visible Game Screen Box (In the middle of the screen) -->
+      <div id="game-screen-box">
+        <!-- Game Canvas -->
+        <canvas id="gameCanvas"></canvas>
+
+        <!-- Top HUD Controls (Safety Chances Left, Info Guide & Sound Right) -->
+        <div id="game-hud" class="hud-layer">
+          <div class="hud-left-group">
+            <div id="safety-chances-pill" class="hud-item safety-chances" title="3 опита: Бъди внимателен и спазвай правилата!">
+              <span class="hud-label">Безопасност:</span>
+              <span id="safety-chances-display" class="chances-icons">
+                <span class="chance-heart active" id="chance-heart-1">❤️</span>
+                <span class="chance-heart active" id="chance-heart-2">❤️</span>
+                <span class="chance-heart active" id="chance-heart-3">❤️</span>
+              </span>
+            </div>
+          </div>
+          <div class="hud-right-group">
+            <button id="info-btn" class="hud-btn retro-hud-btn" title="Как се играе">
+              ℹ️
+            </button>
+            <button id="music-toggle-btn" class="hud-btn retro-hud-btn" title="Музика вкл/изкл">
+              🎵
+            </button>
+            <button id="sound-toggle-btn" class="hud-btn retro-hud-btn" title="Звуци вкл/изкл">
+              🔊
+            </button>
+          </div>
+        </div>
+
+        
+          </div>
+          <div id="store-goal-banner" class="store-goal-banner hidden">
+            
+          </div>
+        </div>
+
+    <!-- On-Screen Touch Controls (D-Pad Left + Action Button Right) -->
+    <div id="walking-controls" class="walking-controls hidden">
+      <!-- Left Side: 4-Way Directional D-Pad -->
+      <div class="touch-dpad-container" id="touch-dpad">
+        <button id="btn-walk-up" class="dpad-btn dpad-up" aria-label="Нагоре" title="Напред (W / ↑)">
+          <span class="dpad-icon">▲</span>
+        </button>
+        <div class="dpad-horizontal-row">
+          <button id="btn-walk-left" class="dpad-btn dpad-left" aria-label="Наляво" title="Наляво (A / ←)">
+            <span class="dpad-icon">◀</span>
+          </button>
+          <div class="dpad-center-hub"></div>
+          <button id="btn-walk-right" class="dpad-btn dpad-right" aria-label="Надясно" title="Надясно (D / →)">
+            <span class="dpad-icon">▶</span>
+          </button>
+        </div>
+        <button id="btn-walk-down" class="dpad-btn dpad-down" aria-label="Надолу" title="Назад (S / ↓)">
+          <span class="dpad-icon">▼</span>
+        </button>
+      </div>
+
+      <!-- Right Side: Big Interactive Action Button (Spacebar replacement on touch screen) -->
+      <div class="touch-action-container" id="touch-action">
+        <button id="btn-touch-action" class="touch-action-btn" aria-label="Действие" title="Действие (SPACEBAR)">
+          <span id="touch-action-icon" class="action-icon">🛎️</span>
+          <span id="touch-action-label" class="action-label">ДЕЙСТВИЕ</span>
+          <span class="action-subtext">SPACE</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Start Menu Screen Overlay (Retro Handheld RPG Style) -->
+    <div id="start-menu" class="screen-overlay">
+      <div class="menu-card animate-pop retro-menu-frame">
+        <div class="retro-header-banner">
+          <div class="title-badge retro-title-badge">★ ПАЗИГРАД ★</div>
+          <h1 class="game-title retro-game-title">Пазиград<br><span class="subtitle">Безопасният път!</span></h1>
+          <p class="menu-desc retro-menu-desc">Помогни на героя си да стигне безопасно до училище!</p>
+        </div>
+
+        <!-- Level Mode Selection -->
+        <div class="level-select-section">
+          <h3 class="retro-section-label"><span>1.</span> ИЗБЕРИ ПРИКЛЮЧЕНИЕ:</h3>
+          <div class="level-options">
+            <button class="level-card selected" data-level="1" id="select-level-1">
+              <div class="level-badge-tag">ПРИКЛЮЧЕНИЕ</div>
+              <div class="level-icon-box">🏫</div>
+              <div class="level-card-info">
+                <span class="level-title">Път до училище</span>
+                <span class="level-subtitle">Стигни безопасно до училище!</span>
+              </div>
+            </button>
+
+            
+
+            
+          </div>
+        </div>
+
+        <!-- Character Selection -->
+        <div class="character-select-section">
+          <h3 class="retro-section-label"><span>2.</span> ИЗБЕРИ ГЕРОЙ:</h3>
+          <div class="character-options">
+            <button class="char-card selected" data-char="boy" id="select-boy">
+              <div class="char-avatar-preview boy-avatar">
+                <img src="assets/characters/boy/face.png" alt="Гого (Момче)" class="char-img-preview">
+              </div>
+              <div class="char-meta">
+                <span class="char-cursor">▶</span>
+                <span class="char-name">Гого</span>
+              </div>
+            </button>
+
+            <button class="char-card" data-char="girl" id="select-girl">
+              <div class="char-avatar-preview girl-avatar">
+                <img src="assets/characters/girl/face.png" alt="Вики (Момиче)" class="char-img-preview">
+              </div>
+              <div class="char-meta">
+                <span class="char-cursor">▶</span>
+                <span class="char-name">Вики</span>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Destination Selection Preview -->
+        <div class="destination-select-section">
+          <div class="destination-card retro-dest-card">
+            <span class="dest-badge">МИСИЯ</span>
+            <div class="dest-info">
+              <span id="menu-dest-icon" class="dest-icon">🏫</span>
+              <div>
+                <strong id="menu-dest-title">Училището на Пазиград</strong>
+                <p id="menu-dest-desc">Днес е учебен ден! Трябва да стигнеш безопасно до училище!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button id="start-game-btn" class="big-action-btn pulse-glow retro-start-btn">
+          <span>▶ СТАРТ!</span>
+        </button>
+
+        <!-- За родители -->
+        <div class="parent-info-section" style="margin-top:16px; padding:14px 18px; background:rgba(255,255,255,0.08); border-radius:14px; border:1px solid rgba(255,255,255,0.15);">
+          <h3 style="margin:0 0 8px; font-size:15px; color:#ffd54f;">👨‍👩‍👧 За родители и учители</h3>
+          <p style="margin:0 0 6px; font-size:12px; line-height:1.5; color:rgba(255,255,255,0.85);">
+            „Пазиград" е образователна игра за деца 5–8 години, базирана на реални правила за пътна безопасност. Кученцето Рони 🐕 помага на децата, когато направат грешка — обяснява правилното действие вместо да наказва.
+          </p>
+          <p style="margin:0 0 6px; font-size:11px; line-height:1.4; color:rgba(255,255,255,0.7);">
+            🔒 Без реклами · 🔒 Без събиране на данни · 🔒 Без регистрация<br>
+            💾 Напредъкът се запазва само на устройството
+          </p>
+          <p style="margin:0; font-size:11px; color:#ffab40;">
+            ⚠️ Допълващ образователен инструмент, не заместител на обучението с възрастен. Препоръчваме да играете заедно с детето и да обсъждате наученото.
+          </p>
+        </div>
+
+        <!-- Quick Access Toolbar -->
+        <div class="menu-help-toolbar">
+          <button id="menu-guide-btn" class="menu-toolbar-btn" title="Как се играе">
+            📖 Как се играе
+          </button>
+          <button id="menu-music-btn" class="menu-toolbar-btn" title="Музика">
+            🎵 Музика: ВКЛ
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Picture-Based Pedestrian Signal Decision Modal -->
+    <div id="challenge-modal" class="screen-overlay hidden">
+      <div class="signal-challenge-card animate-scale">
+        <!-- Visual Signal Display Unit using user signal images -->
+        <div class="pedestrian-signal-display">
+          <div class="signal-frame-wrapper">
+            <img id="signal-display-img" src="assets/ui/signals/signal-stop-hand.png" alt="Pedestrian Crossing Signal" class="signal-display-img">
+          </div>
+        </div>
+
+        <!-- Big Picture-Based Choice Action Buttons (For kids who can't read) -->
+        <div class="picture-actions-grid">
+          <!-- Button 1: ЧАКАЙ (Red) -->
+          <button class="action-choice-btn btn-stay" id="btn-choice-stay">
+            <div class="btn-visual-icon">
+              <span class="choice-symbol">🛑</span>
+              <span class="choice-figure">🧍</span>
+            </div>
+            <span class="choice-title">ЧАКАЙ</span>
+            <span class="choice-subtext">Чакай на тротоара</span>
+          </button>
+
+          <!-- Button 2: ПРЕСЕЧИ (Green) -->
+          <button class="action-choice-btn btn-walk" id="btn-choice-walk">
+            <div class="btn-visual-icon">
+              <span class="choice-symbol">🟢</span>
+              <span class="choice-figure">🚶</span>
+            </div>
+            <span class="choice-title">ПРЕСЕЧИ</span>
+            <span class="choice-subtext">Пресечи на зебрата</span>
+          </button>
+        </div>
+
+        <!-- Visual Feedback Indicator -->
+        <div id="visual-feedback-box" class="visual-feedback hidden">
+          <span id="feedback-symbol" class="feedback-large-symbol">⭐</span>
+          <div id="feedback-msg-text" class="feedback-msg">Браво!</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Victory / Destination Reached Screen -->
+    <div id="victory-modal" class="screen-overlay hidden">
+      <div class="victory-card animate-bounce">
+        <div class="victory-confetti-banner">🎉 СТИГНА БЕЗОПАСНО! 🎉</div>
+        <div class="victory-icon" id="victory-dest-icon">🏫</div>
+        <h2 class="victory-title" id="victory-title">Стигна до училище! 🏫</h2>
+        <p class="victory-sub" id="victory-sub">Направи правилните избори на всяка крачка от пътя!</p>
+
+        <div class="victory-stats-card">
+          <div class="stat-box">
+            <span class="stat-num" id="stat-stars">5 / 5</span>
+            <span class="stat-label">Звезди ⭐</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-num" id="stat-challenges">5</span>
+            <span class="stat-label">Безопасни пресичания 🚸</span>
+          </div>
+        </div>
+
+        <div class="badge-award">
+          <div class="medal-icon">🏅</div>
+          <div class="medal-text">
+            <strong>Сертифициран герой на пътната безопасност!</strong>
+            <span>Овладя светофари, пешеходни пътеки и внимание на пътя!</span>
+          </div>
+        </div>
+
+        <button id="play-again-btn" class="big-action-btn pulse-glow">
+          <span>ИГРАЙ ПЪТНОВО! 🔄</span> 🔄
+        </button>
+      </div> <!-- /#victory-card -->
+    </div> <!-- /#victory-modal -->
+
+    
+
+    
+
+    
+
+    <!-- Game Over / Safety Practice Reset Screen -->
+    <div id="game-over-modal" class="screen-overlay hidden">
+      <div class="practice-card animate-bounce">
+        <div class="practice-badge">🚦 ВРЕМЕ ЗА УПРАЖНЕНИЕ! 🚸</div>
+        <div class="practice-icon" id="practice-icon">🛑</div>
+        <h2 class="practice-title" id="practice-title">Време е за ново начало!</h2>
+        <p class="practice-sub" id="practice-sub">
+          Дори най-добрите пешеходци правят грешки! Безопасността изисква практика. Нека опитаме отново!
+        </p>
+
+        <div class="safety-tip-card">
+          <div class="tip-header">💡 🐕 РОНИ КАЗВА:</div>
+          <p id="practice-tip-text" class="tip-text">
+            Винаги спирай на бордюра и чакай зелената светлина, преди да стъпиш на пешеходната пътека!
+          </p>
+        </div>
+
+        <div class="victory-stats-card">
+          <div class="stat-box">
+            <span class="stat-num" id="practice-stat-crossings">0 / 5</span>
+            <span class="stat-label">Пресичания 🚸</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-num" id="practice-stat-stars">0</span>
+            <span class="stat-label">Звезди ⭐</span>
+          </div>
+        </div>
+
+        <button id="practice-again-btn" class="big-action-btn pulse-glow practice-btn">
+          <span>ОПИТАЙ ОТНОВО! 🔄</span> 🔄
+        </button>
+      </div> <!-- /.practice-card -->
+    </div> <!-- /#game-over-modal -->
+
+    <!-- Info Page Modal (Game Mechanics, Signal Guide, Cybertruck Secret & Challenges) -->
+    <div id="info-modal" class="screen-overlay hidden">
+      <div class="info-card animate-pop">
+        <button id="btn-close-info" class="modal-close-x" title="Close Guide">✕</button>
+
+        <div class="info-header">
+          <div class="title-badge">📖 КАК СЕ ИГРАЕ</div>
+          <h2 class="info-main-title">Ръководство за пътна безопасност</h2>
+          <p class="info-subtitle">Научи правилата за пресичане и как работят светофарите!</p>
+        </div>
+
+        <div class="info-content-scroll">
+          <!-- Section 1: Game Mechanics -->
+          <div class="info-section">
+            <h3 class="section-title"><span>🎮</span> Как се играе</h3>
+            <div class="info-mechanics-grid">
+              <div class="mechanic-item">
+                <div class="mechanic-icon-box">
+                  <img src="assets/characters/boy/face.png" alt="Leo" class="mechanic-avatar">
+                  <img src="assets/characters/girl/face.png" alt="Maya" class="mechanic-avatar">
+                </div>
+                <div class="mechanic-text">
+                  <strong>Движение (мишка и клавиши)</strong>
+                  <p><strong>Кликни и задръж</strong> навсякъде на екрана, за да се движи героят ти! Можеш и с <strong>[W/A/S/D]</strong>, <strong>[стрелки]</strong> или бутоните на екрана.</p>
+                </div>
+              </div>
+
+              <div class="mechanic-item">
+                <div class="mechanic-icon-box yellow-curb-icon">
+                  🟡
+                </div>
+                <div class="mechanic-text">
+                  <strong>Стой на тротоара и чакай на бордюра</strong>
+                  <p>Винаги ходи по сивия тротоар. Когато стигнеш кръстовище, <strong>СПРИ зад жълтите плочки</strong> и провери сигнала!</p>
+                </div>
+              </div>
+
+              <div class="mechanic-item">
+                <div class="mechanic-icon-box" style="background:#ffb300; color:#fff; font-size:22px;">
+                  🛎️
+                </div>
+                <div class="mechanic-text">
+                  <strong>Натисни бутона за пресичане [SPACE]</strong>
+                  <p>На кръстовища отиди до жълтия бутон на стълба и натисни <strong>[SPACE]</strong> (или го тапни), за да заявиш пресичане! После чакай на бордюра, докато светне зелено!</p>
+                </div>
+              </div>
+
+              <div class="mechanic-item">
+                <div class="mechanic-icon-box fall-icon">
+                  💥
+                </div>
+                <div class="mechanic-text">
+                  <strong>Не пресичай в грешен момент!</strong>
+                  <p>Ако изтичаш на пътя докато сигналът е СТОП или МИГА, героят ти ще се спъне и ще седне на земята!</p>
+                </div>
+              </div>
+
+              <div class="mechanic-item">
+                <div class="mechanic-icon-box" style="background:#ffebee; color:#d32f2f; font-size:22px;">
+                  ❤️
+                </div>
+                <div class="mechanic-text">
+                  <strong>3 опита за безопасност</strong>
+                  <p>Имаш <strong>3 опита (❤️ ❤️ ❤️)</strong>. Ако направиш 3 грешки, ще направиш <strong>кратка пауза</strong> и ще повториш правилата, преди да опиташ отново!</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 2: How The Signals Work (Using Actual Images!) -->
+          <div class="info-section">
+            <h3 class="section-title"><span>🚦</span> Как работят сигналите</h3>
+            <div class="info-signals-grid">
+              <!-- Stop Hand -->
+              <div class="signal-card stop-theme">
+                <div class="signal-image-frame stop-frame">
+                  <img src="assets/ui/signals/signal-stop-hand.png" alt="Solid Stop Hand Sign" class="signal-guide-img">
+                </div>
+                <div class="signal-badge stop">🛑 СТОП</div>
+                <p class="signal-rule"><strong>ЧАКАЙ НА ТРОТОАРА:</strong> Колите имат зелено. Стой безопасно на бордюра и чакай търпеливо.</p>
+              </div>
+
+              <!-- Flashing Walk Sign -->
+              <div class="signal-card flashing-theme">
+                <div class="signal-image-frame flashing-glow">
+                  <img src="assets/ui/signals/signal-walk.png" alt="Flashing Walk Sign" class="signal-guide-img blink-img">
+                </div>
+                <div class="signal-badge flashing">⏳ МИГАЩ СИГНАЛ</div>
+                <p class="signal-rule"><strong>НЕ ЗАПОЧВАЙ ДА ПРЕСИЧАШ:</strong> Времето за пресичане изтича! Трябва да чакаш на бордюра:<br>
+                <span class="cycle-pill">1. Чакай при мигане ⏳</span> ➡️ 
+                <span class="cycle-pill">2. Чакай при СТОП 🛑</span> ➡️ 
+                <span class="cycle-pill">3. Пресечи при зелено 🟢</span></p>
+              </div>
+
+              <!-- Solid Walk -->
+              <div class="signal-card walk-theme">
+                <div class="signal-image-frame walk-glow">
+                  <img src="assets/ui/signals/signal-walk.png" alt="Solid Walk Sign" class="signal-guide-img">
+                </div>
+                <div class="signal-badge walk">🟢 ПРЕСЕЧИ</div>
+                <p class="signal-rule"><strong>БЕЗОПАСНО Е ДА ПРЕСЕЧЕШ:</strong> Колите спират на стоп-линията! Пресечи спокойно по зебрата до отсрещния тротоар.</p>
+              </div>
+            </div>
+          </div>
+
+          
+          </div>
+
+          <!-- Section 4: Upcoming Challenges (Coming Soon) -->
+          <div class="info-section">
+            <h3 class="section-title"><span>🚸</span> Специални предизвикателства</h3>
+            <p class="section-sub">Нови приключения за пътна безопасност:</p>
+            <div class="challenges-preview-grid">
+              <!-- ACTIVE INTERДЕЙСТВИЕ 1: Училищен пазач -->
+              <div class="challenge-preview-card active-card">
+                <div class="challenge-img-box">
+                  <img src="assets/characters/crossing_guard/guard_1.png" alt="Училищен пазач" class="challenge-thumb-img guard-active-img">
+                  <span class="active-badge">АКТИВНО</span>
+                </div>
+                <div class="challenge-info">
+                  <h4>🚸 Училищен пазач</h4>
+                  <p>Чакай на тротоара. Когато пазачът излезе със знака СТОП и ти махне да пресечеш — тръгни!</p>
+                </div>
+              </div>
+
+              <!-- ACTIVE INTERДЕЙСТВИЕ 2: Group Crossing -->
+              <div class="challenge-preview-card active-card">
+                <div class="challenge-img-box">
+                  <img src="assets/characters/group_of_3/group3_1.png" alt="Group Crossing" class="challenge-thumb-img">
+                  <span class="active-badge">АКТИВНО</span>
+                </div>
+                <div class="challenge-info">
+                  <h4>👥 Пресичане с групата (не тичай напред!)</h4>
+                  <p>Пресечи заедно с групата. <strong>Никога не тичай напред!</strong> Ако изпреварш групата, те спират и героят ти пада!</p>
+                </div>
+              </div>
+
+              <!-- ACTIVE INTERДЕЙСТВИЕ 3: Strangers with Dogs -->
+              <div class="challenge-preview-card active-card">
+                <div class="challenge-img-box">
+                  <img src="assets/characters/strangers_dogs/stranger_dog_4.png" alt="Strangers with Dogs" class="challenge-thumb-img">
+                  <span class="active-badge">АКТИВНО</span>
+                </div>
+                <div class="challenge-info">
+                  <h4>🐕 Непознати с кучета (питай преди да галиш!)</h4>
+                  <p>Спри на безопасно разстояние и натисни <strong>[SPACE]</strong> за да попиташ! <strong>Никога не се приближавай до куче без да питаш</strong> — уплашеното куче ще те свали и ще загубиш ❤️! Ако 👍 — можеш да го погалиш! Ако 👎 — <strong>ТРЯБВА да се отдалечиш</strong>!</p>
+                </div>
+              </div>
+
+              <!-- ACTIVE INTERДЕЙСТВИЕ 4: Pedestrian Footbridge -->
+              <div class="challenge-preview-card active-card">
+                <div class="challenge-img-box">
+                  <img src="assets/bridge/pedestrian_footbridge.png" alt="Pedestrian Footbridge" class="challenge-thumb-img">
+                  <span class="active-badge">АКТИВНО</span>
+                </div>
+                <div class="challenge-info">
+                  <h4>🌉 Пешеходен мост (улица без пътека)</h4>
+                  <p>Улицата <strong>НЯМА пешеходна пътека</strong>! Трябва да използваш пешеходния надлез. Ако се опиташ да пресечеш директно — ще паднеш!</p>
+                </div>
+              </div>
+
+              <!-- СКОРО: Construction Detour -->
+              <div class="challenge-preview-card">
+                <div class="challenge-img-box icon-thumb cone-thumb">
+                  <span class="preview-emoji">🚧</span>
+                  <span class="coming-soon-badge">СКОРО</span>
+                </div>
+                <div class="challenge-info">
+                  <h4>🚧 Строителство — обходен маршрут</h4>
+                  <p>Следвай оранжевите конуси и обходните маршрути около строителни зони, без да стъпваш на пътя.</p>
+                </div>
+              </div>
+
+              <!-- СКОРО: Внимание към непознати -->
+              <div class="challenge-preview-card">
+                <div class="challenge-img-box icon-thumb stranger-thumb">
+                  <span class="preview-emoji">🚫</span>
+                  <span class="coming-soon-badge">СКОРО</span>
+                </div>
+                <div class="challenge-info">
+                  <h4>🛑 Внимание към непознати</h4>
+                  <p>Ако непозната кола забави или те повика, стой далеч на тротоара, игнорирай ги и продължавай бързо.</p>
+                </div>
+              </div>
+
+              <div class="challenge-preview-card">
+                <div class="challenge-img-box icon-thumb blindspot-thumb">
+                  <span class="preview-emoji">🚚</span>
+                  <span class="coming-soon-badge">СКОРО</span>
+                </div>
+                <div class="challenge-info">
+                  <h4>🚚 Слепи зони на бусове</h4>
+                  <p>Научи се да спираш и да гледаш наляво-надясно-наляво, преди да заобиколиш паркирани бусове и големи препятствия.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+          <!-- Секция за родители -->
+          <div class="info-section">
+            <h3 class="section-title"><span>👨‍👩‍👧</span> За родители и учители</h3>
+            <div class="info-mechanics-grid">
+              <div class="mechanic-item">
+                <div class="mechanic-icon-box" style="font-size:22px;">🎓</div>
+                <div class="mechanic-text">
+                  <strong>Какво е „Пазиград"?</strong>
+                  <p>Образователна игра, създадена да научи деца на възраст 5–8 години на основните правила за безопасност на пътя чрез интерактивна игра. Базирана е на реални правила за пътна безопасност.</p>
+                </div>
+              </div>
+              <div class="mechanic-item">
+                <div class="mechanic-icon-box" style="font-size:22px;">🐕</div>
+                <div class="mechanic-text">
+                  <strong>Кой е Рони?</strong>
+                  <p>Рони е кученце-помощник, което дава съвети на децата, когато направат грешка. Вместо наказание, Рони обяснява какво е правилното действие и насърчава да опитат отново.</p>
+                </div>
+              </div>
+              <div class="mechanic-item">
+                <div class="mechanic-icon-box" style="font-size:22px;">🔒</div>
+                <div class="mechanic-text">
+                  <strong>Безопасност и поверителност</strong>
+                  <p>🔒 <strong>Без реклами</strong> — играта не съдържа никакви реклами.<br>
+                  🔒 <strong>Без събиране на данни</strong> — не събираме лична информацция.<br>
+                  🔒 <strong>Без регистрация</strong> — не е нужен акаунт.<br>
+                  💾 <strong>Локален прогрес</strong> — напредъкът се запазва само на устройството.</p>
+                </div>
+              </div>
+              <div class="mechanic-item">
+                <div class="mechanic-icon-box" style="font-size:22px;">⚠️</div>
+                <div class="mechanic-text">
+                  <strong>Важно</strong>
+                  <p>Тази игра е допълващ образователен инструмент, не заместител на обучението с възрастен. Подходяща за деца на 5–8 години. Препоръчваме да играете заедно с детето си и да обсъждате наученото.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        <div class="info-footer">
+          <button id="btn-got-it-info" class="big-action-btn pulse-glow">
+            <span>РАЗБРАХ! ДА ИГРАЕМ! 🐕</span> 🚶
+          </button>
+        </div>
+      </div>
+    </div>
+  </div> <!-- /#game-screen-box -->
+
+    <!-- Integrated Progress Bar Directly Below The Square Box -->
+    <div id="progress-hud" class="integrated-progress-bar">
+      <div class="progress-bar-container">
+        <div class="progress-track">
+          <div id="progress-fill" class="progress-fill" style="width: 0%;"></div>
+          <div id="progress-avatar-marker" class="avatar-marker">
+            <img id="progress-avatar-img" src="assets/characters/boy/face.png" alt="Progress Avatar">
+          </div>
+        </div>
+        <div class="progress-endpoints">
+          <span class="start-point">🏠 Вкъщи</span>
+          <span id="end-point-label" class="end-point">🏫 Училище</span>
+        </div>
+      </div>
+    </div>
+  </div> <!-- /#game-cabinet -->
+</div> <!-- /#game-console-wrapper -->
+
+  <script src="game.js"></script>
+</body>
+</html>
