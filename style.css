@@ -3754,3 +3754,24 @@ body, html {
   background: #1a2a3a;
   backdrop-filter: none;
 }
+
+/* Bike ride button active colors */
+.bike-btn-stop { border-color: #f44336; }
+.bike-btn-stop:active { background: rgba(244,67,54,0.4) !important; }
+.bike-btn-bell { border-color: #ff9800; }
+.bike-btn-bell:active { background: rgba(255,152,0,0.4) !important; }
+.bike-btn-signal { border-color: #2196f3; }
+.bike-btn-signal:active { background: rgba(33,150,243,0.4) !important; }
+
+.bike-ride-roni {
+  background: rgba(255,193,7,0.2);
+  border: 2px solid #ffc107;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.9em;
+  color: #fff;
+  width: 100%;
+  text-align: center;
+  max-width: 400px;
+}
