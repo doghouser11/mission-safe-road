@@ -6137,7 +6137,8 @@ class PedestrianGame {
     // Rider
     const bounce = this.bikeRidePaused ? 0 : Math.sin(this.bikeRider.pedaling) * 2;
     ctx.font = '44px sans-serif';
-    ctx.fillText('🚴', this.bikeRider.x - 22, this.bikeRider.y + bounce);
+    const bikeEmoji = this.selectedChar === 'girl' ? '🚴‍♀️' : '🚴‍♂️';
+    ctx.fillText(bikeEmoji, this.bikeRider.x - 22, this.bikeRider.y + bounce);
 
     // Feedback text on canvas
     if (this.bikeFeedbackTimer > 0) {
