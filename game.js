@@ -906,10 +906,40 @@ class PedestrianGame {
     // State
     this.state = 'START_MENU'; // START_MENU | WALKING_SIDEWALK | AT_CROSSWALK | CROSSING_ROAD | WALKING_TO_GOAL | VICTORY
     this.selectedChar = 'boy';
+    this.missions = [
+      {
+        id: 'park',
+        title: 'Разходка до парка',
+        icon: '🌳',
+        desc: 'Отиди до парка на Пазиград! Пресичай внимателно!',
+        subtitle: 'Лесна разходка до парка',
+        badge: 'ЛЕСНО',
+        crossings: 3
+      },
+      {
+        id: 'school',
+        title: 'Път до училище',
+        icon: '🏫',
+        desc: 'Училището е в края на булеварда! Пресичай внимателно!',
+        subtitle: 'Стигни безопасно до училище!',
+        badge: 'ПРИКЛЮЧЕНИЕ',
+        crossings: 4
+      },
+      {
+        id: 'library',
+        title: 'Път до библиотеката',
+        icon: '📚',
+        desc: 'Библиотеката е далече — ще минеш през натоварени улици!',
+        subtitle: 'По-дълъг и труден маршрут!',
+        badge: 'ПРЕДИЗВИКАТЕЛСТВО',
+        crossings: 6
+      }
+    ];
+    this.selectedMission = 1; // default: Път до училище
     this.destination = {
-      title: 'Училището на Пазиград',
-      icon: '🏫',
-      desc: 'Училището е в края на булеварда! Пресичай внимателно!'
+      title: this.missions[this.selectedMission].title,
+      icon: this.missions[this.selectedMission].icon,
+      desc: this.missions[this.selectedMission].desc
     };
 
     this.safetyStars = 0;
@@ -939,8 +969,8 @@ class PedestrianGame {
       startX: this.pathCenterX - 22,
       startY: 1516,
       targetY: 1370,
-      drawW: 76,
-      drawH: 58,
+      drawW: 100,
+      drawH: 76,
       speed: 1.35,
       isWalking: false,
       animFrame: 0,
@@ -953,8 +983,8 @@ class PedestrianGame {
       startX: this.pathCenterX + 24,
       startY: 1516,
       targetY: 1370,
-      drawW: 98,
-      drawH: 58,
+      drawW: 128,
+      drawH: 76,
       speed: 1.35,
       isWalking: false,
       animFrame: 0,
@@ -981,8 +1011,8 @@ class PedestrianGame {
         spriteIndex: 3,
         x: this.sidewalkX + 18,
         y: 1230,
-        drawW: 66,
-        drawH: 66,
+        drawW: 92,
+        drawH: 92,
         interacted: false,
         decision: 'THUMBS_UP',
         speechText: 'Разбира се! Можеш да погалиш кучето ми! 🐶',
@@ -995,8 +1025,8 @@ class PedestrianGame {
         spriteIndex: 5,
         x: this.sidewalkX + 82,
         y: 810,
-        drawW: 68,
-        drawH: 68,
+        drawW: 94,
+        drawH: 94,
         interacted: false,
         decision: 'THUMBS_DOWN',
         speechText: 'Не, моля! Кучето ми е нервно! Отдалечи се! ⚠️',
@@ -1079,8 +1109,10 @@ class PedestrianGame {
   }
 
   randomizeTrialsAndEnvironments() {
-    // Random number от trials between 3 and 10 per game!
-    const numTrials = Math.floor(Math.random() * (10 - 3 + 1)) + 3;
+    // Number of crossings based on selected mission
+    const mission = this.missions[this.selectedMission];
+    this.destination = { title: mission.title, icon: mission.icon, desc: mission.desc };
+    const numTrials = mission.crossings;
     this.totalCrossings = numTrials;
     this.currentCrossingIndex = 0;
 
@@ -1172,8 +1204,8 @@ class PedestrianGame {
           startX: this.pathCenterX - 24,
           startY: zone.southCurbY + 18,
           targetY: zone.northCurbY - 14,
-          drawW: 76,
-          drawH: 58,
+          drawW: 100,
+          drawH: 76,
           speed: 1.35,
           isWalking: false,
           animFrame: 0,
@@ -1187,8 +1219,8 @@ class PedestrianGame {
           startX: this.pathCenterX + 24,
           startY: zone.southCurbY + 18,
           targetY: zone.northCurbY - 14,
-          drawW: 98,
-          drawH: 58,
+          drawW: 128,
+          drawH: 76,
           speed: 1.35,
           isWalking: false,
           animFrame: 0,
@@ -1279,8 +1311,8 @@ class PedestrianGame {
         spriteIndex: template.spriteIndex,
         x: dogX,
         y: dogY,
-        drawW: 66,
-        drawH: 66,
+        drawW: 92,
+        drawH: 92,
         interacted: false,
         decision: template.decision,
         speechText: template.speechText,
@@ -1428,26 +1460,17 @@ class PedestrianGame {
       this.startGame();
     });
 
-    // Level Mode Selection (Level 1: Път до училище vs Level 2: Grocery Store Adventure)
-    if (this.selectLevel1) {
-      this.selectLevel1.addEventListener('click', () => {
-        sfx.menuSelect();
-        this.setLevel(1);
-      });
-    }
-
-    if (this.selectLevel2) {
-      this.selectLevel2.addEventListener('click', () => {
-        sfx.menuSelect();
-        this.setLevel(2);
-      });
-    }
-
-    if (this.selectLevel3) {
-      this.selectLevel3.addEventListener('click', () => {
-        sfx.menuSelect();
-        this.setLevel(3);
-      });
+    // Mission Selection
+    for (let i = 0; i < 3; i++) {
+      const btn = document.getElementById(`select-mission-${i}`);
+      if (btn) {
+        btn.addEventListener('click', () => {
+          sfx.menuSelect();
+          this.selectedMission = i;
+          document.querySelectorAll('.level-card').forEach(c => c.classList.remove('selected'));
+          btn.classList.add('selected');
+        });
+      }
     }
 
     // Play Again Button (Victory Modal - Level 1)
@@ -3507,14 +3530,14 @@ class PedestrianGame {
     }
 
     document.getElementById('victory-dest-icon').textContent = this.destination.icon;
-    document.getElementById('victory-title').textContent = `Welcome to the Bakery & Park!`;
+    document.getElementById('victory-title').textContent = `Стигна до ${this.destination.title}!`;
     document.getElementById('stat-stars').textContent = `${this.safetyStars} / ${this.totalCrossings}`;
     document.getElementById('stat-challenges').textContent = `${this.totalCrossings}`;
 
     const subEl = document.getElementById('victory-sub');
     if (subEl) {
       if (!this.hasEverFallen) {
-        subEl.innerHTML = '⚡ <strong>FLAWLESS RUN!</strong> You got everything right without falling down and unlocked the Cybertruck!';
+        subEl.innerHTML = '⚡ <strong>ПЕРФЕКТНО!</strong> Направи всичко правилно без нито едно падане!';
       } else {
         subEl.textContent = 'Направи правилните избори на всяка крачка от пътя!';
       }
@@ -4890,7 +4913,7 @@ class PedestrianGame {
     ctx.translate(this.player.x, this.player.y);
 
     const isStore = false;
-    const scaleFactor = isStore ? 1.8 : 1.35;
+    const scaleFactor = isStore ? 1.8 : 1.65;
     const charW = 58 * scaleFactor;
     const charH = 58 * scaleFactor;
 
