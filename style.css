@@ -3737,3 +3737,20 @@ body, html {
     gap: 6px;
   }
 }
+
+/* Bike ride overlay — fully opaque */
+#bike-ride-overlay {
+  background: #1a2a3a;
+  backdrop-filter: none;
+}
+
+#bike-equip-overlay {
+  background: #1a3a2a;
+  backdrop-filter: none;
+}
+
+#bike-quiz-overlay,
+#bike-results-overlay {
+  background: #1a2a3a;
+  backdrop-filter: none;
+}

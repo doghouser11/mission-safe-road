@@ -6000,8 +6000,7 @@ class PedestrianGame {
     ctx.fillText('🚴', this.bikeRider.x, riderY + bounce);
 
     // HUD update
-    document.getElementById('bike-ride-distance').textContent = `${Math.floor(this.bikeDistance)}m`;
-    document.getElementById('bike-ride-stars').textContent = `⭐ ${this.bikeRideStars}`;
+    document.getElementById('bike-ride-stars-count').textContent = this.bikeRideStars;
 
     // Finish line
     if (this.bikeDistance > 2000) {
