@@ -2414,21 +2414,7 @@ class PedestrianGame {
               } else if (currentZone.hasCrossingGuard) {
                 // Пресичане guard manages wait & stepping out in updateCrossingGuard()
               } else {
-                // Traditional Traffic Light Trial:
-                // Player must press the crosswalk button (SPACEBAR or tap/click) first!
-                if (currentZone.pedestrianButtonPressed) {
-                  currentZone.waitTime = (currentZone.waitTime || 0) + dt;
-                  if (currentZone.waitTime >= 1.5 && !currentZone.walkGranted) {
-                    currentZone.signalState = 'WALK';
-                    currentZone.walkGranted = true;
-                    currentZone.carsHalted = true;
-                    sfx.walkSignalChirp();
-                    sfx.correct();
-                    this.safetyStars++;
-                    if (this.starCountEl) this.starCountEl.textContent = this.safetyStars;
-                    this.showInWorldFeedback('🟢 Зелено е! Можеш да пресечеш! 🚶', '#2e7d32');
-                  }
-                }
+                // Traditional Traffic Light: timer handled below (outside isWalkingIntoRoad check)
               }
             }
 
@@ -2436,6 +2422,21 @@ class PedestrianGame {
             if (this.player.y < currentZone.southCurbY && this.player.y > currentZone.northCurbY) {
               this.triggerPlayerFall(currentZone);
               return;
+            }
+
+            // Traffic Light Timer: runs regardless of player movement direction
+            if (currentZone.trialType === 'TRAFFIC_LIGHT' && currentZone.pedestrianButtonPressed && !currentZone.walkGranted) {
+              currentZone.buttonWaitTime = (currentZone.buttonWaitTime || 0) + dt;
+              if (currentZone.buttonWaitTime >= 1.5) {
+                currentZone.signalState = 'WALK';
+                currentZone.walkGranted = true;
+                currentZone.carsHalted = true;
+                sfx.walkSignalChirp();
+                sfx.correct();
+                this.safetyStars++;
+                if (this.starCountEl) this.starCountEl.textContent = this.safetyStars;
+                this.showInWorldFeedback('🟢 Зелено е! Можеш да пресечеш! 🚶', '#2e7d32');
+              }
             }
           } else {
             // Signal is WALK!
@@ -3386,6 +3387,7 @@ class PedestrianGame {
       if (!currentZone.pedestrianButtonPressed) {
         currentZone.pedestrianButtonPressed = true;
         currentZone.waitTime = 0;
+        currentZone.buttonWaitTime = 0;
         sfx.buttonPress();
         this.safetyStars++;
         if (this.starCountEl) this.starCountEl.textContent = this.safetyStars;
