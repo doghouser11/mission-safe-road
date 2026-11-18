@@ -933,6 +933,24 @@ class PedestrianGame {
         subtitle: 'По-дълъг и труден маршрут!',
         badge: 'ПРЕДИЗВИКАТЕЛСТВО',
         crossings: 6
+      },
+      {
+        id: 'quiz',
+        title: 'Познай знака!',
+        icon: '🚦',
+        desc: 'Светльо те изпитва — познаваш ли пътните знаци?',
+        subtitle: 'Светльо те изпитва!',
+        badge: 'ВИКТОРИНА',
+        mode: 'quiz'
+      },
+      {
+        id: 'danger',
+        title: 'Намери грешката!',
+        icon: '🔍',
+        desc: 'Открий опасностите на улицата!',
+        subtitle: 'Открий опасностите на улицата!',
+        badge: 'ДЕТЕКТИВ',
+        mode: 'danger'
       }
     ];
     this.selectedMission = 1; // default: Път до училище
@@ -1461,7 +1479,7 @@ class PedestrianGame {
     });
 
     // Mission Selection
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 5; i++) {
       const btn = document.getElementById(`select-mission-${i}`);
       if (btn) {
         btn.addEventListener('click', () => {
@@ -1476,6 +1494,34 @@ class PedestrianGame {
     // Play Again Button (Victory Modal - Level 1)
     document.getElementById('play-again-btn').addEventListener('click', () => {
       sfx.menuSelect();
+      this.resetToStartMenu();
+    });
+
+    // Quiz Mode Buttons
+    document.getElementById('quiz-next-btn').addEventListener('click', () => {
+      sfx.menuSelect();
+      this.nextQuizQuestion();
+    });
+    document.getElementById('quiz-retry-btn').addEventListener('click', () => {
+      sfx.menuSelect();
+      document.getElementById('quiz-results-overlay').classList.add('hidden');
+      this.startQuiz();
+    });
+    document.getElementById('quiz-menu-btn').addEventListener('click', () => {
+      sfx.menuSelect();
+      document.getElementById('quiz-results-overlay').classList.add('hidden');
+      this.resetToStartMenu();
+    });
+
+    // Danger Find Mode Buttons
+    document.getElementById('danger-retry-btn').addEventListener('click', () => {
+      sfx.menuSelect();
+      document.getElementById('danger-results-overlay').classList.add('hidden');
+      this.nextDangerScene();
+    });
+    document.getElementById('danger-menu-btn').addEventListener('click', () => {
+      sfx.menuSelect();
+      document.getElementById('danger-results-overlay').classList.add('hidden');
       this.resetToStartMenu();
     });
 
@@ -1986,6 +2032,17 @@ class PedestrianGame {
   }
 
   startGame() {
+    // Route to special game modes
+    const mission = this.missions[this.selectedMission];
+    if (mission && mission.mode === 'quiz') {
+      this.startQuiz();
+      return;
+    }
+    if (mission && mission.mode === 'danger') {
+      this.startDangerFind();
+      return;
+    }
+
     this.currentCrossingIndex = 0;
     this.safetyStars = 0;
     this.safetyChances = 3;
@@ -3561,6 +3618,10 @@ class PedestrianGame {
     if (this.starCountEl) this.starCountEl.textContent = '0';
 
     this.victoryModal.classList.add('hidden');
+    document.getElementById('quiz-overlay').classList.add('hidden');
+    document.getElementById('quiz-results-overlay').classList.add('hidden');
+    document.getElementById('danger-overlay').classList.add('hidden');
+    document.getElementById('danger-results-overlay').classList.add('hidden');
     if (this.checkoutModal) this.checkoutModal.classList.add('hidden');
     if (this.checkoutMinigameModal) this.checkoutMinigameModal.classList.add('hidden');
     if (this.homeVictoryModal) this.homeVictoryModal.classList.add('hidden');
@@ -5628,6 +5689,409 @@ class PedestrianGame {
 
 
 
+
+
+
+  // ============================================================================
+  // QUIZ MODE: Познай знака! (Светльо)
+  // ============================================================================
+
+  startQuiz() {
+    this.quizQuestions = [
+      {
+        sign: '🛑', label: 'СТОП',
+        q: 'Какво трябва да направиш, когато видиш този знак?',
+        a: ['Спри и се огледай', 'Побързай да минеш', 'Завий наляво', 'Не обръщай внимание'],
+        correct: 0,
+        svetlio: 'Този знак казва: СПРИ! Огледай се и чак тогава продължи!',
+        roni: 'Червеното винаги означава СТОП! 🐾'
+      },
+      {
+        sign: '🚸', label: 'ВНИМАНИЕ, ДЕЦА',
+        q: 'Този знак се поставя близо до...',
+        a: ['Магазин', 'Училище или детска градина', 'Бензиностанция', 'Паркинг'],
+        correct: 1,
+        svetlio: 'Браво! Този знак предупреждава шофьорите за деца наблизо!',
+        roni: 'Виж човечетата на знака — приличат на деца! 🐾'
+      },
+      {
+        sign: '🚷', label: 'ЗАБРАНЕНО ЗА ПЕШЕХОДЦИ',
+        q: 'Когато видиш този знак, трябва да...',
+        a: ['Пресечеш бързо', 'Потърсиш друг път', 'Изчакаш 5 секунди', 'Извикаш за помощ'],
+        correct: 1,
+        svetlio: 'Точно! Тук не е безопасно за пешеходци!',
+        roni: 'Пешеходец с червена линия = НЕ минавай тук! 🐾'
+      },
+      {
+        sign: '🚦', label: 'СВЕТОФАР',
+        q: 'Какво означава ЖЪЛТАТА светлина?',
+        a: ['Тичай бързо!', 'Приготви се, НЕ тръгвай', 'Можеш да минеш', 'Светофарът е повреден'],
+        correct: 1,
+        svetlio: 'Аз съм Светльо и знам! Жълто = ИЗЧАКАЙ!',
+        roni: 'Жълтото е между червеното и зеленото — изчакай! 🐾'
+      },
+      {
+        sign: '⛔', label: 'ЗАБРАНЕНО ВЛИЗАНЕТО',
+        q: 'Този кръгъл червен знак означава...',
+        a: ['Влез от другата страна', 'Забранено е да влизаш', 'Паркирай тук', 'Намали скоростта'],
+        correct: 1,
+        svetlio: 'Правилно! Забранено е да се влиза!',
+        roni: 'Червен кръг с бяла линия = ЗАБРАНЕНО! 🐾'
+      },
+      {
+        sign: '🦓', label: 'ПЕШЕХОДНА ПЪТЕКА',
+        q: 'Къде е най-безопасно да пресечеш улицата?',
+        a: ['Между паркирани коли', 'На пешеходна пътека', 'Където е най-близо', 'На завоя'],
+        correct: 1,
+        svetlio: 'Браво! Винаги пресичай на пешеходната пътека!',
+        roni: 'Зебрата е най-безопасното място за пресичане! 🐾'
+      },
+      {
+        sign: '🟢', label: 'ЗЕЛЕНА СВЕТЛИНА',
+        q: 'Светофарът светна зелено. Какво правиш ПЪРВО?',
+        a: ['Тичам веднага', 'Оглеждам се наляво и надясно', 'Чакам 10 секунди', 'Нищо, стоя'],
+        correct: 1,
+        svetlio: 'Супер! Дори на зелено — ПЪРВО се огледай!',
+        roni: 'Зелено НЕ означава „тичай"! Първо провери! 🐾'
+      },
+      {
+        sign: '🚲', label: 'ВЕЛОСИПЕДНА ПЪТЕКА',
+        q: 'Този знак показва път за...',
+        a: ['Пешеходци', 'Велосипедисти', 'Автомобили', 'Автобуси'],
+        correct: 1,
+        svetlio: 'Точно! Тази пътека е за велосипеди!',
+        roni: 'Виж велосипеда на знака! 🐾'
+      },
+      {
+        sign: '⚠️', label: 'ВНИМАНИЕ, ОПАСНОСТ',
+        q: 'Жълтият триъгълник означава...',
+        a: ['Всичко е наред', 'Внимание, има опасност!', 'Забранено паркиране', 'Край на пътя'],
+        correct: 1,
+        svetlio: 'Правилно! Жълтият триъгълник казва: ВНИМАНИЕ!',
+        roni: 'Жълто + триъгълник = ВНИМАНИЕ! 🐾'
+      },
+      {
+        sign: '🌙', label: 'НОЩНО ХОДЕНЕ',
+        q: 'Когато е тъмно, как си по-видим за шофьорите?',
+        a: ['Обличам тъмни дрехи', 'Нося светлоотразителна жилетка', 'Тичам по-бързо', 'Ходя по средата на пътя'],
+        correct: 1,
+        svetlio: 'Браво! Светлоотразителните дрехи те правят видим!',
+        roni: 'Когато е тъмно, свети като звезда! 🐾'
+      },
+      {
+        sign: '🚐', label: 'ПАРКИРАНИ КОЛИ',
+        q: 'Защо е опасно да излизаш между паркирани коли?',
+        a: ['Колите могат да се разкарат', 'Шофьорите не те виждат', 'Няма тротоар', 'Не е опасно'],
+        correct: 1,
+        svetlio: 'Точно! Шофьорите не виждат малки деца зад паркирани коли!',
+        roni: 'Ти си малък — шофьорът не те вижда зад колата! 🐾'
+      },
+      {
+        sign: '👂', label: 'СЛУШАЛКИ',
+        q: 'Защо е опасно да ходиш със слушалки на улицата?',
+        a: ['Батерията свършва', 'Не чуваш колите и клаксоните', 'Слушалките падат', 'Не е опасно'],
+        correct: 1,
+        svetlio: 'Правилно! Ушите са важни колкото очите на улицата!',
+        roni: 'Махни слушалките — чуй какво става около теб! 🐾'
+      }
+    ];
+
+    // Shuffle and pick 10
+    this.quizQuestions = this.quizQuestions.sort(() => Math.random() - 0.5).slice(0, 10);
+    this.quizIndex = 0;
+    this.quizScore = 0;
+    this.quizAnswered = false;
+
+    this.state = 'QUIZ_MODE';
+    this.startMenu.classList.add('hidden');
+    this.gameHud.classList.add('hidden');
+    this.progressHud.classList.add('hidden');
+    if (this.walkingControls) this.walkingControls.classList.add('hidden');
+
+    document.getElementById('quiz-overlay').classList.remove('hidden');
+    document.getElementById('quiz-total-num').textContent = this.quizQuestions.length;
+    this.showQuizQuestion();
+  }
+
+  showQuizQuestion() {
+    const q = this.quizQuestions[this.quizIndex];
+    document.getElementById('quiz-current-num').textContent = this.quizIndex + 1;
+    document.getElementById('quiz-score').textContent = this.quizScore;
+    document.getElementById('quiz-progress-fill').style.width = `${(this.quizIndex / this.quizQuestions.length) * 100}%`;
+    document.getElementById('quiz-sign-emoji').textContent = q.sign;
+    document.getElementById('quiz-sign-label').textContent = q.label;
+    document.getElementById('quiz-question-text').textContent = q.q;
+
+    document.getElementById('quiz-feedback').classList.add('hidden');
+    this.quizAnswered = false;
+
+    const answersEl = document.getElementById('quiz-answers');
+    answersEl.innerHTML = '';
+    q.a.forEach((ans, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'quiz-answer-btn';
+      btn.textContent = `${['А', 'Б', 'В', 'Г'][i]}. ${ans}`;
+      btn.addEventListener('click', () => this.checkQuizAnswer(i));
+      answersEl.appendChild(btn);
+    });
+  }
+
+  checkQuizAnswer(idx) {
+    if (this.quizAnswered) return;
+    this.quizAnswered = true;
+
+    const q = this.quizQuestions[this.quizIndex];
+    const btns = document.querySelectorAll('.quiz-answer-btn');
+    const isCorrect = idx === q.correct;
+
+    btns[idx].classList.add(isCorrect ? 'correct' : 'wrong');
+    if (!isCorrect) {
+      btns[q.correct].classList.add('correct');
+    }
+
+    if (isCorrect) {
+      this.quizScore++;
+      sfx.fanfare && sfx.playRetroPulse(880, 0.15, 'square', 0.1);
+    } else {
+      sfx.playRetroPulse(220, 0.3, 'square', 0.08);
+    }
+
+    const feedbackEl = document.getElementById('quiz-feedback');
+    feedbackEl.classList.remove('hidden');
+    document.getElementById('quiz-feedback-icon').textContent = isCorrect ? '✅' : '❌';
+    document.getElementById('quiz-feedback-text').textContent = isCorrect
+      ? `🚦 Светльо: ${q.svetlio}`
+      : `🚦 Светльо: Не съвсем...`;
+
+    const roniEl = document.getElementById('quiz-roni');
+    if (!isCorrect) {
+      roniEl.classList.remove('hidden');
+      document.getElementById('quiz-roni-text').textContent = q.roni;
+    } else {
+      roniEl.classList.add('hidden');
+    }
+
+    const nextBtn = document.getElementById('quiz-next-btn');
+    nextBtn.textContent = this.quizIndex < this.quizQuestions.length - 1 ? 'Следващ въпрос ➡️' : 'Виж резултата 🏆';
+  }
+
+  nextQuizQuestion() {
+    this.quizIndex++;
+    if (this.quizIndex >= this.quizQuestions.length) {
+      this.showQuizResults();
+    } else {
+      this.showQuizQuestion();
+    }
+  }
+
+  showQuizResults() {
+    document.getElementById('quiz-overlay').classList.add('hidden');
+    const overlay = document.getElementById('quiz-results-overlay');
+    overlay.classList.remove('hidden');
+
+    const total = this.quizQuestions.length;
+    const score = this.quizScore;
+    const pct = score / total;
+
+    let title, subtitle;
+    if (pct >= 0.9) { title = 'Перфектно! 🌟'; subtitle = 'Ти си истински експерт по пътна безопасност!'; }
+    else if (pct >= 0.7) { title = 'Браво! 👏'; subtitle = 'Знаеш много за пътните знаци!'; }
+    else if (pct >= 0.5) { title = 'Добре! 👍'; subtitle = 'Знаеш основните, но можеш повече!'; }
+    else { title = 'Опитай пак! 💪'; subtitle = 'Светльо ще ти помогне да научиш знаците!'; }
+
+    document.getElementById('quiz-results-title').textContent = title;
+    document.getElementById('quiz-results-subtitle').textContent = subtitle;
+    document.getElementById('quiz-results-score').textContent = `${score} / ${total}`;
+
+    const starsEl = document.getElementById('quiz-results-stars');
+    const starCount = pct >= 0.9 ? 3 : pct >= 0.7 ? 2 : pct >= 0.4 ? 1 : 0;
+    starsEl.textContent = '⭐'.repeat(starCount) + '☆'.repeat(3 - starCount);
+
+    sfx.fanfare && sfx.fanfare();
+  }
+
+  // ============================================================================
+  // DANGER FIND MODE: Намери грешката! (Светльо)
+  // ============================================================================
+
+  startDangerFind() {
+    this.dangerScenes = [
+      {
+        id: 'crossroad', label: 'Кръстовище', cssClass: 'danger-scene-crossroad',
+        elements: [
+          { emoji: '🧒📱', x: 42, y: 38, isDanger: true, name: 'Дете на телефон', desc: 'Не гледай телефон докато пресичаш!' },
+          { emoji: '🏃', x: 70, y: 36, isDanger: true, name: 'Дете тича', desc: 'Не тичай на пътя — спри и се огледай!' },
+          { emoji: '🚴', x: 15, y: 42, isDanger: true, name: 'Колоездач без каска', desc: 'Винаги носи каска!' },
+          { emoji: '🧒', x: 85, y: 65, isDanger: false, name: 'Дете чака', desc: '' },
+          { emoji: '🚗', x: 30, y: 48, isDanger: false, name: 'Кола', desc: '' },
+          { emoji: '🚙', x: 65, y: 50, isDanger: false, name: 'Кола', desc: '' },
+          { emoji: '👩‍👦', x: 10, y: 65, isDanger: false, name: 'Майка с дете', desc: '' },
+          { emoji: '🧒', x: 50, y: 20, isDanger: true, name: 'Дете между паркирани коли', desc: 'Не излизай между паркирани коли!' },
+          { emoji: '🚦', x: 48, y: 55, isDanger: false, name: 'Светофар', desc: '' },
+        ]
+      },
+      {
+        id: 'school', label: 'До училището', cssClass: 'danger-scene-school',
+        elements: [
+          { emoji: '⚽', x: 35, y: 42, isDanger: true, name: 'Топка на пътя', desc: 'Не тичай след топката на улицата!' },
+          { emoji: '🧒🎧', x: 60, y: 40, isDanger: true, name: 'Дете със слушалки', desc: 'Махни слушалките на улицата!' },
+          { emoji: '🛴', x: 20, y: 38, isDanger: true, name: 'Тротинетка на пътя', desc: 'Карай тротинетка по тротоара, не по пътя!' },
+          { emoji: '👨‍👧‍👦', x: 75, y: 60, isDanger: false, name: 'Баща с деца', desc: '' },
+          { emoji: '🏫', x: 50, y: 15, isDanger: false, name: 'Училище', desc: '' },
+          { emoji: '🚐', x: 25, y: 48, isDanger: false, name: 'Микробус', desc: '' },
+          { emoji: '🧒', x: 80, y: 40, isDanger: true, name: 'Дете пресича без пътека', desc: 'Пресичай само на пешеходна пътека!' },
+          { emoji: '👩‍🏫', x: 45, y: 60, isDanger: false, name: 'Учителка', desc: '' },
+        ]
+      },
+      {
+        id: 'night', label: 'Вечерна разходка', cssClass: 'danger-scene-night',
+        elements: [
+          { emoji: '🧒', x: 30, y: 40, isDanger: true, name: 'Дете с тъмни дрехи', desc: 'Носи светлоотразителна жилетка нощем!' },
+          { emoji: '🧒', x: 65, y: 45, isDanger: true, name: 'Дете на пътя', desc: 'Ходи само по тротоара!' },
+          { emoji: '📱', x: 48, y: 35, isDanger: true, name: 'Дете гледа телефон', desc: 'Вдигни глава и гледай пътя!' },
+          { emoji: '🌙', x: 80, y: 8, isDanger: false, name: 'Луна', desc: '' },
+          { emoji: '🏠', x: 15, y: 15, isDanger: false, name: 'Къща', desc: '' },
+          { emoji: '🚗', x: 50, y: 50, isDanger: false, name: 'Кола', desc: '' },
+          { emoji: '💡', x: 85, y: 25, isDanger: false, name: 'Улична лампа', desc: '' },
+          { emoji: '🧑‍🦺', x: 10, y: 42, isDanger: false, name: 'Човек с жилетка', desc: '' },
+          { emoji: '🛹', x: 40, y: 48, isDanger: true, name: 'Скейтборд на тъмно', desc: 'Не карай скейтборд на тъмно на пътя!' },
+        ]
+      }
+    ];
+
+    this.dangerSceneIndex = 0;
+    this.dangerTotalFound = 0;
+    this.dangerTotalDangers = 0;
+    this.dangerScenesCompleted = 0;
+
+    this.state = 'DANGER_MODE';
+    this.startMenu.classList.add('hidden');
+    this.gameHud.classList.add('hidden');
+    this.progressHud.classList.add('hidden');
+    if (this.walkingControls) this.walkingControls.classList.add('hidden');
+
+    document.getElementById('danger-overlay').classList.remove('hidden');
+    this.loadDangerScene(0);
+  }
+
+  loadDangerScene(idx) {
+    const scene = this.dangerScenes[idx];
+    this.currentDangerScene = scene;
+    this.dangerFoundInScene = 0;
+    this.dangerTotalInScene = scene.elements.filter(e => e.isDanger).length;
+
+    document.getElementById('danger-found-count').textContent = '0';
+    document.getElementById('danger-total-count').textContent = this.dangerTotalInScene;
+    document.getElementById('danger-scene-label').textContent = scene.label;
+    document.getElementById('danger-instruction').textContent = `Намери ${this.dangerTotalInScene} опасности!`;
+    document.getElementById('danger-found-list').innerHTML = '';
+    document.getElementById('danger-roni').classList.add('hidden');
+
+    const sceneEl = document.getElementById('danger-scene');
+    sceneEl.className = `danger-scene ${scene.cssClass}`;
+    sceneEl.innerHTML = '';
+
+    scene.elements.forEach((el, i) => {
+      const div = document.createElement('div');
+      div.className = 'danger-element';
+      div.textContent = el.emoji;
+      div.style.left = `${el.x}%`;
+      div.style.top = `${el.y}%`;
+      div.dataset.index = i;
+      div.addEventListener('click', () => this.tapDangerElement(i, div));
+      sceneEl.appendChild(div);
+    });
+
+    // Show hint after 8 seconds
+    this.dangerHintTimer = setTimeout(() => {
+      this.showDangerHint();
+    }, 8000);
+  }
+
+  tapDangerElement(idx, div) {
+    const el = this.currentDangerScene.elements[idx];
+    if (el.tapped) return;
+    el.tapped = true;
+
+    if (el.isDanger) {
+      this.dangerFoundInScene++;
+      this.dangerTotalFound++;
+      div.classList.add('found-danger');
+      sfx.playRetroPulse(660, 0.12, 'square', 0.1);
+
+      document.getElementById('danger-found-count').textContent = this.dangerFoundInScene;
+
+      const tag = document.createElement('span');
+      tag.className = 'danger-found-tag';
+      tag.textContent = `❌ ${el.name}`;
+      document.getElementById('danger-found-list').appendChild(tag);
+
+      // Show explanation
+      const roniEl = document.getElementById('danger-roni');
+      roniEl.classList.remove('hidden');
+      document.getElementById('danger-roni-text').textContent = `${el.desc}`;
+
+      // Check if all found
+      if (this.dangerFoundInScene >= this.dangerTotalInScene) {
+        clearTimeout(this.dangerHintTimer);
+        this.dangerScenesCompleted++;
+        setTimeout(() => this.showDangerSceneResult(), 1200);
+      }
+    } else {
+      div.classList.add('found-safe');
+      sfx.playRetroPulse(220, 0.2, 'square', 0.06);
+      const roniEl = document.getElementById('danger-roni');
+      roniEl.classList.remove('hidden');
+      document.getElementById('danger-roni-text').textContent = `${el.name} — тук няма опасност! Търси другаде! 🐾`;
+    }
+  }
+
+  showDangerHint() {
+    const scene = this.currentDangerScene;
+    const unfound = scene.elements.filter(e => e.isDanger && !e.tapped);
+    if (unfound.length > 0) {
+      const hint = unfound[0];
+      const roniEl = document.getElementById('danger-roni');
+      roniEl.classList.remove('hidden');
+      document.getElementById('danger-roni-text').textContent = `Подсказка: Потърси нещо опасно около ${hint.x < 50 ? 'лявата' : 'дясната'} страна! 🐾`;
+    }
+  }
+
+  showDangerSceneResult() {
+    document.getElementById('danger-overlay').classList.add('hidden');
+
+    const hasMore = this.dangerSceneIndex < this.dangerScenes.length - 1;
+
+    const overlay = document.getElementById('danger-results-overlay');
+    overlay.classList.remove('hidden');
+
+    const total = this.dangerTotalInScene;
+    document.getElementById('danger-results-title').textContent = 'Супер! Намери всички! 🎉';
+    document.getElementById('danger-results-subtitle').textContent = `Сцена "${this.currentDangerScene.label}" завършена!`;
+    document.getElementById('danger-results-score').textContent = `${this.dangerTotalFound} общо`;
+
+    const starsEl = document.getElementById('danger-results-stars');
+    starsEl.textContent = '⭐⭐⭐';
+
+    const retryBtn = document.getElementById('danger-retry-btn');
+    retryBtn.textContent = hasMore ? '➡️ Следваща сцена' : '🔄 Играй пак';
+
+    sfx.fanfare && sfx.fanfare();
+  }
+
+  nextDangerScene() {
+    document.getElementById('danger-results-overlay').classList.add('hidden');
+    this.dangerSceneIndex++;
+    if (this.dangerSceneIndex >= this.dangerScenes.length) {
+      this.dangerSceneIndex = 0;
+      this.dangerTotalFound = 0;
+      this.dangerScenesCompleted = 0;
+    }
+    // Reset tapped state
+    this.dangerScenes.forEach(s => s.elements.forEach(e => e.tapped = false));
+    document.getElementById('danger-overlay').classList.remove('hidden');
+    this.loadDangerScene(this.dangerSceneIndex);
+  }
 
 }
 
