@@ -3739,20 +3739,21 @@ body, html {
 }
 
 /* Bike ride overlay — fully opaque */
-#bike-ride-overlay {
-  background: #1a2a3a;
-  backdrop-filter: none;
+#bike-ride-overlay,
+#bike-equip-overlay,
+#bike-quiz-overlay,
+#bike-results-overlay,
+#quiz-overlay,
+#quiz-results-overlay,
+#danger-overlay,
+#danger-results-overlay {
+  background: #1a2a3a !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
 #bike-equip-overlay {
-  background: #1a3a2a;
-  backdrop-filter: none;
-}
-
-#bike-quiz-overlay,
-#bike-results-overlay {
-  background: #1a2a3a;
-  backdrop-filter: none;
+  background: #1a3a2a !important;
 }
 
 /* Bike ride button active colors */

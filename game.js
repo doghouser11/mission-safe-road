@@ -5880,26 +5880,26 @@ class PedestrianGame {
     this.bikeCanvas.width = 400;
     this.bikeCanvas.height = 300;
 
-    this.bikeRider = { x: 60, y: 180, speed: 2, pedaling: 0 };
+    this.bikeRider = { x: 60, y: 180, speed: 80, pedaling: 0 }; // pixels per second (dt-based)
     this.bikeDistance = 0;
     this.bikeRideStars = 0;
 
     // Each challenge: icon approaches, player must press the RIGHT button
     // correctBtn: 'stop' | 'bell' | 'signal'
     this.bikeChallenges = [
-      { type: 'stop_sign', icon: '🛑', triggerDist: 300, correctBtn: 'stop', label: 'СТОП знак!',
+      { type: 'stop_sign', icon: '🛑', triggerDist: 400, correctBtn: 'stop', label: 'СТОП знак!',
         good: 'Правилно! Винаги спирай на СТОП знак! ⭐', bad: 'Трябваше да СПРЕШ! На СТОП знак винаги спираш!' },
-      { type: 'pedestrian', icon: '🚶', triggerDist: 650, correctBtn: 'bell', label: 'Пешеходец напред!',
+      { type: 'pedestrian', icon: '🚶', triggerDist: 900, correctBtn: 'bell', label: 'Пешеходец напред!',
         good: 'Правилно! Звънецът предупреждава пешеходеца! ⭐', bad: 'Трябваше да ПОЗВЪНИШ! Предупреди пешеходеца!' },
-      { type: 'turn', icon: '↗️', triggerDist: 1000, correctBtn: 'signal', label: 'Завой надясно!',
+      { type: 'turn', icon: '↗️', triggerDist: 1400, correctBtn: 'signal', label: 'Завой надясно!',
         good: 'Правилно! Протегни ръка преди завой! ⭐', bad: 'Трябваше да дадеш СИГНАЛ! Протегни ръка преди завой!' },
-      { type: 'red_light', icon: '🔴', triggerDist: 1350, correctBtn: 'stop', label: 'Червен светофар!',
+      { type: 'red_light', icon: '🔴', triggerDist: 1900, correctBtn: 'stop', label: 'Червен светофар!',
         good: 'Правилно! Червено = СТОП! ⭐', bad: 'Трябваше да СПРЕШ! Червено е!' },
-      { type: 'pedestrian2', icon: '👨‍👧', triggerDist: 1700, correctBtn: 'bell', label: 'Баща с дете на пътеката!',
+      { type: 'pedestrian2', icon: '👨‍👧', triggerDist: 2500, correctBtn: 'bell', label: 'Баща с дете на пътеката!',
         good: 'Правилно! Звъни и заобиколи внимателно! ⭐', bad: 'Трябваше да ПОЗВЪНИШ! Има хора на пътеката!' },
-      { type: 'turn2', icon: '↙️', triggerDist: 2050, correctBtn: 'signal', label: 'Завой наляво!',
+      { type: 'turn2', icon: '↙️', triggerDist: 3100, correctBtn: 'signal', label: 'Завой наляво!',
         good: 'Правилно! Сигнал с лява ръка! ⭐', bad: 'Трябваше да дадеш СИГНАЛ преди завоя!' },
-      { type: 'stop_sign2', icon: '🛑', triggerDist: 2400, correctBtn: 'stop', label: 'СТОП знак!',
+      { type: 'stop_sign2', icon: '🛑', triggerDist: 3700, correctBtn: 'stop', label: 'СТОП знак!',
         good: 'Перфектно! Спираш като истински велосипедист! ⭐', bad: 'СТОП знак — трябва да спреш!' },
     ];
     this.bikeCurrentChallenge = 0;
@@ -5907,7 +5907,7 @@ class PedestrianGame {
     this.bikeRideFinished = false;
     this.bikeActiveChallenge = null;
     this.bikeChallengeTimer = 0;
-    this.bikeChallengeTimeout = 3.0; // seconds to react
+    this.bikeChallengeTimeout = 5.0; // 5 seconds to react (kid-friendly)
     this.bikeFeedbackTimer = 0;
     this.bikeFeedbackText = '';
 
@@ -5985,8 +5985,8 @@ class PedestrianGame {
 
     // Update
     if (!this.bikeRidePaused && !this.bikeRideFinished) {
-      this.bikeDistance += this.bikeRider.speed;
-      this.bikeRider.pedaling += 0.15;
+      this.bikeDistance += this.bikeRider.speed * dt;
+      this.bikeRider.pedaling += dt * 6;
     }
 
     // Feedback timer
@@ -6030,7 +6030,7 @@ class PedestrianGame {
     }
 
     // Finish
-    if (this.bikeCurrentChallenge >= this.bikeChallenges.length && this.bikeDistance >= 2600 && !this.bikeRideFinished) {
+    if (this.bikeCurrentChallenge >= this.bikeChallenges.length && this.bikeDistance >= 4000 && !this.bikeRideFinished) {
       this.bikeRideFinished = true;
       this.bikeStars += this.bikeRideStars;
       setTimeout(() => {
@@ -6048,10 +6048,13 @@ class PedestrianGame {
     ctx.fillStyle = `rgb(${skyR},${skyG},${skyB})`;
     ctx.fillRect(0, 0, W, H);
 
-    // Clouds
+    // Clouds (slow parallax)
     ctx.font = '22px sans-serif';
     for (let i = 0; i < 3; i++) {
-      const cx = ((i * 180 - this.bikeDistance * 0.3) % (W + 100) + W + 100) % (W + 100) - 50;
+      const baseX = i * 180;
+      const scrollX = this.bikeDistance * 0.15;
+      let cx = baseX - (scrollX % (W + 100));
+      if (cx < -50) cx += W + 100;
       ctx.fillText('☁️', cx, 30 + i * 25);
     }
 
@@ -6063,27 +6066,32 @@ class PedestrianGame {
     ctx.fillStyle = nightPct > 0.5 ? '#444' : '#666';
     ctx.fillRect(0, H * 0.5, W, H * 0.35);
 
-    // Road markings
+    // Road markings (dashes scroll left)
     ctx.strokeStyle = '#fff';
     ctx.lineWidth = 2;
+    const dashOffset = -(this.bikeDistance * 0.5) % 35;
     ctx.setLineDash([20, 15]);
-    const offset = (this.bikeDistance * 2) % 35;
+    ctx.lineDashOffset = dashOffset;
     ctx.beginPath();
-    ctx.moveTo(-offset, H * 0.67);
+    ctx.moveTo(0, H * 0.67);
     ctx.lineTo(W, H * 0.67);
     ctx.stroke();
     ctx.setLineDash([]);
+    ctx.lineDashOffset = 0;
 
     // Bike lane marking
     ctx.fillStyle = 'rgba(76,175,80,0.3)';
     ctx.fillRect(0, H * 0.5, W, H * 0.17);
 
-    // Scrolling scenery
+    // Scrolling scenery (moves left = bike goes right)
     ctx.font = '30px sans-serif';
     const scenery = ['🌳', '🏠', '🌲', '🏢', '🌳', '🏪', '🌲', '🏫'];
+    const sceneSpacing = 100;
+    const totalSceneW = scenery.length * sceneSpacing;
     for (let i = 0; i < scenery.length; i++) {
-      const sx = ((i * 90 - this.bikeDistance * 0.8) % (W + 150) + W + 150) % (W + 150) - 50;
-      ctx.fillText(scenery[i], sx, H * 0.48);
+      let sx = (i * sceneSpacing) - (this.bikeDistance * 0.4 % totalSceneW);
+      if (sx < -50) sx += totalSceneW;
+      if (sx < W + 50) ctx.fillText(scenery[i], sx, H * 0.48);
     }
 
     // Upcoming challenge icon
@@ -6131,8 +6139,8 @@ class PedestrianGame {
     document.getElementById('bike-ride-stars-count').textContent = this.bikeRideStars;
 
     // Finish line
-    if (this.bikeDistance > 2400) {
-      const finishDist = 2600 - this.bikeDistance;
+    if (this.bikeDistance > 3700) {
+      const finishDist = 4000 - this.bikeDistance;
       if (finishDist > 0) {
         const fx = this.bikeRider.x + 60 + (finishDist / 200) * (W - 100);
         ctx.font = '24px sans-serif';
