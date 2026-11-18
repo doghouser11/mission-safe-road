@@ -6566,7 +6566,7 @@ class PedestrianGame {
     document.getElementById('danger-found-count').textContent = '0';
     document.getElementById('danger-total-count').textContent = this.dangerTotalInScene;
     document.getElementById('danger-scene-label').textContent = scene.label;
-    document.getElementById('danger-instruction').textContent = `Намери ${this.dangerTotalInScene} опасности!`;
+    document.getElementById('danger-instruction').textContent = `Намери ${this.dangerTotalInScene} опасности! 👆 Тапни върху опасните!`;
     document.getElementById('danger-found-list').innerHTML = '';
     document.getElementById('danger-roni').classList.add('hidden');
 
