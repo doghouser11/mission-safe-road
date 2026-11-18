@@ -6504,7 +6504,7 @@ class PedestrianGame {
         elements: [
           { emoji: '🧒📱', x: 42, y: 38, isDanger: true, name: 'Дете на телефон', desc: 'Не гледай телефон докато пресичаш!' },
           { emoji: '🏃', x: 70, y: 36, isDanger: true, name: 'Дете тича', desc: 'Не тичай на пътя — спри и се огледай!' },
-          { emoji: '🚴', x: 15, y: 42, isDanger: true, name: 'Колоездач без каска', desc: 'Винаги носи каска!' },
+          { emoji: '🛴', x: 15, y: 42, isDanger: true, name: 'Тротинетка на пътя', desc: 'Не карай тротинетка на пътя — само по тротоара!' },
           { emoji: '🧒', x: 85, y: 65, isDanger: false, name: 'Дете чака', desc: '' },
           { emoji: '🚗', x: 30, y: 48, isDanger: false, name: 'Кола', desc: '' },
           { emoji: '🚙', x: 65, y: 50, isDanger: false, name: 'Кола', desc: '' },
