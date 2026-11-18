@@ -3501,28 +3501,90 @@ body, html {
   text-align: center;
 }
 
-/* Danger scene backgrounds */
+/* Danger scene backgrounds — clear visual zones */
 .danger-scene-crossroad {
-  background: linear-gradient(180deg, #87CEEB 0%, #87CEEB 30%, #a8d5a2 30%, #a8d5a2 40%, #666 40%, #666 60%, #a8d5a2 60%, #a8d5a2 70%, #888 70%);
+  background:
+    linear-gradient(180deg,
+      #87CEEB 0%, #87CEEB 18%,       /* небе */
+      #a8d5a2 18%, #a8d5a2 30%,      /* тротоар горе + тревна площ */
+      #b0b0b0 30%, #b0b0b0 32%,      /* бордюр */
+      #666 32%, #666 55%,             /* ПЪТ */
+      #b0b0b0 55%, #b0b0b0 57%,      /* бордюр */
+      #a8d5a2 57%, #a8d5a2 75%,      /* тротоар долу */
+      #8B7355 75%);                    /* земя */
 }
 
+/* Зебра пътека */
 .danger-scene-crossroad::before {
   content: '';
   position: absolute;
-  top: 42%;
-  left: 20%;
-  width: 60%;
-  height: 4%;
-  background: repeating-linear-gradient(90deg, #fff 0, #fff 8%, transparent 8%, transparent 16%);
+  top: 33%;
+  left: 35%;
+  width: 20%;
+  height: 22%;
+  background: repeating-linear-gradient(180deg, #fff 0, #fff 12%, #666 12%, #666 24%);
   z-index: 1;
+  opacity: 0.7;
+}
+
+/* Пътна маркировка */
+.danger-scene-crossroad::after {
+  content: '';
+  position: absolute;
+  top: 43%;
+  left: 0;
+  width: 100%;
+  height: 2%;
+  background: repeating-linear-gradient(90deg, #fff 0, #fff 4%, transparent 4%, transparent 8%);
+  z-index: 1;
+  opacity: 0.6;
 }
 
 .danger-scene-school {
-  background: linear-gradient(180deg, #87CEEB 0%, #87CEEB 25%, #c8a86e 25%, #c8a86e 35%, #666 35%, #666 55%, #8BC34A 55%, #8BC34A 65%, #795548 65%);
+  background:
+    linear-gradient(180deg,
+      #87CEEB 0%, #87CEEB 18%,       /* небе */
+      #c9b896 18%, #c9b896 32%,      /* училищен двор */
+      #b0b0b0 32%, #b0b0b0 34%,      /* бордюр */
+      #666 34%, #666 56%,             /* ПЪТ */
+      #b0b0b0 56%, #b0b0b0 58%,      /* бордюр */
+      #8BC34A 58%, #8BC34A 75%,       /* тротоар */
+      #795548 75%);                    /* земя */
+}
+
+.danger-scene-school::after {
+  content: '';
+  position: absolute;
+  top: 44%;
+  left: 0;
+  width: 100%;
+  height: 2%;
+  background: repeating-linear-gradient(90deg, #fff 0, #fff 4%, transparent 4%, transparent 8%);
+  z-index: 1;
+  opacity: 0.5;
 }
 
 .danger-scene-night {
-  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 30%, #333 30%, #333 50%, #555 50%, #555 60%, #222 60%);
+  background:
+    linear-gradient(180deg,
+      #0d1b2a 0%, #1b2838 18%,       /* нощно небе */
+      #2a3a2a 18%, #2a3a2a 30%,      /* тъмен тротоар */
+      #444 30%, #444 32%,             /* бордюр */
+      #333 32%, #333 55%,             /* тъмен път */
+      #444 55%, #444 57%,             /* бордюр */
+      #2a3a2a 57%, #2a3a2a 75%,      /* тъмен тротоар */
+      #1a1a1a 75%);
+}
+
+.danger-scene-night::after {
+  content: '';
+  position: absolute;
+  top: 43%;
+  left: 0;
+  width: 100%;
+  height: 2%;
+  background: repeating-linear-gradient(90deg, rgba(255,255,255,0.4) 0, rgba(255,255,255,0.4) 4%, transparent 4%, transparent 8%);
+  z-index: 1;
 }
 
 .danger-scene-night .danger-element {
