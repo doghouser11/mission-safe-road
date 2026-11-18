@@ -5757,6 +5757,8 @@ class PedestrianGame {
     if (this.walkingControls) this.walkingControls.classList.add('hidden');
 
     const overlay = document.getElementById('bike-equip-overlay');
+    overlay.style.background = '#1a3a2a';
+    overlay.style.backdropFilter = 'none';
     overlay.classList.remove('hidden');
     document.getElementById('bike-go-btn').classList.add('hidden');
     document.getElementById('bike-roni').classList.add('hidden');
@@ -5873,14 +5875,16 @@ class PedestrianGame {
   startBikeRide() {
     this.bikePhase = 'ride';
     const overlay = document.getElementById('bike-ride-overlay');
+    overlay.style.background = '#1a2a3a';
+    overlay.style.backdropFilter = 'none';
     overlay.classList.remove('hidden');
 
     this.bikeCanvas = document.getElementById('bike-canvas');
     this.bikeCtx = this.bikeCanvas.getContext('2d');
-    this.bikeCanvas.width = 400;
-    this.bikeCanvas.height = 300;
+    this.bikeCanvas.width = 560;
+    this.bikeCanvas.height = 340;
 
-    this.bikeRider = { x: 60, y: 180, speed: 80, pedaling: 0 }; // pixels per second (dt-based)
+    this.bikeRider = { x: 240, y: 210, speed: 80, pedaling: 0 }; // centered
     this.bikeDistance = 0;
     this.bikeRideStars = 0;
 
@@ -6094,15 +6098,24 @@ class PedestrianGame {
       if (sx < W + 50) ctx.fillText(scenery[i], sx, H * 0.48);
     }
 
-    // Upcoming challenge icon
+    // Upcoming challenge icon (approaches from right, fixed size on road)
     if (this.bikeCurrentChallenge < this.bikeChallenges.length) {
       const ch = this.bikeChallenges[this.bikeCurrentChallenge];
       const dist = ch.triggerDist - 50 - this.bikeDistance;
-      if (dist > 0 && dist < 400) {
-        const objX = this.bikeRider.x + 60 + (dist / 400) * (W - this.bikeRider.x - 80);
-        const objScale = 1 + (1 - dist / 400) * 0.8;
-        ctx.font = `${Math.round(24 * objScale)}px sans-serif`;
-        ctx.fillText(ch.icon, objX, H * 0.56);
+      if (dist > 0 && dist < 500) {
+        const pct = dist / 500; // 1 = far right, 0 = at rider
+        const objX = this.bikeRider.x + 40 + pct * (W - this.bikeRider.x - 60);
+        // Draw on road surface, small and consistent
+        ctx.font = '22px sans-serif';
+        ctx.fillText(ch.icon, objX, H * 0.58);
+        // Label underneath when close
+        if (pct < 0.4) {
+          ctx.fillStyle = '#fff';
+          ctx.font = 'bold 11px Nunito, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText(ch.label, objX + 10, H * 0.58 + 18);
+          ctx.textAlign = 'start';
+        }
       }
     }
 
@@ -6120,8 +6133,8 @@ class PedestrianGame {
     }
 
     // Rider
-    const bounce = this.bikeRidePaused ? 0 : Math.sin(this.bikeRider.pedaling) * 3;
-    ctx.font = '38px sans-serif';
+    const bounce = this.bikeRidePaused ? 0 : Math.sin(this.bikeRider.pedaling) * 2;
+    ctx.font = '28px sans-serif';
     ctx.fillText('🚴', this.bikeRider.x, this.bikeRider.y + bounce);
 
     // Feedback text on canvas
