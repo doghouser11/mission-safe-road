@@ -3637,10 +3637,12 @@ body, html {
   flex-direction: column;
   align-items: center;
   padding: 8px;
-  max-width: 440px;
+  max-width: 700px;
   margin: 0 auto;
   gap: 6px;
   width: 100%;
+  height: 100%;
+  justify-content: center;
 }
 
 .bike-ride-hud {
@@ -3656,10 +3658,11 @@ body, html {
 
 #bike-canvas {
   width: 100%;
-  max-width: 560px;
+  max-width: 100%;
   border-radius: 12px;
   border: 3px solid rgba(255,255,255,0.3);
   background: #87CEEB;
+  aspect-ratio: 16 / 9;
 }
 
 .bike-ride-action {

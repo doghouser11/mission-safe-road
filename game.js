@@ -5881,10 +5881,12 @@ class PedestrianGame {
 
     this.bikeCanvas = document.getElementById('bike-canvas');
     this.bikeCtx = this.bikeCanvas.getContext('2d');
-    this.bikeCanvas.width = 560;
-    this.bikeCanvas.height = 340;
+    // Match canvas resolution to displayed size
+    const rect = this.bikeCanvas.getBoundingClientRect();
+    this.bikeCanvas.width = Math.max(560, Math.round(rect.width)) || 700;
+    this.bikeCanvas.height = Math.max(300, Math.round(rect.height)) || 400;
 
-    this.bikeRider = { x: 240, y: 210, speed: 80, pedaling: 0 }; // centered
+    this.bikeRider = { x: 120, y: 210, speed: 80, pedaling: 0 }; // left third — obstacles come from right
     this.bikeDistance = 0;
     this.bikeRideStars = 0;
 
@@ -6105,13 +6107,13 @@ class PedestrianGame {
       if (dist > 0 && dist < 500) {
         const pct = dist / 500; // 1 = far right, 0 = at rider
         const objX = this.bikeRider.x + 40 + pct * (W - this.bikeRider.x - 60);
-        // Draw on road surface, small and consistent
-        ctx.font = '22px sans-serif';
+        // Draw on road surface
+        ctx.font = '32px sans-serif';
         ctx.fillText(ch.icon, objX, H * 0.58);
         // Label underneath when close
         if (pct < 0.4) {
           ctx.fillStyle = '#fff';
-          ctx.font = 'bold 11px Nunito, sans-serif';
+          ctx.font = 'bold 13px Nunito, sans-serif';
           ctx.textAlign = 'center';
           ctx.fillText(ch.label, objX + 10, H * 0.58 + 18);
           ctx.textAlign = 'start';
@@ -6134,8 +6136,8 @@ class PedestrianGame {
 
     // Rider
     const bounce = this.bikeRidePaused ? 0 : Math.sin(this.bikeRider.pedaling) * 2;
-    ctx.font = '28px sans-serif';
-    ctx.fillText('🚴', this.bikeRider.x, this.bikeRider.y + bounce);
+    ctx.font = '44px sans-serif';
+    ctx.fillText('🚴', this.bikeRider.x - 22, this.bikeRider.y + bounce);
 
     // Feedback text on canvas
     if (this.bikeFeedbackTimer > 0) {
