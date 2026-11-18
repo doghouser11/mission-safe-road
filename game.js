@@ -921,15 +921,6 @@ class PedestrianGame {
         title: 'Път до училище',
         icon: '🏫',
         desc: 'Училището е в края на булеварда! Пресичай внимателно!',
-        subtitle: 'Стигни безопасно до училище!',
-        badge: 'ПРИКЛЮЧЕНИЕ',
-        crossings: 4
-      },
-      {
-        id: 'library',
-        title: 'Път до библиотеката',
-        icon: '📚',
-        desc: 'Библиотеката е далече — ще минеш през натоварени улици!',
         subtitle: 'По-дълъг и труден маршрут!',
         badge: 'ПРЕДИЗВИКАТЕЛСТВО',
         crossings: 6
@@ -951,6 +942,15 @@ class PedestrianGame {
         subtitle: 'Открий опасностите на улицата!',
         badge: 'ДЕТЕКТИВ',
         mode: 'danger'
+      },
+      {
+        id: 'bike',
+        title: 'Велосипедист!',
+        icon: '🚲',
+        desc: 'Подготви се и тръгни на велосипед!',
+        subtitle: 'Екипировка + каране!',
+        badge: 'НОВО',
+        mode: 'bike'
       }
     ];
     this.selectedMission = 1; // default: Път до училище
@@ -1479,7 +1479,7 @@ class PedestrianGame {
     });
 
     // Mission Selection
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < this.missions.length; i++) {
       const btn = document.getElementById(`select-mission-${i}`);
       if (btn) {
         btn.addEventListener('click', () => {
@@ -1510,6 +1510,26 @@ class PedestrianGame {
     document.getElementById('quiz-menu-btn').addEventListener('click', () => {
       sfx.menuSelect();
       document.getElementById('quiz-results-overlay').classList.add('hidden');
+      this.resetToStartMenu();
+    });
+
+    // Bike Mission Buttons
+    document.getElementById('bike-go-btn').addEventListener('click', () => {
+      sfx.menuSelect();
+      this.submitBikeEquip();
+    });
+    document.getElementById('bike-quiz-next-btn').addEventListener('click', () => {
+      sfx.menuSelect();
+      this.nextBikeQuizQuestion();
+    });
+    document.getElementById('bike-retry-btn').addEventListener('click', () => {
+      sfx.menuSelect();
+      document.getElementById('bike-results-overlay').classList.add('hidden');
+      this.startBikeMission();
+    });
+    document.getElementById('bike-menu-btn').addEventListener('click', () => {
+      sfx.menuSelect();
+      document.getElementById('bike-results-overlay').classList.add('hidden');
       this.resetToStartMenu();
     });
 
@@ -2040,6 +2060,10 @@ class PedestrianGame {
     }
     if (mission && mission.mode === 'danger') {
       this.startDangerFind();
+      return;
+    }
+    if (mission && mission.mode === 'bike') {
+      this.startBikeMission();
       return;
     }
 
@@ -3624,6 +3648,11 @@ class PedestrianGame {
     document.getElementById('quiz-results-overlay').classList.add('hidden');
     document.getElementById('danger-overlay').classList.add('hidden');
     document.getElementById('danger-results-overlay').classList.add('hidden');
+    document.getElementById('bike-equip-overlay').classList.add('hidden');
+    document.getElementById('bike-ride-overlay').classList.add('hidden');
+    document.getElementById('bike-quiz-overlay').classList.add('hidden');
+    document.getElementById('bike-results-overlay').classList.add('hidden');
+    if (this.bikeRideLoop) { cancelAnimationFrame(this.bikeRideLoop); this.bikeRideLoop = null; }
     if (this.checkoutModal) this.checkoutModal.classList.add('hidden');
     if (this.checkoutMinigameModal) this.checkoutMinigameModal.classList.add('hidden');
     if (this.homeVictoryModal) this.homeVictoryModal.classList.add('hidden');
@@ -5693,6 +5722,443 @@ class PedestrianGame {
 
 
 
+
+  // ============================================================================
+  // BIKE MISSION: Велосипедист! (3 фази)
+  // ============================================================================
+
+  startBikeMission() {
+    this.bikeEquipment = [
+      { emoji: '🪖', name: 'Каска', required: true, desc: 'Каската е задължителна за деца!' },
+      { emoji: '🦺', name: 'Жилетка', required: true, desc: 'Светлоотразителната жилетка те прави видим!' },
+      { emoji: '🔔', name: 'Звънец', required: true, desc: 'Звънецът предупреждава пешеходци и коли!' },
+      { emoji: '🔦', name: 'Предна светлина', required: true, desc: 'Предната светлина осветява пътя!' },
+      { emoji: '🔴', name: 'Задна светлина', required: true, desc: 'Задната светлина те прави видим отзад!' },
+      { emoji: '🎧', name: 'Слушалки', required: false, bad: true, desc: 'НЕ! Слушалките са опасни — не чуваш колите!' },
+      { emoji: '☂️', name: 'Чадър', required: false, bad: true, desc: 'НЕ! Чадърът пречи на управлението!' },
+      { emoji: '📱', name: 'Телефон', required: false, bad: true, desc: 'НЕ! Телефонът те разсейва — остави го в раницата!' },
+      { emoji: '🏀', name: 'Топка', required: false, bad: true, desc: 'НЕ! Не карай велосипед с топка в ръка!' },
+      { emoji: '🎒', name: 'Голяма раница', required: false, bad: true, desc: 'НЕ! Тежката раница нарушава баланса!' },
+      { emoji: '🧤', name: 'Ръкавици', required: false, bad: false, desc: 'Добър избор! Ръкавиците помагат за захват.' },
+      { emoji: '💧', name: 'Вода', required: false, bad: false, desc: 'Добър избор! Водата е важна при дълго каране.' },
+    ];
+
+    // Shuffle
+    this.bikeEquipment = this.bikeEquipment.sort(() => Math.random() - 0.5);
+    this.bikeSelectedItems = new Set();
+    this.bikePhase = 'equip';
+    this.bikeStars = 0;
+    this.bikeEquipMistakes = 0;
+
+    this.state = 'BIKE_MODE';
+    this.startMenu.classList.add('hidden');
+    this.gameHud.classList.add('hidden');
+    this.progressHud.classList.add('hidden');
+    if (this.walkingControls) this.walkingControls.classList.add('hidden');
+
+    const overlay = document.getElementById('bike-equip-overlay');
+    overlay.classList.remove('hidden');
+    document.getElementById('bike-go-btn').classList.add('hidden');
+    document.getElementById('bike-roni').classList.add('hidden');
+    document.getElementById('bike-equip-hint').textContent = '';
+    document.getElementById('bike-selected-count').textContent = '0';
+
+    const grid = document.getElementById('bike-equip-grid');
+    grid.innerHTML = '';
+    this.bikeEquipment.forEach((item, i) => {
+      const div = document.createElement('div');
+      div.className = 'bike-equip-item';
+      div.innerHTML = `<span class="bike-equip-emoji">${item.emoji}</span><span class="bike-equip-label">${item.name}</span>`;
+      div.dataset.index = i;
+      div.addEventListener('click', () => this.toggleBikeEquip(i, div));
+      grid.appendChild(div);
+    });
+  }
+
+  toggleBikeEquip(idx, div) {
+    const item = this.bikeEquipment[idx];
+
+    if (this.bikeSelectedItems.has(idx)) {
+      // Deselect
+      this.bikeSelectedItems.delete(idx);
+      div.classList.remove('selected');
+    } else {
+      // Select
+      this.bikeSelectedItems.add(idx);
+      div.classList.add('selected');
+    }
+
+    document.getElementById('bike-selected-count').textContent = this.bikeSelectedItems.size;
+    this.checkBikeEquipReady();
+  }
+
+  checkBikeEquipReady() {
+    const required = this.bikeEquipment.filter(e => e.required);
+    const allRequired = required.every((item, _) => {
+      const idx = this.bikeEquipment.indexOf(item);
+      return this.bikeSelectedItems.has(idx);
+    });
+    const anyBad = [...this.bikeSelectedItems].some(idx => this.bikeEquipment[idx].bad);
+
+    const goBtn = document.getElementById('bike-go-btn');
+    const hint = document.getElementById('bike-equip-hint');
+
+    if (allRequired && !anyBad) {
+      goBtn.classList.remove('hidden');
+      hint.textContent = '✅ Готов за тръгване!';
+      hint.style.color = '#4caf50';
+    } else {
+      goBtn.classList.add('hidden');
+      if (anyBad) {
+        hint.textContent = '⚠️ Махни нещо, което не ти трябва!';
+        hint.style.color = '#ff9800';
+      } else {
+        const missing = required.filter(item => !this.bikeSelectedItems.has(this.bikeEquipment.indexOf(item)));
+        hint.textContent = `Липсват ${missing.length} задължителни`;
+        hint.style.color = 'rgba(255,255,255,0.7)';
+      }
+    }
+  }
+
+  submitBikeEquip() {
+    // Validate and show feedback
+    const roni = document.getElementById('bike-roni');
+    const roniText = document.getElementById('bike-roni-text');
+    let hasError = false;
+
+    // Check for bad items selected
+    for (const idx of this.bikeSelectedItems) {
+      const item = this.bikeEquipment[idx];
+      if (item.bad) {
+        hasError = true;
+        const divs = document.querySelectorAll('.bike-equip-item');
+        divs[idx].classList.add('wrong');
+        roni.classList.remove('hidden');
+        roniText.textContent = item.desc;
+        this.bikeEquipMistakes++;
+        setTimeout(() => {
+          divs[idx].classList.remove('wrong', 'selected');
+          this.bikeSelectedItems.delete(idx);
+          document.getElementById('bike-selected-count').textContent = this.bikeSelectedItems.size;
+          this.checkBikeEquipReady();
+        }, 1500);
+        return;
+      }
+    }
+
+    // Check for missing required
+    const required = this.bikeEquipment.filter(e => e.required);
+    const missing = required.filter(item => !this.bikeSelectedItems.has(this.bikeEquipment.indexOf(item)));
+    if (missing.length > 0) {
+      roni.classList.remove('hidden');
+      roniText.textContent = `Забрави нещо важно! Потърси: ${missing[0].name} ${missing[0].emoji}`;
+      this.bikeEquipMistakes++;
+      return;
+    }
+
+    // All good — award stars and move to phase 2
+    this.bikeStars += this.bikeEquipMistakes === 0 ? 3 : this.bikeEquipMistakes <= 2 ? 2 : 1;
+
+    sfx.fanfare && sfx.fanfare();
+    roni.classList.remove('hidden');
+    roniText.textContent = 'Перфектна екипировка! Тръгваме! 🚲💨';
+
+    setTimeout(() => {
+      document.getElementById('bike-equip-overlay').classList.add('hidden');
+      this.startBikeRide();
+    }, 1500);
+  }
+
+  // Phase 2: Side-scroller bike riding
+  startBikeRide() {
+    this.bikePhase = 'ride';
+    const overlay = document.getElementById('bike-ride-overlay');
+    overlay.classList.remove('hidden');
+
+    this.bikeCanvas = document.getElementById('bike-canvas');
+    this.bikeCtx = this.bikeCanvas.getContext('2d');
+
+    // Set canvas resolution
+    const rect = this.bikeCanvas.getBoundingClientRect();
+    this.bikeCanvas.width = 400;
+    this.bikeCanvas.height = 300;
+
+    this.bikeRider = {
+      x: 60,
+      y: 180,
+      lane: 1, // 0=top, 1=middle, 2=bottom
+      speed: 2,
+      pedaling: 0,
+      stopped: false,
+      signaling: false
+    };
+
+    this.bikeDistance = 0;
+    this.bikeRideStars = 0;
+    this.bikeObstacles = [];
+    this.bikeChallenges = [
+      { type: 'stop_sign', triggerDist: 300, text: '🛑 СТОП знак! Какво правиш?', options: ['Спирам и оглеждам', 'Ускорявам'], correct: 0, roni: 'На СТОП знак винаги спираш!' },
+      { type: 'turn_signal', triggerDist: 700, text: '↗️ Завиваш надясно. Какво правиш първо?', options: ['Подавам ръчен сигнал', 'Завивам директно'], correct: 0, roni: 'Преди завой — протегни ръка за сигнал!' },
+      { type: 'pedestrian', triggerDist: 1100, text: '🚶 Пешеходец на велоалеята! Какво правиш?', options: ['Звъня и заобикалям внимателно', 'Карам покрай него бързо'], correct: 0, roni: 'Предупреди с звънец и заобиколи бавно!' },
+      { type: 'red_light', triggerDist: 1500, text: '🔴 Червен светофар! Какво правиш?', options: ['Спирам и чакам зелено', 'Пресичам — няма коли'], correct: 0, roni: 'Червено = СТОП! Дори и да няма коли!' },
+      { type: 'night', triggerDist: 1900, text: '🌙 Започва да се стъмва. Какво правиш?', options: ['Включвам предната и задната светлина', 'Продължавам — все още се вижда'], correct: 0, roni: 'Включи светлините преди да стане тъмно!' },
+    ];
+    this.bikeCurrentChallenge = 0;
+    this.bikeRidePaused = false;
+    this.bikeRideFinished = false;
+
+    this.bikeRideLoop = requestAnimationFrame(() => this.updateBikeRide());
+  }
+
+  updateBikeRide() {
+    if (this.state !== 'BIKE_MODE' || this.bikePhase !== 'ride') {
+      // Phase changed, stop loop
+      return;
+    }
+
+    const ctx = this.bikeCtx;
+    const W = this.bikeCanvas.width;
+    const H = this.bikeCanvas.height;
+
+    if (!this.bikeRidePaused && !this.bikeRideFinished) {
+      this.bikeDistance += this.bikeRider.speed;
+      this.bikeRider.pedaling += 0.15;
+    }
+
+    // Check for challenge triggers
+    if (this.bikeCurrentChallenge < this.bikeChallenges.length) {
+      const ch = this.bikeChallenges[this.bikeCurrentChallenge];
+      if (this.bikeDistance >= ch.triggerDist && !this.bikeRidePaused) {
+        this.bikeRidePaused = true;
+        this.showBikeChallenge(ch);
+      }
+    } else if (this.bikeDistance >= 2200 && !this.bikeRideFinished) {
+      this.bikeRideFinished = true;
+      this.bikeStars += this.bikeRideStars;
+      setTimeout(() => {
+        document.getElementById('bike-ride-overlay').classList.add('hidden');
+        this.startBikeQuiz();
+      }, 1000);
+    }
+
+    // Draw
+    // Sky gradient (gets darker as distance increases)
+    const nightPct = Math.min(1, Math.max(0, (this.bikeDistance - 1800) / 400));
+    const skyR = Math.round(135 - nightPct * 110);
+    const skyG = Math.round(206 - nightPct * 170);
+    const skyB = Math.round(235 - nightPct * 150);
+    ctx.fillStyle = `rgb(${skyR},${skyG},${skyB})`;
+    ctx.fillRect(0, 0, W, H);
+
+    // Ground
+    ctx.fillStyle = nightPct > 0.5 ? '#2a3a2a' : '#4a7a3a';
+    ctx.fillRect(0, H * 0.55, W, H * 0.45);
+
+    // Road
+    ctx.fillStyle = nightPct > 0.5 ? '#333' : '#666';
+    ctx.fillRect(0, H * 0.5, W, H * 0.35);
+
+    // Bike lane marking
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([20, 15]);
+    ctx.beginPath();
+    ctx.moveTo(0, H * 0.6);
+    ctx.lineTo(W, H * 0.6);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Bike lane icon
+    const laneMarkX = ((this.bikeDistance * 1.5) % 300) - 50;
+    ctx.fillStyle = 'rgba(255,255,255,0.3)';
+    ctx.font = '20px sans-serif';
+    ctx.fillText('🚲', W - laneMarkX, H * 0.72);
+
+    // Scrolling trees/buildings
+    for (let i = 0; i < 6; i++) {
+      const treeX = ((i * 120 - this.bikeDistance * 0.8) % (W + 100) + W + 100) % (W + 100) - 50;
+      ctx.font = '28px sans-serif';
+      ctx.fillText(i % 2 === 0 ? '🌳' : '🏠', treeX, H * 0.48);
+    }
+
+    // Challenge objects on road
+    if (this.bikeCurrentChallenge < this.bikeChallenges.length) {
+      const ch = this.bikeChallenges[this.bikeCurrentChallenge];
+      const objDist = ch.triggerDist - this.bikeDistance;
+      if (objDist > 0 && objDist < 350) {
+        const objX = W * 0.7 + (objDist / 350) * W * 0.3;
+        const icons = { stop_sign: '🛑', turn_signal: '↗️', pedestrian: '🚶', red_light: '🚦', night: '🌙' };
+        ctx.font = '30px sans-serif';
+        ctx.fillText(icons[ch.type] || '⚠️', objX, H * 0.55);
+      }
+    }
+
+    // Rider
+    const riderY = this.bikeRider.y;
+    const bounce = this.bikeRidePaused ? 0 : Math.sin(this.bikeRider.pedaling) * 3;
+    ctx.font = '36px sans-serif';
+    ctx.fillText('🚴', this.bikeRider.x, riderY + bounce);
+
+    // HUD update
+    document.getElementById('bike-ride-distance').textContent = `${Math.floor(this.bikeDistance)}m`;
+    document.getElementById('bike-ride-stars').textContent = `⭐ ${this.bikeRideStars}`;
+
+    // Finish line
+    if (this.bikeDistance > 2000) {
+      const finishX = W - ((this.bikeDistance - 2000) * 0.5);
+      if (finishX > 0) {
+        ctx.font = 'bold 16px Nunito, sans-serif';
+        ctx.fillStyle = '#fff';
+        ctx.fillText('🏁 ФИНИШ', Math.max(10, finishX), H * 0.48);
+      }
+    }
+
+    this.bikeRideLoop = requestAnimationFrame(() => this.updateBikeRide());
+  }
+
+  showBikeChallenge(ch) {
+    const actionEl = document.getElementById('bike-ride-action');
+    actionEl.classList.remove('hidden');
+    document.getElementById('bike-ride-action-text').textContent = ch.text;
+
+    const btnsEl = document.getElementById('bike-ride-buttons');
+    btnsEl.innerHTML = '';
+    ch.options.forEach((opt, i) => {
+      const btn = document.createElement('button');
+      btn.className = i === ch.correct ? 'bike-btn-correct' : 'bike-btn-wrong';
+      btn.textContent = opt;
+      btn.addEventListener('click', () => this.answerBikeChallenge(i, ch));
+      btnsEl.appendChild(btn);
+    });
+  }
+
+  answerBikeChallenge(idx, ch) {
+    const isCorrect = idx === ch.correct;
+    if (isCorrect) {
+      this.bikeRideStars++;
+      sfx.playRetroPulse(880, 0.15, 'square', 0.1);
+      document.getElementById('bike-ride-action-text').textContent = '✅ Правилно! ' + ch.roni;
+    } else {
+      sfx.playRetroPulse(220, 0.3, 'square', 0.08);
+      document.getElementById('bike-ride-action-text').textContent = '❌ ' + ch.roni;
+    }
+
+    document.getElementById('bike-ride-buttons').innerHTML = '';
+    this.bikeCurrentChallenge++;
+
+    setTimeout(() => {
+      document.getElementById('bike-ride-action').classList.add('hidden');
+      this.bikeRidePaused = false;
+    }, 2000);
+  }
+
+  // Phase 3: Bike-specific quiz
+  startBikeQuiz() {
+    this.bikePhase = 'quiz';
+    this.bikeQuizQuestions = [
+      { q: 'От коя страна на пътя караш велосипед?', a: ['От лявата', 'От дясната', 'По средата', 'По тротоара'], correct: 1, roni: 'Велосипедът кара от ДЯСНАТА страна, по посока на движение!' },
+      { q: 'Задължителна ли е каската за деца до 18г.?', a: ['Да, задължителна е', 'Не, по избор', 'Само до 12г.', 'Само извън града'], correct: 0, roni: 'ДА! По закон каската е задължителна за деца!' },
+      { q: 'Какво правиш преди да завиеш наляво?', a: ['Нищо, просто завивам', 'Протягам лява ръка за сигнал', 'Спирам за 10 секунди', 'Натискам клаксон'], correct: 1, roni: 'Преди завой — протегни ръка, за да знаят шофьорите!' },
+      { q: 'Може ли да караш велосипед по тротоара?', a: ['Да, винаги', 'Не, освен ако няма велоалея и си дете', 'Само нощем', 'Само с каска'], correct: 1, roni: 'Велосипедът е за пътя или велоалеята, не за тротоара!' },
+      { q: 'Какво НЕ трябва да правиш докато караш?', a: ['Да пееш', 'Да гледаш телефон', 'Да педалираш бавно', 'Да спираш на знак СТОП'], correct: 1, roni: 'НИКОГА не гледай телефон докато караш!' },
+    ];
+    this.bikeQuizIndex = 0;
+    this.bikeQuizScore = 0;
+    this.bikeQuizAnswered = false;
+
+    document.getElementById('bike-quiz-overlay').classList.remove('hidden');
+    document.getElementById('bike-quiz-total').textContent = this.bikeQuizQuestions.length;
+    this.showBikeQuizQuestion();
+  }
+
+  showBikeQuizQuestion() {
+    const q = this.bikeQuizQuestions[this.bikeQuizIndex];
+    document.getElementById('bike-quiz-current').textContent = this.bikeQuizIndex + 1;
+    document.getElementById('bike-quiz-score').textContent = this.bikeQuizScore;
+    document.getElementById('bike-quiz-question').textContent = q.q;
+    document.getElementById('bike-quiz-feedback').classList.add('hidden');
+    this.bikeQuizAnswered = false;
+
+    const answersEl = document.getElementById('bike-quiz-answers');
+    answersEl.innerHTML = '';
+    q.a.forEach((ans, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'quiz-answer-btn';
+      btn.textContent = `${['А', 'Б', 'В', 'Г'][i]}. ${ans}`;
+      btn.addEventListener('click', () => this.checkBikeQuizAnswer(i));
+      answersEl.appendChild(btn);
+    });
+  }
+
+  checkBikeQuizAnswer(idx) {
+    if (this.bikeQuizAnswered) return;
+    this.bikeQuizAnswered = true;
+
+    const q = this.bikeQuizQuestions[this.bikeQuizIndex];
+    const btns = document.querySelectorAll('#bike-quiz-answers .quiz-answer-btn');
+    const isCorrect = idx === q.correct;
+
+    btns[idx].classList.add(isCorrect ? 'correct' : 'wrong');
+    if (!isCorrect) btns[q.correct].classList.add('correct');
+
+    if (isCorrect) {
+      this.bikeQuizScore++;
+      sfx.playRetroPulse(880, 0.15, 'square', 0.1);
+    } else {
+      sfx.playRetroPulse(220, 0.3, 'square', 0.08);
+    }
+
+    const fb = document.getElementById('bike-quiz-feedback');
+    fb.classList.remove('hidden');
+    document.getElementById('bike-quiz-fb-icon').textContent = isCorrect ? '✅' : '❌';
+    document.getElementById('bike-quiz-fb-text').textContent = isCorrect ? 'Правилно!' : 'Не съвсем...';
+
+    const roniEl = document.getElementById('bike-quiz-roni');
+    if (!isCorrect) {
+      roniEl.classList.remove('hidden');
+      document.getElementById('bike-quiz-roni-text').textContent = q.roni;
+    } else {
+      roniEl.classList.add('hidden');
+    }
+
+    const nextBtn = document.getElementById('bike-quiz-next-btn');
+    nextBtn.textContent = this.bikeQuizIndex < this.bikeQuizQuestions.length - 1 ? 'Следващ ➡️' : 'Виж резултата 🏆';
+  }
+
+  nextBikeQuizQuestion() {
+    this.bikeQuizIndex++;
+    if (this.bikeQuizIndex >= this.bikeQuizQuestions.length) {
+      this.showBikeResults();
+    } else {
+      this.showBikeQuizQuestion();
+    }
+  }
+
+  showBikeResults() {
+    document.getElementById('bike-quiz-overlay').classList.add('hidden');
+    document.getElementById('bike-ride-overlay').classList.add('hidden');
+
+    this.bikeStars += this.bikeQuizScore;
+    const maxStars = 3 + 5 + 5; // equip + ride + quiz
+    const pct = this.bikeStars / maxStars;
+
+    const overlay = document.getElementById('bike-results-overlay');
+    overlay.classList.remove('hidden');
+
+    let title, subtitle;
+    if (pct >= 0.85) { title = 'Истински велосипедист! 🚲🌟'; subtitle = 'Знаеш всички правила за безопасно каране!'; }
+    else if (pct >= 0.6) { title = 'Браво! 🚲👏'; subtitle = 'Знаеш основните правила!'; }
+    else { title = 'Опитай пак! 🚲💪'; subtitle = 'Рони ще ти помогне да научиш правилата!'; }
+
+    document.getElementById('bike-results-title').textContent = title;
+    document.getElementById('bike-results-subtitle').textContent = subtitle;
+    document.getElementById('bike-results-score').textContent = `${this.bikeStars} / ${maxStars}`;
+
+    const starCount = pct >= 0.85 ? 3 : pct >= 0.6 ? 2 : 1;
+    document.getElementById('bike-results-stars').textContent = '⭐'.repeat(starCount) + '☆'.repeat(3 - starCount);
+
+    sfx.fanfare && sfx.fanfare();
+  }
 
   // ============================================================================
   // QUIZ MODE: Познай знака! (Светльо)
