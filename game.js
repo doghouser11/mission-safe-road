@@ -5886,7 +5886,7 @@ class PedestrianGame {
     this.bikeCanvas.width = Math.max(560, Math.round(rect.width)) || 700;
     this.bikeCanvas.height = Math.max(300, Math.round(rect.height)) || 400;
 
-    this.bikeRider = { x: 120, y: 210, speed: 80, pedaling: 0 }; // left third — obstacles come from right
+    this.bikeRider = { x: 0, y: 0, speed: 80, pedaling: 0 }; // position set dynamically in render
     this.bikeDistance = 0;
     this.bikeRideStars = 0;
 
@@ -6250,25 +6250,36 @@ class PedestrianGame {
       }
     }
 
+    // === RIDER & OBSTACLES (drawn LAST, on top of everything) ===
+
+    // Dynamic rider position: 30% from left, centered on bike lane
+    const riderX = W * 0.3;
+    const riderY = H * 0.63;
+    this.bikeRider.x = riderX;
+    this.bikeRider.y = riderY;
+
     // Upcoming challenge icon (approaches from RIGHT — in front of rider)
     if (this.bikeCurrentChallenge < this.bikeChallenges.length) {
       const ch = this.bikeChallenges[this.bikeCurrentChallenge];
       const dist = ch.triggerDist - 50 - scroll;
       if (dist > 0 && dist < 500) {
         const pct = dist / 500;
-        const objX = this.bikeRider.x + 60 + pct * (W - this.bikeRider.x - 80);
-        ctx.fillStyle = 'rgba(0,0,0,0.2)';
-        ctx.beginPath(); ctx.ellipse(objX + 8, H * 0.62, 14, 4, 0, 0, Math.PI * 2); ctx.fill();
-        ctx.font = '34px sans-serif';
-        ctx.fillText(ch.icon, objX - 8, H * 0.58);
+        const objX = riderX + 60 + pct * (W - riderX - 80);
+        // Shadow
+        ctx.fillStyle = 'rgba(0,0,0,0.25)';
+        ctx.beginPath(); ctx.ellipse(objX + 8, H * 0.68, 16, 5, 0, 0, Math.PI * 2); ctx.fill();
+        // Icon (large, visible)
+        ctx.font = '40px sans-serif';
+        ctx.fillText(ch.icon, objX - 10, H * 0.64);
+        // Label when close
         if (pct < 0.35) {
-          ctx.fillStyle = 'rgba(0,0,0,0.6)';
-          ctx.font = 'bold 12px Nunito, sans-serif';
+          ctx.font = 'bold 13px Nunito, sans-serif';
           const tw = ctx.measureText(ch.label).width;
-          ctx.beginPath(); ctx.roundRect(objX - tw/2, H * 0.60, tw + 16, 20, 6); ctx.fill();
+          ctx.fillStyle = 'rgba(0,0,0,0.7)';
+          ctx.beginPath(); ctx.roundRect(objX - tw/2, H * 0.66, tw + 16, 22, 6); ctx.fill();
           ctx.fillStyle = '#fff';
           ctx.textAlign = 'center';
-          ctx.fillText(ch.label, objX + 8, H * 0.60 + 15);
+          ctx.fillText(ch.label, objX + 8, H * 0.66 + 16);
           ctx.textAlign = 'start';
         }
       }
@@ -6277,26 +6288,26 @@ class PedestrianGame {
     // Active challenge: flash border + countdown
     if (this.bikeActiveChallenge) {
       const pulse = Math.sin(Date.now() / 150) > 0;
-      ctx.strokeStyle = pulse ? 'rgba(244,67,54,0.8)' : 'rgba(255,152,0,0.8)';
-      ctx.lineWidth = 4;
+      ctx.strokeStyle = pulse ? 'rgba(244,67,54,0.9)' : 'rgba(255,152,0,0.9)';
+      ctx.lineWidth = 5;
       ctx.strokeRect(2, 2, W - 4, H - 4);
       const pct = this.bikeChallengeTimer / this.bikeChallengeTimeout;
       const barGrad = ctx.createLinearGradient(0, 0, W * pct, 0);
       barGrad.addColorStop(0, pct > 0.5 ? '#4caf50' : pct > 0.25 ? '#ff9800' : '#f44336');
       barGrad.addColorStop(1, pct > 0.5 ? '#66bb6a' : pct > 0.25 ? '#ffb74d' : '#ef5350');
       ctx.fillStyle = barGrad;
-      ctx.fillRect(0, 0, W * pct, 5);
+      ctx.fillRect(0, 0, W * pct, 6);
     }
 
     // Rider shadow
-    ctx.fillStyle = 'rgba(0,0,0,0.15)';
-    ctx.beginPath(); ctx.ellipse(this.bikeRider.x, this.bikeRider.y + 16, 18, 5, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = 'rgba(0,0,0,0.2)';
+    ctx.beginPath(); ctx.ellipse(riderX, riderY + 20, 22, 6, 0, 0, Math.PI * 2); ctx.fill();
 
-    // Rider
+    // Rider (large, prominent)
     const bounce = this.bikeRidePaused ? 0 : Math.sin(this.bikeRider.pedaling) * 2;
-    ctx.font = '44px sans-serif';
+    ctx.font = '52px sans-serif';
     const bikeEmoji = this.selectedChar === 'girl' ? '🚴‍♀️' : '🚴‍♂️';
-    ctx.fillText(bikeEmoji, this.bikeRider.x - 22, this.bikeRider.y + bounce);
+    ctx.fillText(bikeEmoji, riderX - 26, riderY + bounce);
 
     // Feedback text
     if (this.bikeFeedbackTimer > 0) {
