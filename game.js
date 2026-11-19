@@ -6046,93 +6046,251 @@ class PedestrianGame {
     }
 
     // ===== DRAW =====
-    // Sky
-    const nightPct = Math.min(1, Math.max(0, (this.bikeDistance - 2200) / 400));
-    const skyR = Math.round(135 - nightPct * 110);
-    const skyG = Math.round(206 - nightPct * 170);
-    const skyB = Math.round(235 - nightPct * 150);
-    ctx.fillStyle = `rgb(${skyR},${skyG},${skyB})`;
-    ctx.fillRect(0, 0, W, H);
+    const scroll = this.bikeDistance;
 
-    // Clouds (slow parallax)
-    ctx.font = '22px sans-serif';
-    for (let i = 0; i < 3; i++) {
-      const baseX = i * 180;
-      const scrollX = this.bikeDistance * 0.15;
-      let cx = baseX - (scrollX % (W + 100));
-      if (cx < -50) cx += W + 100;
-      ctx.fillText('☁️', cx, 30 + i * 25);
+    // Sky gradient (day → dusk transition)
+    const nightPct = Math.min(1, Math.max(0, (scroll - 2200) / 400));
+    const skyGrad = ctx.createLinearGradient(0, 0, 0, H * 0.5);
+    if (nightPct < 0.5) {
+      skyGrad.addColorStop(0, '#7ec8e3');
+      skyGrad.addColorStop(1, '#87CEEB');
+    } else {
+      skyGrad.addColorStop(0, '#1a2a4a');
+      skyGrad.addColorStop(0.6, '#2a3a5a');
+      skyGrad.addColorStop(1, '#3a4a6a');
+    }
+    ctx.fillStyle = skyGrad;
+    ctx.fillRect(0, 0, W, H * 0.5);
+
+    // Sun / Moon
+    if (nightPct < 0.5) {
+      const sunX = W * 0.82;
+      const sunY = H * 0.12;
+      const sunGlow = ctx.createRadialGradient(sunX, sunY, 5, sunX, sunY, 40);
+      sunGlow.addColorStop(0, 'rgba(255,235,59,0.9)');
+      sunGlow.addColorStop(0.5, 'rgba(255,235,59,0.2)');
+      sunGlow.addColorStop(1, 'transparent');
+      ctx.fillStyle = sunGlow;
+      ctx.beginPath(); ctx.arc(sunX, sunY, 40, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#ffeb3b';
+      ctx.beginPath(); ctx.arc(sunX, sunY, 14, 0, Math.PI * 2); ctx.fill();
+    } else {
+      ctx.fillStyle = '#e0e0e0';
+      ctx.beginPath(); ctx.arc(W * 0.85, H * 0.1, 12, 0, Math.PI * 2); ctx.fill();
     }
 
-    // Ground
-    ctx.fillStyle = nightPct > 0.5 ? '#2a3a2a' : '#4a7a3a';
-    ctx.fillRect(0, H * 0.55, W, H * 0.45);
+    // Clouds (parallax, drawn shapes)
+    const cloudData = [{bx: 60, by: 0.08, w: 70}, {bx: 250, by: 0.14, w: 55}, {bx: 420, by: 0.06, w: 80}, {bx: 600, by: 0.12, w: 50}];
+    ctx.fillStyle = nightPct > 0.5 ? 'rgba(200,200,220,0.15)' : 'rgba(255,255,255,0.75)';
+    cloudData.forEach(c => {
+      let cx = c.bx - (scroll * 0.08 % (W + 200));
+      if (cx < -100) cx += W + 200;
+      const cy = c.by * H;
+      ctx.beginPath();
+      ctx.arc(cx, cy, c.w * 0.3, 0, Math.PI * 2);
+      ctx.arc(cx + c.w * 0.25, cy - c.w * 0.1, c.w * 0.25, 0, Math.PI * 2);
+      ctx.arc(cx + c.w * 0.5, cy, c.w * 0.28, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    // Background hills
+    ctx.fillStyle = nightPct > 0.5 ? '#1a3a1a' : '#6aaa4a';
+    ctx.beginPath();
+    ctx.moveTo(0, H * 0.42);
+    for (let x = 0; x <= W; x += 20) {
+      const hillY = H * 0.42 + Math.sin((x + scroll * 0.05) * 0.015) * 15 + Math.sin((x + scroll * 0.03) * 0.008) * 10;
+      ctx.lineTo(x, hillY);
+    }
+    ctx.lineTo(W, H * 0.5); ctx.lineTo(0, H * 0.5); ctx.closePath(); ctx.fill();
+
+    // Ground / grass strip
+    ctx.fillStyle = nightPct > 0.5 ? '#1e3a1e' : '#4a8a3a';
+    ctx.fillRect(0, H * 0.5, W, H * 0.04);
+
+    // Top sidewalk / curb
+    ctx.fillStyle = nightPct > 0.5 ? '#555' : '#aaa';
+    ctx.fillRect(0, H * 0.54, W, H * 0.03);
 
     // Road
-    ctx.fillStyle = nightPct > 0.5 ? '#444' : '#666';
-    ctx.fillRect(0, H * 0.5, W, H * 0.35);
+    const roadGrad = ctx.createLinearGradient(0, H * 0.57, 0, H * 0.88);
+    roadGrad.addColorStop(0, nightPct > 0.5 ? '#3a3a3a' : '#555');
+    roadGrad.addColorStop(0.5, nightPct > 0.5 ? '#333' : '#666');
+    roadGrad.addColorStop(1, nightPct > 0.5 ? '#3a3a3a' : '#555');
+    ctx.fillStyle = roadGrad;
+    ctx.fillRect(0, H * 0.57, W, H * 0.31);
 
-    // Road markings (dashes scroll left)
-    ctx.strokeStyle = '#fff';
+    // Road edge lines (white)
+    ctx.fillStyle = 'rgba(255,255,255,0.6)';
+    ctx.fillRect(0, H * 0.57, W, 2);
+    ctx.fillRect(0, H * 0.88 - 2, W, 2);
+
+    // Center dashed line (yellow)
+    ctx.strokeStyle = '#fdd835';
     ctx.lineWidth = 2;
-    const dashOffset = -(this.bikeDistance * 0.5) % 35;
-    ctx.setLineDash([20, 15]);
+    const dashOffset = -(scroll * 0.5) % 35;
+    ctx.setLineDash([18, 14]);
     ctx.lineDashOffset = dashOffset;
     ctx.beginPath();
-    ctx.moveTo(0, H * 0.67);
-    ctx.lineTo(W, H * 0.67);
+    ctx.moveTo(0, H * 0.725);
+    ctx.lineTo(W, H * 0.725);
     ctx.stroke();
     ctx.setLineDash([]);
     ctx.lineDashOffset = 0;
 
-    // Bike lane marking
-    ctx.fillStyle = 'rgba(76,175,80,0.3)';
-    ctx.fillRect(0, H * 0.5, W, H * 0.17);
+    // Bike lane (green tint on top lane)
+    ctx.fillStyle = 'rgba(76,175,80,0.15)';
+    ctx.fillRect(0, H * 0.57, W, H * 0.155);
 
-    // Scrolling scenery (moves left = bike goes right)
-    ctx.font = '30px sans-serif';
-    const scenery = ['🌳', '🏠', '🌲', '🏢', '🌳', '🏪', '🌲', '🏫'];
-    const sceneSpacing = 100;
-    const totalSceneW = scenery.length * sceneSpacing;
-    for (let i = 0; i < scenery.length; i++) {
-      let sx = (i * sceneSpacing) - (this.bikeDistance * 0.4 % totalSceneW);
-      if (sx < -50) sx += totalSceneW;
-      if (sx < W + 50) ctx.fillText(scenery[i], sx, H * 0.48);
+    // Bike lane icons (scrolling)
+    ctx.font = '16px sans-serif';
+    ctx.globalAlpha = 0.25;
+    for (let i = 0; i < 4; i++) {
+      let bx = i * 200 - (scroll * 0.5 % 200);
+      if (bx < -30) bx += 800;
+      if (bx < W + 30) ctx.fillText('🚲', bx, H * 0.66);
+    }
+    ctx.globalAlpha = 1;
+
+    // Bottom curb
+    ctx.fillStyle = nightPct > 0.5 ? '#555' : '#999';
+    ctx.fillRect(0, H * 0.88, W, H * 0.03);
+
+    // Bottom grass
+    ctx.fillStyle = nightPct > 0.5 ? '#1e3a1e' : '#4a8a3a';
+    ctx.fillRect(0, H * 0.91, W, H * 0.09);
+
+    // Scrolling background scenery (drawn buildings, trees)
+    const sceneItems = [
+      {type:'tree', offset: 0}, {type:'house', offset: 110}, {type:'tree', offset: 200},
+      {type:'building', offset: 320}, {type:'tree', offset: 410}, {type:'shop', offset: 500},
+      {type:'tree', offset: 580}, {type:'school', offset: 700}
+    ];
+    const totalSceneW = 800;
+    sceneItems.forEach(item => {
+      let sx = item.offset - (scroll * 0.4 % totalSceneW);
+      if (sx < -60) sx += totalSceneW;
+      if (sx > W + 60) return;
+      const groundY = H * 0.5;
+
+      if (item.type === 'tree') {
+        ctx.fillStyle = nightPct > 0.5 ? '#3a2a1a' : '#6d4c41';
+        ctx.fillRect(sx + 8, groundY - 35, 8, 35);
+        ctx.fillStyle = nightPct > 0.5 ? '#1a4a1a' : '#43a047';
+        ctx.beginPath(); ctx.arc(sx + 12, groundY - 40, 18, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = nightPct > 0.5 ? '#1a3a1a' : '#388e3c';
+        ctx.beginPath(); ctx.arc(sx + 18, groundY - 45, 14, 0, Math.PI * 2); ctx.fill();
+      } else if (item.type === 'house') {
+        ctx.fillStyle = nightPct > 0.5 ? '#3a3030' : '#e8d5b7';
+        ctx.fillRect(sx, groundY - 42, 40, 42);
+        ctx.fillStyle = nightPct > 0.5 ? '#5a2a2a' : '#c62828';
+        ctx.beginPath(); ctx.moveTo(sx - 4, groundY - 42); ctx.lineTo(sx + 20, groundY - 60); ctx.lineTo(sx + 44, groundY - 42); ctx.closePath(); ctx.fill();
+        ctx.fillStyle = nightPct > 0.5 ? '#ffd54f' : '#bbdefb';
+        ctx.fillRect(sx + 8, groundY - 34, 10, 10);
+        ctx.fillRect(sx + 24, groundY - 34, 10, 10);
+        ctx.fillStyle = '#5d4037';
+        ctx.fillRect(sx + 15, groundY - 18, 12, 18);
+      } else if (item.type === 'building') {
+        ctx.fillStyle = nightPct > 0.5 ? '#2a3040' : '#90a4ae';
+        ctx.fillRect(sx, groundY - 65, 45, 65);
+        ctx.fillStyle = nightPct > 0.5 ? '#ffd54f' : '#e3f2fd';
+        for (let wy = 0; wy < 4; wy++) {
+          for (let wx = 0; wx < 3; wx++) {
+            ctx.fillRect(sx + 5 + wx * 14, groundY - 60 + wy * 15, 8, 8);
+          }
+        }
+      } else if (item.type === 'shop') {
+        ctx.fillStyle = nightPct > 0.5 ? '#2a3a2a' : '#a5d6a7';
+        ctx.fillRect(sx, groundY - 38, 42, 38);
+        ctx.fillStyle = nightPct > 0.5 ? '#5a3030' : '#ef5350';
+        ctx.fillRect(sx - 3, groundY - 38, 48, 8);
+        ctx.fillStyle = nightPct > 0.5 ? '#ffd54f' : '#fff9c4';
+        ctx.fillRect(sx + 5, groundY - 28, 32, 16);
+      } else if (item.type === 'school') {
+        ctx.fillStyle = nightPct > 0.5 ? '#3a3a2a' : '#fff9c4';
+        ctx.fillRect(sx, groundY - 50, 55, 50);
+        ctx.fillStyle = nightPct > 0.5 ? '#5a4a2a' : '#f9a825';
+        ctx.fillRect(sx - 3, groundY - 50, 61, 7);
+        ctx.fillStyle = nightPct > 0.5 ? '#ffd54f' : '#bbdefb';
+        for (let wx = 0; wx < 4; wx++) {
+          ctx.fillRect(sx + 5 + wx * 13, groundY - 40, 8, 10);
+        }
+        ctx.font = '14px sans-serif';
+        ctx.fillText('🚸', sx + 56, groundY - 20);
+      }
+    });
+
+    // Bottom bushes
+    ctx.fillStyle = nightPct > 0.5 ? '#2a4a2a' : '#66bb6a';
+    for (let i = 0; i < 5; i++) {
+      let bx = i * 170 - (scroll * 0.35 % 850);
+      if (bx < -20) bx += 850;
+      if (bx < W + 20) {
+        ctx.beginPath(); ctx.arc(bx, H * 0.94, 10, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(bx + 14, H * 0.95, 8, 0, Math.PI * 2); ctx.fill();
+      }
     }
 
-    // Upcoming challenge icon (approaches from right, fixed size on road)
+    // Street lamps
+    ctx.strokeStyle = nightPct > 0.5 ? '#777' : '#90a4ae';
+    ctx.lineWidth = 3;
+    for (let i = 0; i < 4; i++) {
+      let lx = i * 210 - (scroll * 0.4 % 840);
+      if (lx < -20) lx += 840;
+      if (lx > W + 20) continue;
+      ctx.beginPath(); ctx.moveTo(lx, H * 0.54); ctx.lineTo(lx, H * 0.38); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(lx, H * 0.38); ctx.lineTo(lx + 12, H * 0.38); ctx.stroke();
+      ctx.fillStyle = nightPct > 0.5 ? '#ffd54f' : '#ccc';
+      ctx.beginPath(); ctx.arc(lx + 12, H * 0.38, 4, 0, Math.PI * 2); ctx.fill();
+      if (nightPct > 0.3) {
+        const glow = ctx.createRadialGradient(lx + 12, H * 0.38, 2, lx + 12, H * 0.5, 50);
+        glow.addColorStop(0, `rgba(255,213,79,${nightPct * 0.3})`);
+        glow.addColorStop(1, 'transparent');
+        ctx.fillStyle = glow;
+        ctx.beginPath(); ctx.arc(lx + 12, H * 0.44, 50, 0, Math.PI * 2); ctx.fill();
+      }
+    }
+
+    // Upcoming challenge icon (approaches from RIGHT — in front of rider)
     if (this.bikeCurrentChallenge < this.bikeChallenges.length) {
       const ch = this.bikeChallenges[this.bikeCurrentChallenge];
-      const dist = ch.triggerDist - 50 - this.bikeDistance;
+      const dist = ch.triggerDist - 50 - scroll;
       if (dist > 0 && dist < 500) {
-        const pct = dist / 500; // 1 = far right, 0 = at rider
-        const objX = this.bikeRider.x + 40 + pct * (W - this.bikeRider.x - 60);
-        // Draw on road surface
-        ctx.font = '32px sans-serif';
-        ctx.fillText(ch.icon, objX, H * 0.58);
-        // Label underneath when close
-        if (pct < 0.4) {
+        const pct = dist / 500;
+        const objX = this.bikeRider.x + 60 + pct * (W - this.bikeRider.x - 80);
+        ctx.fillStyle = 'rgba(0,0,0,0.2)';
+        ctx.beginPath(); ctx.ellipse(objX + 8, H * 0.62, 14, 4, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.font = '34px sans-serif';
+        ctx.fillText(ch.icon, objX - 8, H * 0.58);
+        if (pct < 0.35) {
+          ctx.fillStyle = 'rgba(0,0,0,0.6)';
+          ctx.font = 'bold 12px Nunito, sans-serif';
+          const tw = ctx.measureText(ch.label).width;
+          ctx.beginPath(); ctx.roundRect(objX - tw/2, H * 0.60, tw + 16, 20, 6); ctx.fill();
           ctx.fillStyle = '#fff';
-          ctx.font = 'bold 13px Nunito, sans-serif';
           ctx.textAlign = 'center';
-          ctx.fillText(ch.label, objX + 10, H * 0.58 + 18);
+          ctx.fillText(ch.label, objX + 8, H * 0.60 + 15);
           ctx.textAlign = 'start';
         }
       }
     }
 
-    // Active challenge: flash border
+    // Active challenge: flash border + countdown
     if (this.bikeActiveChallenge) {
       const pulse = Math.sin(Date.now() / 150) > 0;
-      ctx.strokeStyle = pulse ? '#f44336' : '#ff9800';
+      ctx.strokeStyle = pulse ? 'rgba(244,67,54,0.8)' : 'rgba(255,152,0,0.8)';
       ctx.lineWidth = 4;
       ctx.strokeRect(2, 2, W - 4, H - 4);
-
-      // Countdown bar
       const pct = this.bikeChallengeTimer / this.bikeChallengeTimeout;
-      ctx.fillStyle = pct > 0.5 ? '#4caf50' : pct > 0.25 ? '#ff9800' : '#f44336';
-      ctx.fillRect(0, 0, W * pct, 6);
+      const barGrad = ctx.createLinearGradient(0, 0, W * pct, 0);
+      barGrad.addColorStop(0, pct > 0.5 ? '#4caf50' : pct > 0.25 ? '#ff9800' : '#f44336');
+      barGrad.addColorStop(1, pct > 0.5 ? '#66bb6a' : pct > 0.25 ? '#ffb74d' : '#ef5350');
+      ctx.fillStyle = barGrad;
+      ctx.fillRect(0, 0, W * pct, 5);
     }
+
+    // Rider shadow
+    ctx.fillStyle = 'rgba(0,0,0,0.15)';
+    ctx.beginPath(); ctx.ellipse(this.bikeRider.x, this.bikeRider.y + 16, 18, 5, 0, 0, Math.PI * 2); ctx.fill();
 
     // Rider
     const bounce = this.bikeRidePaused ? 0 : Math.sin(this.bikeRider.pedaling) * 2;
@@ -6140,14 +6298,15 @@ class PedestrianGame {
     const bikeEmoji = this.selectedChar === 'girl' ? '🚴‍♀️' : '🚴‍♂️';
     ctx.fillText(bikeEmoji, this.bikeRider.x - 22, this.bikeRider.y + bounce);
 
-    // Feedback text on canvas
+    // Feedback text
     if (this.bikeFeedbackTimer > 0) {
-      ctx.fillStyle = 'rgba(0,0,0,0.6)';
-      ctx.fillRect(0, H * 0.35, W, 40);
+      ctx.fillStyle = 'rgba(0,0,0,0.65)';
+      const fbY = H * 0.3;
+      ctx.beginPath(); ctx.roundRect(W * 0.1, fbY, W * 0.8, 36, 10); ctx.fill();
       ctx.fillStyle = '#fff';
       ctx.font = 'bold 14px Nunito, sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText(this.bikeFeedbackText, W / 2, H * 0.35 + 26);
+      ctx.fillText(this.bikeFeedbackText, W / 2, fbY + 24);
       ctx.textAlign = 'start';
     }
 
@@ -6155,12 +6314,17 @@ class PedestrianGame {
     document.getElementById('bike-ride-stars-count').textContent = this.bikeRideStars;
 
     // Finish line
-    if (this.bikeDistance > 3700) {
-      const finishDist = 4000 - this.bikeDistance;
+    if (scroll > 3700) {
+      const finishDist = 4000 - scroll;
       if (finishDist > 0) {
         const fx = this.bikeRider.x + 60 + (finishDist / 200) * (W - 100);
-        ctx.font = '24px sans-serif';
+        ctx.font = '28px sans-serif';
         ctx.fillText('🏁', Math.max(10, fx), H * 0.52);
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 11px Nunito, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('ФИНАЛ', fx + 14, H * 0.52 + 18);
+        ctx.textAlign = 'start';
       }
     }
 
