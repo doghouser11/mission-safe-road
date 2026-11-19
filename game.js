@@ -6081,7 +6081,8 @@ class PedestrianGame {
 
     // Clouds (parallax, drawn shapes)
     const cloudData = [{bx: 60, by: 0.08, w: 70}, {bx: 250, by: 0.14, w: 55}, {bx: 420, by: 0.06, w: 80}, {bx: 600, by: 0.12, w: 50}];
-    ctx.fillStyle = nightPct > 0.5 ? 'rgba(200,200,220,0.15)' : 'rgba(255,255,255,0.75)';
+    ctx.save();
+    ctx.fillStyle = nightPct > 0.5 ? 'rgba(200,200,220,0.15)' : 'rgba(255,255,255,0.85)';
     cloudData.forEach(c => {
       let cx = c.bx - (scroll * 0.08 % (W + 200));
       if (cx < -100) cx += W + 200;
@@ -6092,8 +6093,10 @@ class PedestrianGame {
       ctx.arc(cx + c.w * 0.5, cy, c.w * 0.28, 0, Math.PI * 2);
       ctx.fill();
     });
+    ctx.restore();
 
     // Background hills
+    ctx.save();
     ctx.fillStyle = nightPct > 0.5 ? '#1a3a1a' : '#6aaa4a';
     ctx.beginPath();
     ctx.moveTo(0, H * 0.42);
@@ -6102,6 +6105,7 @@ class PedestrianGame {
       ctx.lineTo(x, hillY);
     }
     ctx.lineTo(W, H * 0.5); ctx.lineTo(0, H * 0.5); ctx.closePath(); ctx.fill();
+    ctx.restore();
 
     // Ground / grass strip
     ctx.fillStyle = nightPct > 0.5 ? '#1e3a1e' : '#4a8a3a';
@@ -6171,6 +6175,7 @@ class PedestrianGame {
       if (sx < -60) sx += totalSceneW;
       if (sx > W + 60) return;
       const groundY = H * 0.5;
+      ctx.save();
 
       if (item.type === 'tree') {
         ctx.fillStyle = nightPct > 0.5 ? '#3a2a1a' : '#6d4c41';
@@ -6217,6 +6222,7 @@ class PedestrianGame {
         ctx.font = '14px sans-serif';
         ctx.fillText('🚸', sx + 56, groundY - 20);
       }
+      ctx.restore();
     });
 
     // Bottom bushes
@@ -6303,11 +6309,15 @@ class PedestrianGame {
     ctx.fillStyle = 'rgba(0,0,0,0.2)';
     ctx.beginPath(); ctx.ellipse(riderX, riderY + 20, 22, 6, 0, 0, Math.PI * 2); ctx.fill();
 
-    // Rider (large, prominent)
+    // Rider (large, prominent, facing RIGHT)
     const bounce = this.bikeRidePaused ? 0 : Math.sin(this.bikeRider.pedaling) * 2;
+    ctx.save();
+    ctx.translate(riderX, riderY + bounce);
+    ctx.scale(-1, 1); // flip horizontally to face right
     ctx.font = '52px sans-serif';
     const bikeEmoji = this.selectedChar === 'girl' ? '🚴‍♀️' : '🚴‍♂️';
-    ctx.fillText(bikeEmoji, riderX - 26, riderY + bounce);
+    ctx.fillText(bikeEmoji, -26, 0);
+    ctx.restore();
 
     // Feedback text
     if (this.bikeFeedbackTimer > 0) {
