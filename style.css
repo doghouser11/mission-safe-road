@@ -3667,24 +3667,30 @@ body, html {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 14px;
-  max-width: 440px;
+  padding: 16px;
+  max-width: 460px;
   margin: 0 auto;
   max-height: 100%;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  gap: 10px;
+  gap: 12px;
 }
 
 .bike-equip-header {
   text-align: center;
   color: #fff;
   font-family: 'Nunito', sans-serif;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+  border-radius: 14px;
+  padding: 12px 16px;
+  border: 1px solid rgba(255,255,255,0.1);
+  width: 100%;
 }
 
 .bike-equip-header h2 {
   margin: 4px 0;
   font-size: 1.3em;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
 
 .bike-equip-header p {
@@ -3695,6 +3701,7 @@ body, html {
 
 .bike-equip-icon {
   font-size: 2.5em;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
 }
 
 .bike-equip-status {
@@ -3704,6 +3711,9 @@ body, html {
   font-size: 0.9em;
   margin-top: 4px;
   color: rgba(255,255,255,0.8);
+  background: rgba(0,0,0,0.2);
+  border-radius: 8px;
+  padding: 4px 12px;
 }
 
 .bike-equip-grid {
@@ -3714,65 +3724,75 @@ body, html {
 }
 
 .bike-equip-item {
-  background: rgba(255,255,255,0.15);
-  border: 3px solid rgba(255,255,255,0.25);
-  border-radius: 14px;
-  padding: 10px 4px;
+  background: linear-gradient(145deg, rgba(255,255,255,0.18), rgba(255,255,255,0.08));
+  border: 3px solid rgba(255,255,255,0.2);
+  border-radius: 16px;
+  padding: 12px 6px;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  transition: all 0.2s;
+  gap: 6px;
+  transition: all 0.25s ease;
   user-select: none;
   -webkit-user-select: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
 .bike-equip-item:hover {
-  background: rgba(255,255,255,0.25);
-  transform: translateY(-2px);
+  background: linear-gradient(145deg, rgba(255,255,255,0.3), rgba(255,255,255,0.15));
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  border-color: rgba(255,255,255,0.4);
 }
 
 .bike-equip-item.selected {
-  background: rgba(76,175,80,0.35);
+  background: linear-gradient(145deg, rgba(76,175,80,0.4), rgba(56,142,60,0.3));
   border-color: #4caf50;
-  box-shadow: 0 0 10px rgba(76,175,80,0.4);
+  box-shadow: 0 0 14px rgba(76,175,80,0.4), inset 0 0 6px rgba(76,175,80,0.15);
+  transform: scale(1.03);
 }
 
 .bike-equip-item.wrong {
-  background: rgba(244,67,54,0.35) !important;
+  background: linear-gradient(145deg, rgba(244,67,54,0.4), rgba(211,47,47,0.3)) !important;
   border-color: #f44336 !important;
+  box-shadow: 0 0 14px rgba(244,67,54,0.4) !important;
   animation: quiz-wrong-shake 0.4s ease;
 }
 
 .bike-equip-item.correct-reveal {
-  background: rgba(76,175,80,0.5) !important;
+  background: linear-gradient(145deg, rgba(76,175,80,0.55), rgba(46,125,50,0.4)) !important;
   border-color: #2e7d32 !important;
+  box-shadow: 0 0 12px rgba(76,175,80,0.5) !important;
 }
 
 .bike-equip-emoji {
-  font-size: 2em;
+  font-size: 2.2em;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.25));
 }
 
 .bike-equip-label {
   font-family: 'Nunito', sans-serif;
-  font-size: 0.7em;
+  font-size: 0.75em;
   font-weight: 700;
-  color: #fff;
+  color: rgba(255,255,255,0.95);
   text-align: center;
   line-height: 1.2;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
 }
 
 .bike-roni {
-  background: rgba(255,193,7,0.2);
+  background: linear-gradient(135deg, rgba(255,193,7,0.2), rgba(255,152,0,0.15));
   border: 2px solid #ffc107;
-  border-radius: 10px;
-  padding: 8px 12px;
+  border-radius: 12px;
+  padding: 10px 14px;
   font-family: 'Nunito', sans-serif;
-  font-size: 0.9em;
+  font-size: 0.95em;
   color: #fff;
   width: 100%;
   text-align: center;
+  box-shadow: 0 2px 10px rgba(255,193,7,0.15);
+  animation: roni-appear 0.4s ease;
 }
 
 .bike-go-btn {
@@ -3802,16 +3822,20 @@ body, html {
   font-size: 0.95em;
   font-weight: 700;
   color: #fff;
-  padding: 4px 8px;
+  padding: 6px 12px;
+  background: linear-gradient(135deg, rgba(0,0,0,0.3), rgba(0,0,0,0.15));
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.08);
 }
 
 #bike-canvas {
   width: 100%;
   max-width: 100%;
-  border-radius: 12px;
-  border: 3px solid rgba(255,255,255,0.3);
-  background: #87CEEB;
+  border-radius: 14px;
+  border: 3px solid rgba(255,255,255,0.2);
+  background: linear-gradient(180deg, #7ec8e3, #87CEEB);
   aspect-ratio: 16 / 9;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4), inset 0 0 40px rgba(0,0,0,0.05);
 }
 
 .bike-ride-action {
@@ -3868,19 +3892,22 @@ body, html {
   font-size: 1em;
   font-weight: 700;
   padding: 12px 20px;
-  border-radius: 12px;
-  border: 3px solid rgba(255,255,255,0.3);
-  background: rgba(255,255,255,0.15);
+  border-radius: 14px;
+  border: 3px solid rgba(255,255,255,0.25);
+  background: linear-gradient(145deg, rgba(255,255,255,0.18), rgba(255,255,255,0.08));
   color: #fff;
   cursor: pointer;
   flex: 1;
   transition: all 0.2s;
   min-height: 48px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
 }
 
 .bike-ctrl-btn:active {
   background: rgba(255,255,255,0.35);
   transform: scale(0.95);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
 }
 
 @media (max-width: 480px) {
@@ -3905,26 +3932,32 @@ body, html {
 }
 
 #bike-equip-overlay {
-  background: #1a3a2a !important;
+  background: linear-gradient(135deg, #1a3a2a, #0f2a1a) !important;
+}
+
+#bike-ride-overlay {
+  background: linear-gradient(135deg, #1a2a3a, #0f1a2a) !important;
 }
 
 /* Bike ride button active colors */
-.bike-btn-stop { border-color: #f44336; }
-.bike-btn-stop:active { background: rgba(244,67,54,0.4) !important; }
-.bike-btn-bell { border-color: #ff9800; }
-.bike-btn-bell:active { background: rgba(255,152,0,0.4) !important; }
-.bike-btn-signal { border-color: #2196f3; }
-.bike-btn-signal:active { background: rgba(33,150,243,0.4) !important; }
+.bike-btn-stop { border-color: #f44336; box-shadow: 0 0 8px rgba(244,67,54,0.2); }
+.bike-btn-stop:active { background: rgba(244,67,54,0.4) !important; box-shadow: 0 0 14px rgba(244,67,54,0.5) !important; }
+.bike-btn-bell { border-color: #ff9800; box-shadow: 0 0 8px rgba(255,152,0,0.2); }
+.bike-btn-bell:active { background: rgba(255,152,0,0.4) !important; box-shadow: 0 0 14px rgba(255,152,0,0.5) !important; }
+.bike-btn-signal { border-color: #2196f3; box-shadow: 0 0 8px rgba(33,150,243,0.2); }
+.bike-btn-signal:active { background: rgba(33,150,243,0.4) !important; box-shadow: 0 0 14px rgba(33,150,243,0.5) !important; }
 
 .bike-ride-roni {
-  background: rgba(255,193,7,0.2);
+  background: linear-gradient(135deg, rgba(255,193,7,0.2), rgba(255,152,0,0.15));
   border: 2px solid #ffc107;
-  border-radius: 10px;
-  padding: 8px 12px;
+  border-radius: 12px;
+  padding: 10px 14px;
   font-family: 'Nunito', sans-serif;
-  font-size: 0.9em;
+  font-size: 0.95em;
   color: #fff;
   width: 100%;
   text-align: center;
   max-width: 400px;
+  box-shadow: 0 2px 10px rgba(255,193,7,0.15);
+  animation: roni-appear 0.4s ease;
 }
