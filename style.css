@@ -3344,9 +3344,11 @@ body, html {
   text-align: center;
   font-family: 'Nunito', sans-serif;
   color: #fff;
-  background: rgba(0,0,0,0.3);
-  border-radius: 12px;
-  padding: 8px 14px;
+  background: linear-gradient(135deg, rgba(33,33,33,0.7), rgba(66,66,66,0.5));
+  border-radius: 14px;
+  padding: 10px 16px;
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
 
 .danger-svetlio {
@@ -3372,8 +3374,9 @@ body, html {
   aspect-ratio: 16 / 10;
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.5), inset 0 0 60px rgba(0,0,0,0.1);
   min-height: 280px;
+  border: 3px solid rgba(255,255,255,0.15);
 }
 
 .danger-scene-label {
@@ -3383,23 +3386,37 @@ body, html {
   transform: translateX(-50%);
   font-family: 'Nunito', sans-serif;
   font-size: 0.8em;
-  font-weight: 700;
-  color: rgba(255,255,255,0.7);
-  background: rgba(0,0,0,0.4);
-  padding: 2px 10px;
-  border-radius: 8px;
+  font-weight: 800;
+  color: rgba(255,255,255,0.9);
+  background: rgba(0,0,0,0.5);
+  padding: 3px 14px;
+  border-radius: 10px;
+  letter-spacing: 0.5px;
+  border: 1px solid rgba(255,255,255,0.1);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
 .danger-element {
   position: absolute;
   font-size: 2.8em;
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s;
   user-select: none;
   -webkit-user-select: none;
   z-index: 2;
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
   animation: danger-hint-pulse 2s ease-in-out infinite;
+  background: rgba(255,255,255,0.15);
+  border-radius: 50%;
+  width: 2.2em;
+  height: 2.2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  border: 2px solid rgba(255,255,255,0.1);
 }
 
 @keyframes danger-hint-pulse {
@@ -3410,6 +3427,9 @@ body, html {
 .danger-element:hover {
   transform: scale(1.2) !important;
   filter: drop-shadow(0 2px 8px rgba(255,255,0,0.5));
+  background: rgba(255,255,255,0.3);
+  border-color: rgba(255,255,0,0.4);
+  box-shadow: 0 0 12px rgba(255,255,0,0.3);
 }
 
 .danger-element.found-danger,
@@ -3419,27 +3439,49 @@ body, html {
 
 .danger-element.found-danger {
   animation: danger-found-pop 0.5s ease;
+  background: rgba(244,67,54,0.35);
+  border: 2px solid #f44336;
+  box-shadow: 0 0 16px rgba(244,67,54,0.5), inset 0 0 8px rgba(244,67,54,0.2);
 }
 
 .danger-element.found-danger::after {
   content: '❌';
   position: absolute;
-  top: -8px;
-  right: -8px;
-  font-size: 0.6em;
+  top: -10px;
+  right: -10px;
+  font-size: 0.55em;
+  background: #d32f2f;
+  border-radius: 50%;
+  width: 1.4em;
+  height: 1.4em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
   animation: danger-x-pulse 1s ease infinite;
 }
 
 .danger-element.found-safe {
   animation: danger-safe-pop 0.4s ease;
+  background: rgba(76,175,80,0.25);
+  border: 2px solid rgba(76,175,80,0.5);
+  opacity: 0.6;
 }
 
 .danger-element.found-safe::after {
   content: '✅';
   position: absolute;
-  top: -8px;
-  right: -8px;
-  font-size: 0.6em;
+  top: -10px;
+  right: -10px;
+  font-size: 0.55em;
+  background: #388e3c;
+  border-radius: 50%;
+  width: 1.4em;
+  height: 1.4em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
 }
 
 @keyframes danger-found-pop {
@@ -3481,37 +3523,50 @@ body, html {
   font-family: 'Nunito', sans-serif;
   font-size: 0.8em;
   font-weight: 700;
-  background: rgba(76,175,80,0.3);
-  border: 1px solid #4caf50;
+  background: linear-gradient(135deg, rgba(244,67,54,0.3), rgba(211,47,47,0.2));
+  border: 1px solid rgba(244,67,54,0.6);
   color: #fff;
-  padding: 3px 10px;
-  border-radius: 8px;
+  padding: 4px 12px;
+  border-radius: 10px;
   animation: danger-found-pop 0.4s ease;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
 }
 
 .danger-roni {
-  background: rgba(255,193,7,0.2);
+  background: linear-gradient(135deg, rgba(255,193,7,0.2), rgba(255,152,0,0.15));
   border: 2px solid #ffc107;
-  border-radius: 10px;
-  padding: 8px 12px;
+  border-radius: 12px;
+  padding: 10px 14px;
   font-family: 'Nunito', sans-serif;
-  font-size: 0.9em;
+  font-size: 0.95em;
   color: #fff;
   width: 100%;
   text-align: center;
+  box-shadow: 0 2px 10px rgba(255,193,7,0.15);
+  animation: roni-appear 0.4s ease;
+}
+
+@keyframes roni-appear {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* Danger scene backgrounds — clear visual zones */
 .danger-scene-crossroad {
   background:
+    /* облаци */
+    radial-gradient(ellipse 80px 30px at 15% 8%, rgba(255,255,255,0.6), transparent),
+    radial-gradient(ellipse 60px 22px at 70% 6%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(ellipse 50px 20px at 88% 12%, rgba(255,255,255,0.4), transparent),
+    /* основни зони */
     linear-gradient(180deg,
-      #87CEEB 0%, #87CEEB 18%,       /* небе */
-      #a8d5a2 18%, #a8d5a2 30%,      /* тротоар горе + тревна площ */
-      #b0b0b0 30%, #b0b0b0 32%,      /* бордюр */
-      #666 32%, #666 55%,             /* ПЪТ */
-      #b0b0b0 55%, #b0b0b0 57%,      /* бордюр */
-      #a8d5a2 57%, #a8d5a2 75%,      /* тротоар долу */
-      #8B7355 75%);                    /* земя */
+      #7ec8e3 0%, #87CEEB 18%,       /* небе с градиент */
+      #8cc77e 18%, #a8d5a2 25%, #a8d5a2 30%, /* тревна площ */
+      #999 30%, #aaa 32%,              /* бордюр 3D */
+      #555 32%, #666 43%, #555 55%,    /* ПЪТ с леки вариации */
+      #999 55%, #aaa 57%,              /* бордюр 3D */
+      #8cc77e 57%, #a8d5a2 70%, #a8d5a2 75%, /* тротоар долу */
+      #7a6245 75%, #8B7355 100%);       /* земя */
 }
 
 /* Зебра пътека */
@@ -3522,9 +3577,10 @@ body, html {
   left: 35%;
   width: 20%;
   height: 22%;
-  background: repeating-linear-gradient(180deg, #fff 0, #fff 12%, #666 12%, #666 24%);
+  background: repeating-linear-gradient(180deg, rgba(255,255,255,0.85) 0, rgba(255,255,255,0.85) 12%, transparent 12%, transparent 24%);
   z-index: 1;
-  opacity: 0.7;
+  border-radius: 2px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
 }
 
 /* Пътна маркировка */
@@ -3535,21 +3591,22 @@ body, html {
   left: 0;
   width: 100%;
   height: 2%;
-  background: repeating-linear-gradient(90deg, #fff 0, #fff 4%, transparent 4%, transparent 8%);
+  background: repeating-linear-gradient(90deg, rgba(255,255,255,0.7) 0, rgba(255,255,255,0.7) 4%, transparent 4%, transparent 8%);
   z-index: 1;
-  opacity: 0.6;
 }
 
 .danger-scene-school {
   background:
+    radial-gradient(ellipse 70px 25px at 25% 7%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(ellipse 55px 20px at 75% 10%, rgba(255,255,255,0.4), transparent),
     linear-gradient(180deg,
-      #87CEEB 0%, #87CEEB 18%,       /* небе */
-      #c9b896 18%, #c9b896 32%,      /* училищен двор */
-      #b0b0b0 32%, #b0b0b0 34%,      /* бордюр */
-      #666 34%, #666 56%,             /* ПЪТ */
-      #b0b0b0 56%, #b0b0b0 58%,      /* бордюр */
-      #8BC34A 58%, #8BC34A 75%,       /* тротоар */
-      #795548 75%);                    /* земя */
+      #7ec8e3 0%, #87CEEB 18%,       /* небе */
+      #c4b48a 18%, #c9b896 32%,      /* училищен двор */
+      #999 32%, #aaa 34%,             /* бордюр */
+      #555 34%, #666 45%, #555 56%,   /* ПЪТ */
+      #999 56%, #aaa 58%,             /* бордюр */
+      #7cb342 58%, #8BC34A 75%,       /* тротоар */
+      #6d4c41 75%, #795548 100%);     /* земя */
 }
 
 .danger-scene-school::after {
@@ -3559,21 +3616,32 @@ body, html {
   left: 0;
   width: 100%;
   height: 2%;
-  background: repeating-linear-gradient(90deg, #fff 0, #fff 4%, transparent 4%, transparent 8%);
+  background: repeating-linear-gradient(90deg, rgba(255,255,255,0.65) 0, rgba(255,255,255,0.65) 4%, transparent 4%, transparent 8%);
   z-index: 1;
-  opacity: 0.5;
 }
 
 .danger-scene-night {
   background:
+    /* звезди */
+    radial-gradient(circle 1px at 10% 5%, rgba(255,255,255,0.7), transparent 2px),
+    radial-gradient(circle 1px at 30% 3%, rgba(255,255,255,0.5), transparent 2px),
+    radial-gradient(circle 1px at 50% 8%, rgba(255,255,255,0.6), transparent 2px),
+    radial-gradient(circle 1px at 65% 4%, rgba(255,255,255,0.4), transparent 2px),
+    radial-gradient(circle 1px at 80% 10%, rgba(255,255,255,0.5), transparent 2px),
+    radial-gradient(circle 1px at 92% 6%, rgba(255,255,255,0.6), transparent 2px),
+    radial-gradient(circle 1px at 20% 12%, rgba(255,255,255,0.3), transparent 2px),
+    /* светлинни петна от лампи */
+    radial-gradient(ellipse 60px 80px at 15% 35%, rgba(255,200,80,0.08), transparent),
+    radial-gradient(ellipse 60px 80px at 50% 35%, rgba(255,200,80,0.08), transparent),
+    radial-gradient(ellipse 60px 80px at 88% 35%, rgba(255,200,80,0.08), transparent),
     linear-gradient(180deg,
-      #0d1b2a 0%, #1b2838 18%,       /* нощно небе */
-      #2a3a2a 18%, #2a3a2a 30%,      /* тъмен тротоар */
-      #444 30%, #444 32%,             /* бордюр */
-      #333 32%, #333 55%,             /* тъмен път */
-      #444 55%, #444 57%,             /* бордюр */
-      #2a3a2a 57%, #2a3a2a 75%,      /* тъмен тротоар */
-      #1a1a1a 75%);
+      #0a1628 0%, #152238 18%,       /* нощно небе */
+      #223322 18%, #2a3a2a 30%,      /* тъмен тротоар */
+      #3a3a3a 30%, #444 32%,         /* бордюр */
+      #2a2a2a 32%, #333 43%, #2a2a2a 55%, /* тъмен път */
+      #3a3a3a 55%, #444 57%,         /* бордюр */
+      #223322 57%, #2a3a2a 75%,      /* тъмен тротоар */
+      #111 75%, #1a1a1a 100%);
 }
 
 .danger-scene-night::after {
@@ -3583,12 +3651,13 @@ body, html {
   left: 0;
   width: 100%;
   height: 2%;
-  background: repeating-linear-gradient(90deg, rgba(255,255,255,0.4) 0, rgba(255,255,255,0.4) 4%, transparent 4%, transparent 8%);
+  background: repeating-linear-gradient(90deg, rgba(255,255,255,0.3) 0, rgba(255,255,255,0.3) 4%, transparent 4%, transparent 8%);
   z-index: 1;
 }
 
 .danger-scene-night .danger-element {
-  filter: brightness(0.85);
+  filter: brightness(0.9);
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
 
 /* ============================================================ */
