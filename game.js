@@ -496,7 +496,7 @@ const CHALLENGE_POOL = [
     tag: '🚸 ПРЕСИЧАНЕ С ПРИЯТЕЛИ',
     icon: '🎒',
     visualIcon: '👥',
-    visualText: 'A group от school friends is waiting on the sidewalk to cross!',
+    visualText: 'Група приятели чакат на тротоара да пресекат!',
     title: 'Група приятели на пешеходната пътека!',
     description: 'Стигаш до пешеходната пътека, където няколко ученици и приятели чакат да пресекат.',
     options: [
@@ -504,8 +504,8 @@ const CHALLENGE_POOL = [
       { text: 'Изтичай напред сам.', correct: false },
       { text: 'Бутни приятелите си на пътя за шега.', correct: false }
     ],
-    feedbackCorrect: '🐕 Рони: Страхотна работа в екип! Когато пресичате заедно, шофьорите ви виждат по-лесно!',
-    feedbackWrong: '🐕 Рони: Никога не тичай напред сам! Шофьорите забелязват група пешеходци много по-лесно.',
+    feedbackCorrect: '🐕 Рони: Страхотна работа в екип! Пресичайте организирано, след като сте спрели и сте се огледали!',
+    feedbackWrong: '🐕 Рони: Никога не тичай напред сам! Пресичайте заедно, организирано, след като сте се огледали и колите са спрели.',
     actionType: 'group_cross'
   },
   {
@@ -522,7 +522,7 @@ const CHALLENGE_POOL = [
       { text: 'Върви по разделителната ивица.', correct: false }
     ],
     feedbackCorrect: '🐕 Рони: Браво! Когато има пешеходен мост или тунел, винаги го използвай!',
-    feedbackWrong: '🐕 Рони: Пресичането на натоварен булевард без мост е много опасно. Мостът гарантира 100% безопасност!',
+    feedbackWrong: '🐕 Рони: Пресичането на натоварен булевард без мост е много опасно! Когато има надлез или тунел — използвай го!',
     actionType: 'bridge_cross'
   },
   {
@@ -534,7 +534,7 @@ const CHALLENGE_POOL = [
     title: 'Непознат вика от спряла кола!',
     description: 'Докато чакаш на ъгъла, непознат шофьор вика: "Хей, ела тук!"',
     options: [
-      { text: 'Ignore them, stay well away on the sidewalk, and cross safely with the зелен сигнал!', correct: true },
+      { text: 'Не им обръщай внимание! Стой далеч, на тротоара, и пресечи безопасно на зелен сигнал!', correct: true },
       { text: 'Отиди до прозореца на колата да чуеш какво искат.', correct: false },
       { text: 'Качи се в колата да им помогнеш.', correct: false }
     ],
@@ -2791,7 +2791,7 @@ class PedestrianGame {
 
     const tipEl = document.getElementById('practice-tip-text');
     if (tipEl) {
-      tipEl.textContent = this.lastSafetyTip || '🐕 Рони: Винаги спирай на бордюра, гледай и в двете посоки и чакай зелен сигнал!';
+      tipEl.textContent = this.lastSafetyTip || '🐕 Рони: Спри на бордюра, огледай се и в двете посоки и се увери, че колите са спрели!';
     }
     const statCrossings = document.getElementById('practice-stat-crossings');
     if (statCrossings) {
@@ -2813,7 +2813,7 @@ class PedestrianGame {
   triggerPlayerFall(zone) {
     if (this.player.isFalling) return;
 
-    let tip = '🐕 Рони: Винаги спирай зад бордюра и чакай зеления сигнал преди да стъпиш на пешеходната пътека!';
+    let tip = '🐕 Рони: Спри зад бордюра, изчакай зелен сигнал и се увери, че колите са спрели, преди да стъпиш на пътеката!';
     if (zone.signalState === 'FLASHING') {
       tip = '🐕 Рони: Мигащ сигнал означава - НЕ ЗАПОЧВАЙ ДА ПРЕСИЧАШ! Чакай на бордюра.';
     }
@@ -5729,16 +5729,16 @@ class PedestrianGame {
 
   startBikeMission() {
     this.bikeEquipment = [
-      { emoji: '🪖', name: 'Каска', required: true, desc: 'Каската е задължителна за деца!' },
-      { emoji: '🦺', name: 'Жилетка', required: true, desc: 'Светлоотразителната жилетка те прави видим!' },
-      { emoji: '🔔', name: 'Звънец', required: true, desc: 'Звънецът предупреждава пешеходци и коли!' },
-      { emoji: '🔦', name: 'Предна светлина', required: true, desc: 'Предната светлина осветява пътя!' },
+      { emoji: '🪖', name: 'Каска', required: true, desc: 'Каската пази главата ти при падане — винаги я носи!' },
+      { emoji: '🦺', name: 'Жилетка', required: true, desc: 'Жилетката те прави видим за шофьорите!' },
+      { emoji: '🔔', name: 'Звънец', required: true, desc: 'Звънецът е задължителен по закон за велосипед!' },
+      { emoji: '🔦', name: 'Предна светлина', required: true, desc: 'Предната светлина е задължителна — осветява пътя!' },
       { emoji: '🔴', name: 'Задна светлина', required: true, desc: 'Задната светлина те прави видим отзад!' },
       { emoji: '🎧', name: 'Слушалки', required: false, bad: true, desc: 'НЕ! Слушалките са опасни — не чуваш колите!' },
       { emoji: '☂️', name: 'Чадър', required: false, bad: true, desc: 'НЕ! Чадърът пречи на управлението!' },
       { emoji: '📱', name: 'Телефон', required: false, bad: true, desc: 'НЕ! Телефонът те разсейва — остави го в раницата!' },
       { emoji: '🏀', name: 'Топка', required: false, bad: true, desc: 'НЕ! Не карай велосипед с топка в ръка!' },
-      { emoji: '🎒', name: 'Голяма раница', required: false, bad: true, desc: 'НЕ! Тежката раница нарушава баланса!' },
+      { emoji: '🎒', name: 'Голяма раница', required: false, bad: true, desc: 'НЕ! Тежката раница може да наруши равновесието ти!' },
       { emoji: '🧤', name: 'Ръкавици', required: false, bad: false, desc: 'Добър избор! Ръкавиците помагат за захват.' },
       { emoji: '💧', name: 'Вода', required: false, bad: false, desc: 'Добър избор! Водата е важна при дълго каране.' },
     ];
@@ -5895,14 +5895,14 @@ class PedestrianGame {
     this.bikeChallenges = [
       { type: 'stop_sign', icon: '🛑', triggerDist: 400, correctBtn: 'stop', label: 'СТОП знак!',
         good: 'Правилно! Винаги спирай на СТОП знак! ⭐', bad: 'Трябваше да СПРЕШ! На СТОП знак винаги спираш!' },
-      { type: 'pedestrian', icon: '🚶', triggerDist: 900, correctBtn: 'bell', label: 'Пешеходец напред!',
-        good: 'Правилно! Звънецът предупреждава пешеходеца! ⭐', bad: 'Трябваше да ПОЗВЪНИШ! Предупреди пешеходеца!' },
+      { type: 'pedestrian', icon: '🚶', triggerDist: 900, correctBtn: 'stop', label: 'Пешеходец напред!',
+        good: 'Правилно! Намали и спри — пешеходецът има предимство! ⭐', bad: 'Трябваше да СПРЕШ! При пешеходец — намали и изчакай!' },
       { type: 'turn', icon: '↗️', triggerDist: 1400, correctBtn: 'signal', label: 'Завой надясно!',
         good: 'Правилно! Протегни ръка преди завой! ⭐', bad: 'Трябваше да дадеш СИГНАЛ! Протегни ръка преди завой!' },
       { type: 'red_light', icon: '🔴', triggerDist: 1900, correctBtn: 'stop', label: 'Червен светофар!',
         good: 'Правилно! Червено = СТОП! ⭐', bad: 'Трябваше да СПРЕШ! Червено е!' },
-      { type: 'pedestrian2', icon: '👨‍👧', triggerDist: 2500, correctBtn: 'bell', label: 'Баща с дете на пътеката!',
-        good: 'Правилно! Звъни и заобиколи внимателно! ⭐', bad: 'Трябваше да ПОЗВЪНИШ! Има хора на пътеката!' },
+      { type: 'pedestrian2', icon: '👨‍👧', triggerDist: 2500, correctBtn: 'stop', label: 'Баща с дете на пътеката!',
+        good: 'Правилно! Спри и изчакай — пешеходците имат предимство на пътеката! ⭐', bad: 'Трябваше да СПРЕШ! На пешеходна пътека — винаги дай предимство!' },
       { type: 'turn2', icon: '↙️', triggerDist: 3100, correctBtn: 'signal', label: 'Завой наляво!',
         good: 'Правилно! Сигнал с лява ръка! ⭐', bad: 'Трябваше да дадеш СИГНАЛ преди завоя!' },
       { type: 'stop_sign2', icon: '🛑', triggerDist: 3700, correctBtn: 'stop', label: 'СТОП знак!',
@@ -6357,9 +6357,9 @@ class PedestrianGame {
     this.bikePhase = 'quiz';
     this.bikeQuizQuestions = [
       { q: 'От коя страна на пътя караш велосипед?', a: ['От лявата', 'От дясната', 'По средата', 'По тротоара'], correct: 1, roni: 'Велосипедът кара от ДЯСНАТА страна, по посока на движение!' },
-      { q: 'Задължителна ли е каската за деца до 18г.?', a: ['Да, задължителна е', 'Не, по избор', 'Само до 12г.', 'Само извън града'], correct: 0, roni: 'ДА! По закон каската е задължителна за деца!' },
+      { q: 'Защо е важно да носиш каска, когато караш велосипед?', a: ['Пази главата при падане или удар', 'Не е важно', 'Само за красота', 'Само когато вали'], correct: 0, roni: 'Каската предпазва главата ти — винаги я носи, когато караш!' },
       { q: 'Какво правиш преди да завиеш наляво?', a: ['Нищо, просто завивам', 'Протягам лява ръка за сигнал', 'Спирам за 10 секунди', 'Натискам клаксон'], correct: 1, roni: 'Преди завой — протегни ръка, за да знаят шофьорите!' },
-      { q: 'Може ли да караш велосипед по тротоара?', a: ['Да, винаги', 'Не, освен ако няма велоалея и си дете', 'Само нощем', 'Само с каска'], correct: 1, roni: 'Велосипедът е за пътя или велоалеята, не за тротоара!' },
+      { q: 'Може ли да караш велосипед по тротоара?', a: ['Да, винаги', 'Деца до 12г. могат в пешеходни зони, но внимателно', 'Само нощем', 'Само с каска'], correct: 1, roni: 'Малките деца могат да карат в пешеходни зони, но трябва да пазят пешеходците!' },
       { q: 'Какво НЕ трябва да правиш докато караш?', a: ['Да пееш', 'Да гледаш телефон', 'Да педалираш бавно', 'Да спираш на знак СТОП'], correct: 1, roni: 'НИКОГА не гледай телефон докато караш!' },
     ];
     this.bikeQuizIndex = 0;
@@ -6379,9 +6379,18 @@ class PedestrianGame {
     document.getElementById('bike-quiz-feedback').classList.add('hidden');
     this.bikeQuizAnswered = false;
 
+    // Shuffle answers (Fisher-Yates)
+    const indices = q.a.map((_, i) => i);
+    for (let i = indices.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [indices[i], indices[j]] = [indices[j], indices[i]];
+    }
+    const shuffledAnswers = indices.map(i => q.a[i]);
+    this._bikeQuizShuffledCorrect = indices.indexOf(q.correct);
+
     const answersEl = document.getElementById('bike-quiz-answers');
     answersEl.innerHTML = '';
-    q.a.forEach((ans, i) => {
+    shuffledAnswers.forEach((ans, i) => {
       const btn = document.createElement('button');
       btn.className = 'quiz-answer-btn';
       btn.textContent = `${['А', 'Б', 'В', 'Г'][i]}. ${ans}`;
@@ -6396,10 +6405,10 @@ class PedestrianGame {
 
     const q = this.bikeQuizQuestions[this.bikeQuizIndex];
     const btns = document.querySelectorAll('#bike-quiz-answers .quiz-answer-btn');
-    const isCorrect = idx === q.correct;
+    const isCorrect = idx === this._bikeQuizShuffledCorrect;
 
     btns[idx].classList.add(isCorrect ? 'correct' : 'wrong');
-    if (!isCorrect) btns[q.correct].classList.add('correct');
+    if (!isCorrect) btns[this._bikeQuizShuffledCorrect].classList.add('correct');
 
     if (isCorrect) {
       this.bikeQuizScore++;
@@ -6439,7 +6448,7 @@ class PedestrianGame {
     document.getElementById('bike-ride-overlay').classList.add('hidden');
 
     this.bikeStars += this.bikeQuizScore;
-    const maxStars = 3 + 5 + 5; // equip + ride + quiz
+    const maxStars = 3 + 7 + 5; // equip + ride(7 challenges) + quiz
     const pct = this.bikeStars / maxStars;
 
     const overlay = document.getElementById('bike-results-overlay');
@@ -6472,7 +6481,7 @@ class PedestrianGame {
         a: ['Спри и се огледай', 'Побързай да минеш', 'Завий наляво', 'Не обръщай внимание'],
         correct: 0,
         svetlio: 'Този знак казва: СПРИ! Огледай се и чак тогава продължи!',
-        roni: 'Червеното винаги означава СТОП! 🐾'
+        roni: 'Червеният знак СТОП означава: спри и се огледай! 🐾'
       },
       {
         sign: '🚸', label: 'ВНИМАНИЕ, ДЕЦА',
@@ -6511,8 +6520,8 @@ class PedestrianGame {
         q: 'Къде е най-безопасно да пресечеш улицата?',
         a: ['Между паркирани коли', 'На пешеходна пътека', 'Където е най-близо', 'На завоя'],
         correct: 1,
-        svetlio: 'Браво! Винаги пресичай на пешеходната пътека!',
-        roni: 'Зебрата е най-безопасното място за пресичане! 🐾'
+        svetlio: 'Браво! Пешеходната пътека е най-безопасното място — но спри и се огледай преди да пресечеш!',
+        roni: 'Зебрата помага, но винаги спри и провери дали колите са спрели! 🐾'
       },
       {
         sign: '🟢', label: 'ЗЕЛЕНА СВЕТЛИНА',
@@ -6593,28 +6602,38 @@ class PedestrianGame {
     document.getElementById('quiz-feedback').classList.add('hidden');
     this.quizAnswered = false;
 
+    // Shuffle answers (Fisher-Yates) while tracking correct index
+    const indices = q.a.map((_, i) => i);
+    for (let i = indices.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [indices[i], indices[j]] = [indices[j], indices[i]];
+    }
+    const shuffledAnswers = indices.map(i => q.a[i]);
+    const shuffledCorrect = indices.indexOf(q.correct);
+
     const answersEl = document.getElementById('quiz-answers');
     answersEl.innerHTML = '';
-    q.a.forEach((ans, i) => {
+    shuffledAnswers.forEach((ans, i) => {
       const btn = document.createElement('button');
       btn.className = 'quiz-answer-btn';
       btn.textContent = `${['А', 'Б', 'В', 'Г'][i]}. ${ans}`;
-      btn.addEventListener('click', () => this.checkQuizAnswer(i));
+      btn.addEventListener('click', () => this.checkQuizAnswer(i, shuffledCorrect));
       answersEl.appendChild(btn);
     });
   }
 
-  checkQuizAnswer(idx) {
+  checkQuizAnswer(idx, correctIdx) {
     if (this.quizAnswered) return;
     this.quizAnswered = true;
 
     const q = this.quizQuestions[this.quizIndex];
+    const actualCorrect = correctIdx !== undefined ? correctIdx : q.correct;
     const btns = document.querySelectorAll('.quiz-answer-btn');
-    const isCorrect = idx === q.correct;
+    const isCorrect = idx === actualCorrect;
 
     btns[idx].classList.add(isCorrect ? 'correct' : 'wrong');
     if (!isCorrect) {
-      btns[q.correct].classList.add('correct');
+      btns[actualCorrect].classList.add('correct');
     }
 
     if (isCorrect) {
@@ -6690,7 +6709,7 @@ class PedestrianGame {
           // === ОПАСНОСТИ (5) — разпръснати по пътя и опасни зони ===
           { emoji: '🧒📱', x: 36, y: 38, isDanger: true, name: 'Дете с телефон на пътя', desc: 'Не гледай телефон докато пресичаш!' },
           { emoji: '🏃', x: 75, y: 46, isDanger: true, name: 'Дете тича на пътя', desc: 'Не тичай на пътя — спри и се огледай!' },
-          { emoji: '🛴', x: 55, y: 52, isDanger: true, name: 'Тротинетка на пътя', desc: 'Тротинетката е за тротоара, не за пътя!' },
+          { emoji: '🛴', x: 55, y: 52, isDanger: true, name: 'Дете с тротинетка между колите', desc: 'Не карай тротинетка между движещи се коли — много е опасно!' },
           { emoji: '🧒', x: 12, y: 44, isDanger: true, name: 'Дете излиза между коли', desc: 'Не излизай между паркирани коли — шофьорите не те виждат!' },
           { emoji: '⚽', x: 62, y: 36, isDanger: true, name: 'Топка на пътя', desc: 'СТОП! Не тичай след топката на улицата!' },
           // === БЕЗОПАСНИ — небе, тротоари, далеч от пътя ===
@@ -6716,7 +6735,7 @@ class PedestrianGame {
           // === ОПАСНОСТИ (5) — разпръснати, лесни за тапване ===
           { emoji: '🧒🎧', x: 52, y: 42, isDanger: true, name: 'Дете със слушалки пресича', desc: 'Махни слушалките — трябва да чуваш колите!' },
           { emoji: '🏃', x: 78, y: 50, isDanger: true, name: 'Дете тича зад автобус', desc: 'Не тичай зад автобус — шофьорите не те виждат!' },
-          { emoji: '🧒', x: 90, y: 38, isDanger: true, name: 'Дете пресича без пътека', desc: 'Пресичай САМО на пешеходна пътека!' },
+          { emoji: '🧒', x: 90, y: 38, isDanger: true, name: 'Дете пресича без пътека', desc: 'Избери безопасно място за пресичане! Ако наблизо има пешеходна пътека — използвай я!' },
           { emoji: '📱', x: 28, y: 46, isDanger: true, name: 'Дете гледа телефон', desc: 'Телефонът чака — първо пресечи безопасно!' },
           { emoji: '🛴', x: 42, y: 54, isDanger: true, name: 'Тротинетка между колите', desc: 'Не карай между движещи се коли!' },
           // === БЕЗОПАСНИ ===
