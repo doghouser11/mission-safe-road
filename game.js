@@ -6709,7 +6709,7 @@ class PedestrianGame {
           // === ОПАСНОСТИ (5) — разпръснати по пътя и опасни зони ===
           { emoji: '🧒📱', x: 36, y: 38, isDanger: true, name: 'Дете с телефон на пътя', desc: 'Не гледай телефон докато пресичаш!' },
           { emoji: '🏃', x: 75, y: 46, isDanger: true, name: 'Дете тича на пътя', desc: 'Не тичай на пътя — спри и се огледай!' },
-          { emoji: '🛴', x: 55, y: 52, isDanger: true, name: 'Дете с тротинетка между колите', desc: 'Не карай тротинетка между движещи се коли — много е опасно!' },
+          { emoji: '🛴', x: 55, y: 52, isDanger: true, name: 'Тротинетка между автомобилите', desc: 'Опасно е да се движиш с тротинетка между автомобилите. Шофьорите може да не те забележат навреме.' },
           { emoji: '🧒', x: 12, y: 44, isDanger: true, name: 'Дете излиза между коли', desc: 'Не излизай между паркирани коли — шофьорите не те виждат!' },
           { emoji: '⚽', x: 62, y: 36, isDanger: true, name: 'Топка на пътя', desc: 'СТОП! Не тичай след топката на улицата!' },
           // === БЕЗОПАСНИ — небе, тротоари, далеч от пътя ===
@@ -6724,7 +6724,7 @@ class PedestrianGame {
           { emoji: '🚦', x: 46, y: 28, isDanger: false, name: 'Светофар', desc: '' },
           { emoji: '👩\u200d👦', x: 6, y: 65, isDanger: false, name: 'Майка с дете чакат', desc: '' },
           { emoji: '🧓', x: 88, y: 72, isDanger: false, name: 'Баба на тротоара', desc: '' },
-          { emoji: '👫', x: 50, y: 20, isDanger: false, name: 'Деца на тротоара', desc: '' },
+          { emoji: '👫', x: 50, y: 16, isDanger: false, name: 'Деца на тротоара', desc: 'Децата са на тротоара, далеч от автомобилите. Тук няма опасност.' },
           { emoji: '🐕', x: 32, y: 72, isDanger: false, name: 'Куче на каишка', desc: '' },
           { emoji: '🚶', x: 22, y: 62, isDanger: false, name: 'Пешеходец на зебра', desc: '' },
         ]
@@ -6737,7 +6737,7 @@ class PedestrianGame {
           { emoji: '🏃', x: 78, y: 50, isDanger: true, name: 'Дете тича зад автобус', desc: 'Не тичай зад автобус — шофьорите не те виждат!' },
           { emoji: '🧒', x: 90, y: 38, isDanger: true, name: 'Дете пресича без пътека', desc: 'Избери безопасно място за пресичане! Ако наблизо има пешеходна пътека — използвай я!' },
           { emoji: '📱', x: 28, y: 46, isDanger: true, name: 'Дете гледа телефон', desc: 'Телефонът чака — първо пресечи безопасно!' },
-          { emoji: '🛴', x: 42, y: 54, isDanger: true, name: 'Тротинетка между колите', desc: 'Не карай между движещи се коли!' },
+          { emoji: '🛴', x: 42, y: 54, isDanger: true, name: 'Тротинетка между автомобилите', desc: 'Не се промъквай с тротинетка между автомобилите. Водачите може да не те видят.' },
           // === БЕЗОПАСНИ ===
           { emoji: '🏫', x: 40, y: 3, isDanger: false, name: 'Училище', desc: '' },
           { emoji: '🚸', x: 60, y: 10, isDanger: false, name: 'Знак Внимание деца', desc: '' },
@@ -6815,13 +6815,30 @@ class PedestrianGame {
     sceneEl.className = `danger-scene ${scene.cssClass}`;
     sceneEl.innerHTML = '';
 
+    // Zone labels for orientation
+    const zoneLabels = [
+      { text: 'ТРОТОАР', cls: 'top-sidewalk', top: '23%' },
+      { text: 'ПЪТНО ПЛАТНО', cls: 'road', top: '44%' },
+      { text: 'ТРОТОАР', cls: 'bottom-sidewalk', top: '66%' }
+    ];
+    zoneLabels.forEach(zone => {
+      const label = document.createElement('span');
+      label.className = `danger-zone-label ${zone.cls}`;
+      label.textContent = zone.text;
+      label.style.top = zone.top;
+      label.setAttribute('aria-hidden', 'true');
+      sceneEl.appendChild(label);
+    });
+
     scene.elements.forEach((el, i) => {
-      const div = document.createElement('div');
+      const div = document.createElement('button');
+      div.type = 'button';
       div.className = 'danger-element';
       div.textContent = el.emoji;
       div.style.left = `${el.x}%`;
       div.style.top = `${el.y}%`;
       div.dataset.index = i;
+      div.setAttribute('aria-label', el.name || 'Обект от сцената');
       div.addEventListener('click', () => this.tapDangerElement(i, div));
       sceneEl.appendChild(div);
     });
@@ -6866,7 +6883,8 @@ class PedestrianGame {
       sfx.playRetroPulse(220, 0.2, 'square', 0.06);
       const roniEl = document.getElementById('danger-roni');
       roniEl.classList.remove('hidden');
-      document.getElementById('danger-roni-text').textContent = `${el.name} — тук няма опасност! Търси другаде! 🐾`;
+      const explanation = el.desc || `${el.name} — в тази ситуация няма показана опасност.`;
+      document.getElementById('danger-roni-text').textContent = `${explanation} Потърси друга ситуация! 🐾`;
     }
   }
 
