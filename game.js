@@ -6704,60 +6704,208 @@ class PedestrianGame {
   // --- SVG Sprite library for Danger Find scenes ---
   get dangerSprites() {
     const S = (body, vb='0 0 60 60') => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" aria-hidden="true">${body}</svg>`;
+
+    // Reusable child body — head, torso, legs as solid rounded shapes (not stick figures)
+    const childBody = (shirtColor, pantsColor='#1565C0', headY=10, bodyY=20, legY=38) =>
+      `<circle cx="30" cy="${headY}" r="9" fill="#FFCC80" stroke="#333" stroke-width="1.5"/>` +
+      `<path d="M24 ${headY-2} Q24 ${headY-8} 30 ${headY-8} Q36 ${headY-8} 36 ${headY-2}" fill="#5D4037"/>` +
+      `<circle cx="27" cy="${headY}" r="1.5" fill="#333"/><circle cx="33" cy="${headY}" r="1.5" fill="#333"/>` +
+      `<path d="M28 ${headY+3} Q30 ${headY+5} 32 ${headY+3}" stroke="#333" stroke-width="1" fill="none"/>` +
+      `<rect x="21" y="${bodyY}" width="18" height="18" rx="4" fill="${shirtColor}" stroke="#333" stroke-width="1.5"/>` +
+      `<rect x="21" y="${legY}" width="8" height="14" rx="3" fill="${pantsColor}" stroke="#333" stroke-width="1"/>` +
+      `<rect x="31" y="${legY}" width="8" height="14" rx="3" fill="${pantsColor}" stroke="#333" stroke-width="1"/>` +
+      `<rect x="21" y="${legY+12}" width="8" height="4" rx="2" fill="#333"/>` +
+      `<rect x="31" y="${legY+12}" width="8" height="4" rx="2" fill="#333"/>`;
+
     return {
-      // Child figure with colored shirt
-      child: (color='#4FC3F7') => S(`<circle cx="30" cy="12" r="8" fill="#FFD54F" stroke="#333" stroke-width="1.5"/><rect x="22" y="20" width="16" height="16" rx="3" fill="${color}" stroke="#333" stroke-width="1.2"/><rect x="22" y="36" width="7" height="14" rx="2" fill="#1565C0" stroke="#333" stroke-width="1"/><rect x="31" y="36" width="7" height="14" rx="2" fill="#1565C0" stroke="#333" stroke-width="1"/><circle cx="26" cy="10" r="1.5" fill="#333"/><circle cx="34" cy="10" r="1.5" fill="#333"/><path d="M27 15 Q30 18 33 15" stroke="#333" stroke-width="1" fill="none"/>`),
+      child: (color='#4FC3F7') => S(childBody(color), '0 0 60 56'),
 
-      // Child looking down at phone (danger)
-      childWithPhone: S(`<circle cx="30" cy="14" r="8" fill="#FFD54F" stroke="#333" stroke-width="1.5"/><rect x="22" y="22" width="16" height="14" rx="3" fill="#E53935" stroke="#333" stroke-width="1.2"/><rect x="22" y="36" width="7" height="14" rx="2" fill="#1565C0" stroke="#333" stroke-width="1"/><rect x="31" y="36" width="7" height="14" rx="2" fill="#1565C0" stroke="#333" stroke-width="1"/><circle cx="27" cy="13" r="1.3" fill="#333"/><circle cx="33" cy="13" r="1.3" fill="#333"/><line x1="27" y1="17" x2="33" y2="17" stroke="#333" stroke-width="1"/><rect x="24" y="30" width="8" height="12" rx="1" fill="#90CAF9" stroke="#333" stroke-width="1"/><rect x="26" y="32" width="4" height="6" fill="#BBDEFB"/>`),
+      childWithPhone: S(
+        childBody('#E53935') +
+        `<rect x="12" y="30" width="9" height="14" rx="2" fill="#90CAF9" stroke="#333" stroke-width="1.2"/>` +
+        `<rect x="14" y="32" width="5" height="8" rx="1" fill="#BBDEFB"/>` +
+        `<line x1="21" y1="28" x2="16" y2="30" stroke="#333" stroke-width="2" stroke-linecap="round"/>`,
+        '0 0 60 56'),
 
-      // Child running (danger)
-      childRunning: S(`<circle cx="28" cy="12" r="8" fill="#FFD54F" stroke="#333" stroke-width="1.5"/><rect x="20" y="20" width="16" height="14" rx="3" fill="#FF9800" stroke="#333" stroke-width="1.2"/><line x1="20" y1="24" x2="12" y2="20" stroke="#333" stroke-width="2" stroke-linecap="round"/><line x1="36" y1="24" x2="44" y2="18" stroke="#333" stroke-width="2" stroke-linecap="round"/><line x1="24" y1="34" x2="16" y2="50" stroke="#1565C0" stroke-width="3" stroke-linecap="round"/><line x1="32" y1="34" x2="42" y2="48" stroke="#1565C0" stroke-width="3" stroke-linecap="round"/><circle cx="25" cy="10" r="1.3" fill="#333"/><circle cx="31" cy="10" r="1.3" fill="#333"/>`),
+      childRunning: S(
+        `<circle cx="30" cy="10" r="9" fill="#FFCC80" stroke="#333" stroke-width="1.5"/>` +
+        `<path d="M24 8 Q24 2 30 2 Q36 2 36 8" fill="#5D4037"/>` +
+        `<circle cx="27" cy="10" r="1.5" fill="#333"/><circle cx="33" cy="10" r="1.5" fill="#333"/>` +
+        `<rect x="21" y="20" width="18" height="16" rx="4" fill="#FF9800" stroke="#333" stroke-width="1.5"/>` +
+        `<line x1="20" y1="24" x2="10" y2="18" stroke="#FF9800" stroke-width="4" stroke-linecap="round"/>` +
+        `<line x1="40" y1="24" x2="50" y2="18" stroke="#FF9800" stroke-width="4" stroke-linecap="round"/>` +
+        `<rect x="18" y="36" width="8" height="14" rx="3" fill="#1565C0" stroke="#333" stroke-width="1" transform="rotate(-20,22,36)"/>` +
+        `<rect x="34" y="36" width="8" height="14" rx="3" fill="#1565C0" stroke="#333" stroke-width="1" transform="rotate(15,38,36)"/>`,
+        '0 0 60 56'),
 
-      // Child between cars (danger)
-      childBetweenCars: S(`<rect x="2" y="28" width="20" height="16" rx="4" fill="#78909C" stroke="#333" stroke-width="1.2"/><circle cx="8" cy="46" r="4" fill="#333"/><circle cx="18" cy="46" r="4" fill="#333"/><rect x="38" y="28" width="20" height="16" rx="4" fill="#607D8B" stroke="#333" stroke-width="1.2"/><circle cx="44" cy="46" r="4" fill="#333"/><circle cx="54" cy="46" r="4" fill="#333"/><circle cx="30" cy="16" r="6" fill="#FFD54F" stroke="#333" stroke-width="1.2"/><rect x="25" y="22" width="10" height="12" rx="2" fill="#66BB6A" stroke="#333" stroke-width="1"/><rect x="25" y="34" width="4" height="10" rx="1" fill="#1565C0"/><rect x="31" y="34" width="4" height="10" rx="1" fill="#1565C0"/><circle cx="28" cy="15" r="1" fill="#333"/><circle cx="32" cy="15" r="1" fill="#333"/>`, '0 0 60 55'),
+      childBetweenCars: S(
+        `<rect x="0" y="20" width="22" height="20" rx="5" fill="#78909C" stroke="#333" stroke-width="1.5"/>` +
+        `<rect x="2" y="24" width="8" height="8" rx="1" fill="#B3E5FC" stroke="#333" stroke-width="0.8"/>` +
+        `<circle cx="6" cy="42" r="4.5" fill="#444" stroke="#333" stroke-width="1"/><circle cx="18" cy="42" r="4.5" fill="#444" stroke="#333" stroke-width="1"/>` +
+        `<rect x="38" y="20" width="22" height="20" rx="5" fill="#607D8B" stroke="#333" stroke-width="1.5"/>` +
+        `<rect x="50" y="24" width="8" height="8" rx="1" fill="#B3E5FC" stroke="#333" stroke-width="0.8"/>` +
+        `<circle cx="42" cy="42" r="4.5" fill="#444" stroke="#333" stroke-width="1"/><circle cx="56" cy="42" r="4.5" fill="#444" stroke="#333" stroke-width="1"/>` +
+        `<circle cx="30" cy="14" r="7" fill="#FFCC80" stroke="#333" stroke-width="1.2"/>` +
+        `<path d="M25 12 Q25 7 30 7 Q35 7 35 12" fill="#5D4037"/>` +
+        `<circle cx="28" cy="14" r="1.2" fill="#333"/><circle cx="32" cy="14" r="1.2" fill="#333"/>` +
+        `<rect x="25" y="21" width="10" height="13" rx="3" fill="#66BB6A" stroke="#333" stroke-width="1"/>` +
+        `<rect x="25" y="34" width="4.5" height="10" rx="2" fill="#1565C0"/><rect x="30.5" y="34" width="4.5" height="10" rx="2" fill="#1565C0"/>`,
+        '0 0 60 50'),
 
-      // Scooter on road (danger)
-      scooterOnRoad: S(`<circle cx="28" cy="12" r="7" fill="#FFD54F" stroke="#333" stroke-width="1.2"/><rect x="22" y="19" width="12" height="12" rx="2" fill="#AB47BC" stroke="#333" stroke-width="1"/><line x1="28" y1="31" x2="28" y2="42" stroke="#1565C0" stroke-width="3" stroke-linecap="round"/><line x1="28" y1="42" x2="22" y2="50" stroke="#1565C0" stroke-width="2.5" stroke-linecap="round"/><line x1="28" y1="38" x2="38" y2="34" stroke="#333" stroke-width="2" stroke-linecap="round"/><line x1="38" y1="30" x2="38" y2="50" stroke="#666" stroke-width="2.5"/><circle cx="38" cy="52" r="5" fill="none" stroke="#333" stroke-width="2"/><circle cx="20" cy="52" r="5" fill="none" stroke="#333" stroke-width="2"/><line x1="20" y1="52" x2="38" y2="52" stroke="#999" stroke-width="1.5"/><circle cx="26" cy="11" r="1" fill="#333"/><circle cx="31" cy="11" r="1" fill="#333"/>`),
+      scooterOnRoad: S(
+        `<circle cx="26" cy="10" r="8" fill="#FFCC80" stroke="#333" stroke-width="1.2"/>` +
+        `<path d="M20 8 Q20 2 26 2 Q32 2 32 8" fill="#5D4037"/>` +
+        `<circle cx="24" cy="10" r="1.2" fill="#333"/><circle cx="28" cy="10" r="1.2" fill="#333"/>` +
+        `<rect x="20" y="18" width="12" height="14" rx="3" fill="#AB47BC" stroke="#333" stroke-width="1"/>` +
+        `<rect x="20" y="32" width="5" height="12" rx="2" fill="#1565C0"/><rect x="27" y="32" width="5" height="12" rx="2" fill="#1565C0"/>` +
+        `<line x1="32" y1="24" x2="40" y2="22" stroke="#333" stroke-width="2" stroke-linecap="round"/>` +
+        `<rect x="38" y="12" width="3" height="32" rx="1.5" fill="#757575" stroke="#333" stroke-width="1"/>` +
+        `<line x1="34" y1="44" x2="44" y2="44" stroke="#757575" stroke-width="2"/>` +
+        `<circle cx="34" cy="46" r="5" fill="none" stroke="#333" stroke-width="2.5"/><circle cx="34" cy="46" r="2" fill="#999"/>` +
+        `<circle cx="44" cy="46" r="5" fill="none" stroke="#333" stroke-width="2.5"/><circle cx="44" cy="46" r="2" fill="#999"/>`,
+        '0 0 52 54'),
 
-      // Soccer ball (danger)
-      ball: S(`<circle cx="30" cy="30" r="14" fill="white" stroke="#333" stroke-width="1.5"/><path d="M30 16 L35 23 L30 26 L25 23Z" fill="#333"/><path d="M17 28 L22 23 L25 28 L22 33Z" fill="#333"/><path d="M38 23 L43 28 L40 33 L35 28Z" fill="#333"/><path d="M22 37 L28 34 L30 40 L25 42Z" fill="#333"/><path d="M35 34 L38 37 L35 42 L30 40Z" fill="#333"/>`),
+      ball: S(
+        `<circle cx="30" cy="30" r="16" fill="white" stroke="#333" stroke-width="2"/>` +
+        `<path d="M30 14 L36 22 L30 26 L24 22Z" fill="#333"/>` +
+        `<path d="M15 27 L21 22 L24 28 L20 34Z" fill="#333"/>` +
+        `<path d="M39 22 L45 27 L42 34 L36 28Z" fill="#333"/>` +
+        `<path d="M20 38 L27 35 L30 42 L24 44Z" fill="#333"/>` +
+        `<path d="M36 35 L40 38 L37 44 L30 42Z" fill="#333"/>`,
+        '0 0 60 60'),
 
-      // Car side view
-      car: (color='#E53935') => S(`<rect x="4" y="22" width="52" height="18" rx="6" fill="${color}" stroke="#333" stroke-width="1.5"/><path d="M14 22 Q16 8 30 8 Q44 8 46 22" fill="${color}" stroke="#333" stroke-width="1.5"/><rect x="17" y="11" width="11" height="10" rx="2" fill="#B3E5FC" stroke="#333" stroke-width="1"/><rect x="32" y="11" width="11" height="10" rx="2" fill="#B3E5FC" stroke="#333" stroke-width="1"/><circle cx="15" cy="42" r="6" fill="#444" stroke="#333" stroke-width="1.5"/><circle cx="15" cy="42" r="3" fill="#888"/><circle cx="45" cy="42" r="6" fill="#444" stroke="#333" stroke-width="1.5"/><circle cx="45" cy="42" r="3" fill="#888"/><rect x="48" y="26" width="6" height="4" rx="1" fill="#FFEB3B"/>`, '0 0 60 50'),
+      car: (color='#E53935') => S(
+        `<rect x="2" y="20" width="56" height="22" rx="6" fill="${color}" stroke="#333" stroke-width="2"/>` +
+        `<path d="M12 20 Q15 6 30 6 Q45 6 48 20" fill="${color}" stroke="#333" stroke-width="2"/>` +
+        `<rect x="16" y="9" width="12" height="10" rx="2" fill="#B3E5FC" stroke="#333" stroke-width="1.2"/>` +
+        `<rect x="32" y="9" width="12" height="10" rx="2" fill="#B3E5FC" stroke="#333" stroke-width="1.2"/>` +
+        `<circle cx="14" cy="44" r="6.5" fill="#444" stroke="#333" stroke-width="2"/><circle cx="14" cy="44" r="3" fill="#999"/>` +
+        `<circle cx="46" cy="44" r="6.5" fill="#444" stroke="#333" stroke-width="2"/><circle cx="46" cy="44" r="3" fill="#999"/>` +
+        `<rect x="50" y="24" width="6" height="5" rx="1.5" fill="#FFEB3B" stroke="#333" stroke-width="0.8"/>` +
+        `<rect x="2" y="24" width="5" height="5" rx="1.5" fill="#F44336" stroke="#333" stroke-width="0.8"/>`,
+        '0 0 60 52'),
 
-      // Bus
-      bus: S(`<rect x="2" y="14" width="56" height="26" rx="5" fill="#FFC107" stroke="#333" stroke-width="1.5"/><rect x="6" y="18" width="10" height="10" rx="2" fill="#B3E5FC" stroke="#333" stroke-width="1"/><rect x="20" y="18" width="10" height="10" rx="2" fill="#B3E5FC" stroke="#333" stroke-width="1"/><rect x="34" y="18" width="10" height="10" rx="2" fill="#B3E5FC" stroke="#333" stroke-width="1"/><rect x="48" y="18" width="8" height="16" rx="2" fill="#FFE082" stroke="#333" stroke-width="1"/><circle cx="12" cy="44" r="5" fill="#444" stroke="#333" stroke-width="1.5"/><circle cx="12" cy="44" r="2.5" fill="#888"/><circle cx="46" cy="44" r="5" fill="#444" stroke="#333" stroke-width="1.5"/><circle cx="46" cy="44" r="2.5" fill="#888"/><rect x="2" y="32" width="56" height="3" fill="#E65100"/>`, '0 0 60 52'),
+      bus: S(
+        `<rect x="1" y="10" width="58" height="30" rx="5" fill="#FFA000" stroke="#333" stroke-width="2"/>` +
+        `<rect x="5" y="14" width="11" height="12" rx="2" fill="#B3E5FC" stroke="#333" stroke-width="1"/>` +
+        `<rect x="19" y="14" width="11" height="12" rx="2" fill="#B3E5FC" stroke="#333" stroke-width="1"/>` +
+        `<rect x="33" y="14" width="11" height="12" rx="2" fill="#B3E5FC" stroke="#333" stroke-width="1"/>` +
+        `<rect x="47" y="14" width="10" height="18" rx="2" fill="#FFE082" stroke="#333" stroke-width="1"/>` +
+        `<rect x="1" y="32" width="58" height="4" rx="1" fill="#E65100"/>` +
+        `<circle cx="12" cy="46" r="6" fill="#444" stroke="#333" stroke-width="2"/><circle cx="12" cy="46" r="3" fill="#999"/>` +
+        `<circle cx="48" cy="46" r="6" fill="#444" stroke="#333" stroke-width="2"/><circle cx="48" cy="46" r="3" fill="#999"/>`,
+        '0 0 60 54'),
 
-      // Building
-      building: (color='#78909C') => S(`<rect x="10" y="5" width="40" height="50" rx="2" fill="${color}" stroke="#333" stroke-width="1.5"/><rect x="16" y="12" width="8" height="8" rx="1" fill="#B3E5FC" stroke="#333" stroke-width="0.8"/><rect x="28" y="12" width="8" height="8" rx="1" fill="#B3E5FC" stroke="#333" stroke-width="0.8"/><rect x="16" y="26" width="8" height="8" rx="1" fill="#B3E5FC" stroke="#333" stroke-width="0.8"/><rect x="28" y="26" width="8" height="8" rx="1" fill="#B3E5FC" stroke="#333" stroke-width="0.8"/><rect x="24" y="40" width="12" height="15" rx="1" fill="#5D4037" stroke="#333" stroke-width="0.8"/>`),
+      building: (color='#78909C') => S(
+        `<rect x="5" y="2" width="50" height="56" rx="2" fill="${color}" stroke="#333" stroke-width="2"/>` +
+        `<rect x="12" y="8" width="10" height="10" rx="1.5" fill="#B3E5FC" stroke="#333" stroke-width="1"/>` +
+        `<rect x="28" y="8" width="10" height="10" rx="1.5" fill="#B3E5FC" stroke="#333" stroke-width="1"/>` +
+        `<rect x="12" y="24" width="10" height="10" rx="1.5" fill="#B3E5FC" stroke="#333" stroke-width="1"/>` +
+        `<rect x="28" y="24" width="10" height="10" rx="1.5" fill="#B3E5FC" stroke="#333" stroke-width="1"/>` +
+        `<rect x="12" y="40" width="10" height="10" rx="1.5" fill="#FFF9C4" stroke="#333" stroke-width="1"/>` +
+        `<rect x="28" y="40" width="10" height="10" rx="1.5" fill="#FFF9C4" stroke="#333" stroke-width="1"/>` +
+        `<rect x="22" y="44" width="12" height="14" rx="1" fill="#5D4037" stroke="#333" stroke-width="1"/>`,
+        '0 0 56 60'),
 
-      // House
-      house: S(`<rect x="12" y="28" width="36" height="27" rx="1" fill="#FFCC80" stroke="#333" stroke-width="1.5"/><polygon points="8,30 30,8 52,30" fill="#E53935" stroke="#333" stroke-width="1.5"/><rect x="24" y="38" width="12" height="17" rx="1" fill="#5D4037" stroke="#333" stroke-width="0.8"/><rect x="16" y="32" width="8" height="8" rx="1" fill="#B3E5FC" stroke="#333" stroke-width="0.8"/><rect x="36" y="32" width="8" height="8" rx="1" fill="#B3E5FC" stroke="#333" stroke-width="0.8"/><circle cx="34" cy="47" r="1.5" fill="#FFC107"/>`),
+      house: S(
+        `<rect x="10" y="26" width="40" height="30" rx="1" fill="#FFCC80" stroke="#333" stroke-width="2"/>` +
+        `<polygon points="6,28 30,4 54,28" fill="#E53935" stroke="#333" stroke-width="2"/>` +
+        `<rect x="23" y="38" width="14" height="18" rx="1" fill="#5D4037" stroke="#333" stroke-width="1"/>` +
+        `<circle cx="35" cy="48" r="1.5" fill="#FFC107"/>` +
+        `<rect x="14" y="30" width="9" height="9" rx="1" fill="#B3E5FC" stroke="#333" stroke-width="1"/>` +
+        `<rect x="37" y="30" width="9" height="9" rx="1" fill="#B3E5FC" stroke="#333" stroke-width="1"/>`,
+        '0 0 60 58'),
 
-      // Shop with awning
-      shop: S(`<rect x="8" y="20" width="44" height="35" rx="2" fill="#FFF9C4" stroke="#333" stroke-width="1.5"/><path d="M6 20 Q14 10 22 20 Q30 10 38 20 Q46 10 54 20" fill="#E53935" stroke="#B71C1C" stroke-width="1"/><rect x="14" y="30" width="14" height="12" rx="1" fill="#B3E5FC" stroke="#333" stroke-width="0.8"/><rect x="34" y="30" width="12" height="20" rx="1" fill="#5D4037" stroke="#333" stroke-width="0.8"/><circle cx="44" cy="42" r="1.2" fill="#FFC107"/>`),
+      shop: S(
+        `<rect x="6" y="18" width="48" height="38" rx="2" fill="#FFF9C4" stroke="#333" stroke-width="2"/>` +
+        `<path d="M4 18 Q12 6 20 18 Q28 6 36 18 Q44 6 56 18" fill="#E53935" stroke="#B71C1C" stroke-width="1.5"/>` +
+        `<rect x="12" y="28" width="16" height="14" rx="1" fill="#B3E5FC" stroke="#333" stroke-width="1"/>` +
+        `<line x1="20" y1="28" x2="20" y2="42" stroke="#333" stroke-width="0.8"/>` +
+        `<rect x="34" y="28" width="14" height="24" rx="1" fill="#5D4037" stroke="#333" stroke-width="1"/>` +
+        `<circle cx="46" cy="42" r="1.5" fill="#FFC107"/>`,
+        '0 0 60 58'),
 
-      // Tree
-      tree: S(`<rect x="26" y="34" width="8" height="20" rx="2" fill="#795548" stroke="#333" stroke-width="1"/><circle cx="30" cy="22" r="16" fill="#66BB6A" stroke="#333" stroke-width="1.5"/><circle cx="22" cy="28" r="10" fill="#4CAF50"/><circle cx="38" cy="28" r="10" fill="#4CAF50"/>`),
+      tree: S(
+        `<rect x="25" y="36" width="10" height="22" rx="3" fill="#6D4C41" stroke="#333" stroke-width="1.5"/>` +
+        `<ellipse cx="30" cy="24" rx="20" ry="18" fill="#43A047" stroke="#2E7D32" stroke-width="2"/>` +
+        `<ellipse cx="20" cy="30" rx="12" ry="10" fill="#388E3C"/>` +
+        `<ellipse cx="40" cy="30" rx="12" ry="10" fill="#388E3C"/>` +
+        `<ellipse cx="30" cy="18" rx="10" ry="8" fill="#4CAF50"/>`,
+        '0 0 60 60'),
 
-      // Traffic light
-      trafficLight: S(`<rect x="24" y="4" width="12" height="36" rx="3" fill="#424242" stroke="#333" stroke-width="1.5"/><circle cx="30" cy="12" r="4" fill="#F44336"/><circle cx="30" cy="22" r="4" fill="#FFC107"/><circle cx="30" cy="32" r="4" fill="#4CAF50"/><rect x="28" y="40" width="4" height="16" fill="#616161" stroke="#333" stroke-width="1"/>`),
+      trafficLight: S(
+        `<rect x="26" y="0" width="14" height="40" rx="4" fill="#424242" stroke="#333" stroke-width="2"/>` +
+        `<circle cx="33" cy="10" r="5" fill="#F44336" stroke="#222" stroke-width="1"/>` +
+        `<circle cx="33" cy="22" r="5" fill="#FFC107" stroke="#222" stroke-width="1"/>` +
+        `<circle cx="33" cy="34" r="5" fill="#4CAF50" stroke="#222" stroke-width="1"/>` +
+        `<rect x="30" y="40" width="6" height="20" rx="1" fill="#616161" stroke="#333" stroke-width="1.5"/>`,
+        '0 0 66 62'),
 
-      // Mother with child
-      motherWithChild: S(`<circle cx="22" cy="10" r="7" fill="#FFD54F" stroke="#333" stroke-width="1.2"/><rect x="15" y="17" width="14" height="16" rx="3" fill="#E91E63" stroke="#333" stroke-width="1"/><rect x="15" y="33" width="6" height="16" rx="2" fill="#1565C0"/><rect x="23" y="33" width="6" height="16" rx="2" fill="#1565C0"/><circle cx="42" cy="20" r="5.5" fill="#FFD54F" stroke="#333" stroke-width="1"/><rect x="37" y="25.5" width="10" height="11" rx="2" fill="#4FC3F7" stroke="#333" stroke-width="1"/><rect x="37" y="36.5" width="4" height="12" rx="1.5" fill="#1565C0"/><rect x="43" y="36.5" width="4" height="12" rx="1.5" fill="#1565C0"/><line x1="29" y1="25" x2="37" y2="30" stroke="#333" stroke-width="1.5" stroke-linecap="round"/>`),
+      motherWithChild: S(
+        `<circle cx="20" cy="8" r="8" fill="#FFCC80" stroke="#333" stroke-width="1.2"/>` +
+        `<path d="M12 6 Q12 0 20 0 Q28 0 28 6" fill="#5D4037"/>` +
+        `<circle cx="17" cy="8" r="1.3" fill="#333"/><circle cx="23" cy="8" r="1.3" fill="#333"/>` +
+        `<rect x="12" y="16" width="16" height="20" rx="4" fill="#E91E63" stroke="#333" stroke-width="1.2"/>` +
+        `<rect x="12" y="36" width="7" height="16" rx="3" fill="#1565C0" stroke="#333" stroke-width="0.8"/>` +
+        `<rect x="21" y="36" width="7" height="16" rx="3" fill="#1565C0" stroke="#333" stroke-width="0.8"/>` +
+        `<rect x="12" y="50" width="7" height="4" rx="2" fill="#333"/><rect x="21" y="50" width="7" height="4" rx="2" fill="#333"/>` +
+        `<circle cx="44" cy="18" r="6.5" fill="#FFCC80" stroke="#333" stroke-width="1"/>` +
+        `<path d="M38 16 Q38 12 44 12 Q50 12 50 16" fill="#FFB74D"/>` +
+        `<circle cx="42" cy="18" r="1" fill="#333"/><circle cx="46" cy="18" r="1" fill="#333"/>` +
+        `<rect x="38" y="24.5" width="12" height="14" rx="3" fill="#4FC3F7" stroke="#333" stroke-width="1"/>` +
+        `<rect x="38" y="38.5" width="5" height="12" rx="2" fill="#1565C0"/><rect x="45" y="38.5" width="5" height="12" rx="2" fill="#1565C0"/>` +
+        `<rect x="38" y="48.5" width="5" height="3" rx="1.5" fill="#333"/><rect x="45" y="48.5" width="5" height="3" rx="1.5" fill="#333"/>` +
+        `<line x1="28" y1="24" x2="38" y2="28" stroke="#E91E63" stroke-width="2.5" stroke-linecap="round"/>`,
+        '0 0 56 56'),
 
-      // Grandma
-      grandma: S(`<circle cx="30" cy="12" r="8" fill="#E0E0E0" stroke="#333" stroke-width="1.2"/><circle cx="30" cy="10" r="8.5" fill="none" stroke="#BDBDBD" stroke-width="2"/><rect x="22" y="20" width="16" height="18" rx="3" fill="#9C27B0" stroke="#333" stroke-width="1"/><rect x="22" y="38" width="7" height="14" rx="2" fill="#424242"/><rect x="31" y="38" width="7" height="14" rx="2" fill="#424242"/><circle cx="27" cy="11" r="1.3" fill="#333"/><circle cx="33" cy="11" r="1.3" fill="#333"/><path d="M27 16 Q30 18 33 16" stroke="#333" stroke-width="0.8" fill="none"/><line x1="38" y1="25" x2="44" y2="50" stroke="#795548" stroke-width="2" stroke-linecap="round"/>`),
+      grandma: S(
+        `<circle cx="30" cy="10" r="9" fill="#E0E0E0" stroke="#333" stroke-width="1.2"/>` +
+        `<path d="M22 8 Q22 0 30 0 Q38 0 38 8" fill="#BDBDBD"/>` +
+        `<circle cx="27" cy="10" r="1.3" fill="#333"/><circle cx="33" cy="10" r="1.3" fill="#333"/>` +
+        `<path d="M28 15 Q30 17 32 15" stroke="#333" stroke-width="0.8" fill="none"/>` +
+        `<rect x="22" y="20" width="16" height="20" rx="4" fill="#7B1FA2" stroke="#333" stroke-width="1.2"/>` +
+        `<rect x="22" y="40" width="7" height="14" rx="3" fill="#424242" stroke="#333" stroke-width="0.8"/>` +
+        `<rect x="31" y="40" width="7" height="14" rx="3" fill="#424242" stroke="#333" stroke-width="0.8"/>` +
+        `<rect x="22" y="52" width="7" height="4" rx="2" fill="#333"/><rect x="31" y="52" width="7" height="4" rx="2" fill="#333"/>` +
+        `<line x1="38" y1="26" x2="48" y2="54" stroke="#795548" stroke-width="2.5" stroke-linecap="round"/>`,
+        '0 0 54 58'),
 
-      // Two kids together
-      twoKids: S(`<circle cx="20" cy="14" r="6" fill="#FFD54F" stroke="#333" stroke-width="1"/><rect x="14" y="20" width="12" height="12" rx="2" fill="#4FC3F7" stroke="#333" stroke-width="1"/><rect x="14" y="32" width="5" height="12" rx="1.5" fill="#1565C0"/><rect x="21" y="32" width="5" height="12" rx="1.5" fill="#1565C0"/><circle cx="40" cy="14" r="6" fill="#FFD54F" stroke="#333" stroke-width="1"/><rect x="34" y="20" width="12" height="12" rx="2" fill="#FF7043" stroke="#333" stroke-width="1"/><rect x="34" y="32" width="5" height="12" rx="1.5" fill="#1565C0"/><rect x="41" y="32" width="5" height="12" rx="1.5" fill="#1565C0"/>`),
+      twoKids: S(
+        `<circle cx="18" cy="10" r="7.5" fill="#FFCC80" stroke="#333" stroke-width="1.2"/>` +
+        `<path d="M12 8 Q12 2 18 2 Q24 2 24 8" fill="#5D4037"/>` +
+        `<circle cx="16" cy="10" r="1.2" fill="#333"/><circle cx="20" cy="10" r="1.2" fill="#333"/>` +
+        `<rect x="11" y="18" width="14" height="16" rx="3" fill="#4FC3F7" stroke="#333" stroke-width="1"/>` +
+        `<rect x="11" y="34" width="6" height="14" rx="2.5" fill="#1565C0" stroke="#333" stroke-width="0.8"/>` +
+        `<rect x="19" y="34" width="6" height="14" rx="2.5" fill="#1565C0" stroke="#333" stroke-width="0.8"/>` +
+        `<rect x="11" y="46" width="6" height="3" rx="1.5" fill="#333"/><rect x="19" y="46" width="6" height="3" rx="1.5" fill="#333"/>` +
+        `<circle cx="42" cy="10" r="7.5" fill="#FFCC80" stroke="#333" stroke-width="1.2"/>` +
+        `<path d="M36 8 Q36 2 42 2 Q48 2 48 8" fill="#FF8A65"/>` +
+        `<circle cx="40" cy="10" r="1.2" fill="#333"/><circle cx="44" cy="10" r="1.2" fill="#333"/>` +
+        `<rect x="35" y="18" width="14" height="16" rx="3" fill="#FF7043" stroke="#333" stroke-width="1"/>` +
+        `<rect x="35" y="34" width="6" height="14" rx="2.5" fill="#1565C0" stroke="#333" stroke-width="0.8"/>` +
+        `<rect x="43" y="34" width="6" height="14" rx="2.5" fill="#1565C0" stroke="#333" stroke-width="0.8"/>` +
+        `<rect x="35" y="46" width="6" height="3" rx="1.5" fill="#333"/><rect x="43" y="46" width="6" height="3" rx="1.5" fill="#333"/>`,
+        '0 0 60 52'),
 
-      // Dog on leash
-      dogOnLeash: S(`<ellipse cx="30" cy="34" rx="14" ry="8" fill="#8D6E63" stroke="#333" stroke-width="1.2"/><circle cx="16" cy="28" r="6" fill="#8D6E63" stroke="#333" stroke-width="1.2"/><circle cx="14" cy="27" r="1.5" fill="#333"/><ellipse cx="14" cy="31" rx="3" ry="2" fill="#333"/><line x1="16" y1="34" x2="16" y2="48" stroke="#8D6E63" stroke-width="3" stroke-linecap="round"/><line x1="22" y1="34" x2="22" y2="48" stroke="#8D6E63" stroke-width="3" stroke-linecap="round"/><line x1="38" y1="34" x2="38" y2="48" stroke="#8D6E63" stroke-width="3" stroke-linecap="round"/><line x1="44" y1="34" x2="44" y2="48" stroke="#8D6E63" stroke-width="3" stroke-linecap="round"/><path d="M44 30 Q52 26 50 34" fill="#8D6E63" stroke="#333" stroke-width="1"/><line x1="16" y1="22" x2="10" y2="18" stroke="#8D6E63" stroke-width="2.5" stroke-linecap="round"/><line x1="18" y1="22" x2="20" y2="16" stroke="#8D6E63" stroke-width="2.5" stroke-linecap="round"/><line x1="10" y1="30" x2="2" y2="10" stroke="#E53935" stroke-width="1.5" stroke-dasharray="2,2"/>`),
+      dogOnLeash: S(
+        `<ellipse cx="30" cy="30" rx="16" ry="10" fill="#8D6E63" stroke="#333" stroke-width="1.5"/>` +
+        `<ellipse cx="14" cy="24" rx="8" ry="7" fill="#A1887F" stroke="#333" stroke-width="1.2"/>` +
+        `<circle cx="11" cy="22" r="2" fill="#333"/><ellipse cx="11" cy="27" rx="3.5" ry="2.5" fill="#333"/>` +
+        `<rect x="14" y="38" width="5" height="12" rx="2" fill="#8D6E63" stroke="#333" stroke-width="0.8"/>` +
+        `<rect x="22" y="38" width="5" height="12" rx="2" fill="#8D6E63" stroke="#333" stroke-width="0.8"/>` +
+        `<rect x="36" y="38" width="5" height="12" rx="2" fill="#8D6E63" stroke="#333" stroke-width="0.8"/>` +
+        `<rect x="44" y="38" width="5" height="12" rx="2" fill="#8D6E63" stroke="#333" stroke-width="0.8"/>` +
+        `<path d="M46 26 Q56 20 54 30" fill="#8D6E63" stroke="#333" stroke-width="1.2"/>` +
+        `<path d="M8 20 L4 14" stroke="#A1887F" stroke-width="3" stroke-linecap="round"/>` +
+        `<path d="M12 18 L14 12" stroke="#A1887F" stroke-width="3" stroke-linecap="round"/>` +
+        `<line x1="8" y1="26" x2="0" y2="6" stroke="#E53935" stroke-width="2"/>`,
+        '0 0 60 52'),
 
-      // Pedestrian on crosswalk
-      pedestrian: S(`<circle cx="30" cy="10" r="7" fill="#FFD54F" stroke="#333" stroke-width="1.2"/><rect x="23" y="17" width="14" height="15" rx="3" fill="#2196F3" stroke="#333" stroke-width="1"/><line x1="23" y1="22" x2="14" y2="28" stroke="#333" stroke-width="2" stroke-linecap="round"/><line x1="37" y1="22" x2="46" y2="28" stroke="#333" stroke-width="2" stroke-linecap="round"/><line x1="27" y1="32" x2="22" y2="50" stroke="#1565C0" stroke-width="3" stroke-linecap="round"/><line x1="33" y1="32" x2="38" y2="50" stroke="#1565C0" stroke-width="3" stroke-linecap="round"/>`)
+      pedestrian: S(
+        childBody('#2196F3') +
+        `<line x1="20" y1="26" x2="10" y2="32" stroke="#2196F3" stroke-width="3.5" stroke-linecap="round"/>` +
+        `<line x1="40" y1="26" x2="50" y2="32" stroke="#2196F3" stroke-width="3.5" stroke-linecap="round"/>`,
+        '0 0 60 56')
     };
   }
 
@@ -6772,21 +6920,21 @@ class PedestrianGame {
           { emoji: '🛴', x: 55, y: 52, isDanger: true, name: 'Тротинетка между автомобилите', desc: 'Опасно е да се движиш с тротинетка между автомобилите. Шофьорите може да не те забележат навреме.' , spriteKey: 'scooterOnRoad'},
           { emoji: '🧒', x: 12, y: 44, isDanger: true, name: 'Дете излиза между коли', desc: 'Не излизай между паркирани коли — шофьорите не те виждат!' , spriteKey: 'childBetweenCars'},
           { emoji: '⚽', x: 62, y: 36, isDanger: true, name: 'Топка на пътя', desc: 'СТОП! Не тичай след топката на улицата!' , spriteKey: 'ball', sizeClass: 'size-small'},
-          // === БЕЗОПАСНИ — небе, тротоари, далеч от пътя ===
-          { emoji: '🏢', x: 3, y: 3, isDanger: false, name: 'Сграда', desc: '' , spriteKey: 'building_grey', sizeClass: 'size-building'},
-          { emoji: '🏠', x: 22, y: 4, isDanger: false, name: 'Къща', desc: '' , spriteKey: 'house', sizeClass: 'size-building'},
-          { emoji: '🏪', x: 78, y: 4, isDanger: false, name: 'Магазин', desc: '' , spriteKey: 'shop', sizeClass: 'size-building'},
-          { emoji: '🌳', x: 92, y: 8, isDanger: false, name: 'Дърво', desc: '' , spriteKey: 'tree'},
-          { emoji: '🌳', x: 45, y: 6, isDanger: false, name: 'Дърво', desc: '' , spriteKey: 'tree'},
-          { emoji: '🚗', x: 28, y: 48, isDanger: false, name: 'Кола', desc: '' , spriteKey: 'car_red', sizeClass: 'size-vehicle'},
-          { emoji: '🚙', x: 88, y: 40, isDanger: false, name: 'Кола', desc: '' , spriteKey: 'car_blue', sizeClass: 'size-vehicle'},
-          { emoji: '🚌', x: 4, y: 50, isDanger: false, name: 'Автобус', desc: '' , spriteKey: 'bus', sizeClass: 'size-vehicle'},
-          { emoji: '🚦', x: 46, y: 28, isDanger: false, name: 'Светофар', desc: '' , spriteKey: 'trafficLight'},
-          { emoji: '👩\u200d👦', x: 6, y: 65, isDanger: false, name: 'Майка с дете чакат', desc: '' , spriteKey: 'motherWithChild'},
-          { emoji: '🧓', x: 88, y: 72, isDanger: false, name: 'Баба на тротоара', desc: '' , spriteKey: 'grandma'},
-          { emoji: '👫', x: 50, y: 16, isDanger: false, name: 'Деца на тротоара', desc: 'Децата са на тротоара, далеч от автомобилите. Тук няма опасност.' , spriteKey: 'twoKids'},
-          { emoji: '🐕', x: 32, y: 72, isDanger: false, name: 'Куче на каишка', desc: '' , spriteKey: 'dogOnLeash', sizeClass: 'size-small'},
-          { emoji: '🚶', x: 22, y: 62, isDanger: false, name: 'Пешеходец на зебра', desc: '' , spriteKey: 'pedestrian'},
+          // === БЕЗОПАСНИ — сгради на горния тротоар, хора на долния ===
+          { emoji: '🏢', x: 2, y: 4, isDanger: false, name: 'Сграда', desc: '' , spriteKey: 'building_grey', sizeClass: 'size-building'},
+          { emoji: '🏠', x: 20, y: 8, isDanger: false, name: 'Къща', desc: '' , spriteKey: 'house', sizeClass: 'size-building'},
+          { emoji: '🏪', x: 76, y: 6, isDanger: false, name: 'Магазин', desc: '' , spriteKey: 'shop', sizeClass: 'size-building'},
+          { emoji: '🌳', x: 90, y: 10, isDanger: false, name: 'Дърво', desc: '' , spriteKey: 'tree', sizeClass: 'size-building'},
+          { emoji: '🌳', x: 44, y: 8, isDanger: false, name: 'Дърво', desc: '' , spriteKey: 'tree', sizeClass: 'size-building'},
+          { emoji: '🚗', x: 26, y: 42, isDanger: false, name: 'Кола', desc: '' , spriteKey: 'car_red', sizeClass: 'size-vehicle'},
+          { emoji: '🚙', x: 84, y: 38, isDanger: false, name: 'Кола', desc: '' , spriteKey: 'car_blue', sizeClass: 'size-vehicle'},
+          { emoji: '🚌', x: 2, y: 46, isDanger: false, name: 'Автобус', desc: '' , spriteKey: 'bus', sizeClass: 'size-vehicle'},
+          { emoji: '🚦', x: 44, y: 24, isDanger: false, name: 'Светофар', desc: '' , spriteKey: 'trafficLight'},
+          { emoji: '👩\u200d👦', x: 4, y: 60, isDanger: false, name: 'Майка с дете чакат', desc: '' , spriteKey: 'motherWithChild'},
+          { emoji: '🧓', x: 84, y: 62, isDanger: false, name: 'Баба на тротоара', desc: '' , spriteKey: 'grandma'},
+          { emoji: '👫', x: 48, y: 20, isDanger: false, name: 'Деца на тротоара', desc: 'Децата са на тротоара, далеч от автомобилите. Тук няма опасност.' , spriteKey: 'twoKids'},
+          { emoji: '🐕', x: 30, y: 66, isDanger: false, name: 'Куче на каишка', desc: '' , spriteKey: 'dogOnLeash'},
+          { emoji: '🚶', x: 20, y: 60, isDanger: false, name: 'Пешеходец на зебра', desc: '' , spriteKey: 'pedestrian'},
         ]
       },
       {

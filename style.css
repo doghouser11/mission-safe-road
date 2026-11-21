@@ -3553,27 +3553,43 @@ body, html {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* SVG sprite sizing — relative to scene container width (cqw) */
-/* Person/child: ~9-10% of scene width */
+/* SVG sprite sizing — adaptive to scene width */
+.danger-element {
+  padding: 6px; /* touch target larger than visual */
+}
 .danger-element svg {
-  width: clamp(32px, 9cqw, 65px);
+  width: clamp(44px, 11vw, 72px);
   height: auto;
   display: block;
   pointer-events: none;
 }
 /* Vehicles proportionally larger than people */
 .danger-element.size-vehicle svg {
-  width: clamp(55px, 15cqw, 100px);
+  width: clamp(70px, 18vw, 120px);
 }
-/* Small objects (ball, dog) */
+/* Small objects (ball) */
 .danger-element.size-small svg {
-  width: clamp(22px, 6cqw, 42px);
+  width: clamp(32px, 7vw, 52px);
 }
-/* Buildings: large but subdued — background layer feel */
+/* Buildings: large, slightly transparent — background feel */
 .danger-element.size-building svg {
-  width: clamp(42px, 12cqw, 80px);
-  opacity: 0.82;
-  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.15));
+  width: clamp(56px, 14vw, 96px);
+  opacity: 0.85;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
+}
+@media (max-width: 600px) {
+  .danger-element svg {
+    width: clamp(38px, 13vw, 60px);
+  }
+  .danger-element.size-vehicle svg {
+    width: clamp(60px, 22vw, 100px);
+  }
+  .danger-element.size-building svg {
+    width: clamp(48px, 16vw, 76px);
+  }
+  .danger-element.size-small svg {
+    width: clamp(28px, 9vw, 44px);
+  }
 }
 
 /* Danger scene backgrounds — clear visual zones */
