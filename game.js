@@ -6905,7 +6905,173 @@ class PedestrianGame {
         childBody('#2196F3') +
         `<line x1="20" y1="26" x2="10" y2="32" stroke="#2196F3" stroke-width="3.5" stroke-linecap="round"/>` +
         `<line x1="40" y1="26" x2="50" y2="32" stroke="#2196F3" stroke-width="3.5" stroke-linecap="round"/>`,
-        '0 0 60 56')
+        '0 0 60 56'),
+
+      // === SCHOOL SCENE SPRITES ===
+      childWithHeadphones: S(
+        childBody('#E53935') +
+        `<rect x="16" y="4" width="4" height="12" rx="2" fill="#333"/><rect x="40" y="4" width="4" height="12" rx="2" fill="#333"/>` +
+        `<path d="M18 4 Q18 -2 30 -2 Q42 -2 42 4" stroke="#333" stroke-width="3" fill="none"/>`,
+        '0 0 60 56'),
+
+      schoolBuilding: S(
+        `<rect x="6" y="14" width="48" height="44" rx="2" fill="#FFF9C4" stroke="#333" stroke-width="2"/>` +
+        `<polygon points="4,16 30,0 56,16" fill="#F44336" stroke="#333" stroke-width="2"/>` +
+        `<rect x="12" y="22" width="10" height="10" rx="1" fill="#B3E5FC" stroke="#333" stroke-width="1"/>` +
+        `<rect x="26" y="22" width="10" height="10" rx="1" fill="#B3E5FC" stroke="#333" stroke-width="1"/>` +
+        `<rect x="40" y="22" width="10" height="10" rx="1" fill="#B3E5FC" stroke="#333" stroke-width="1"/>` +
+        `<rect x="12" y="36" width="10" height="10" rx="1" fill="#B3E5FC" stroke="#333" stroke-width="1"/>` +
+        `<rect x="40" y="36" width="10" height="10" rx="1" fill="#B3E5FC" stroke="#333" stroke-width="1"/>` +
+        `<rect x="24" y="38" width="14" height="20" rx="1" fill="#5D4037" stroke="#333" stroke-width="1.2"/>` +
+        `<circle cx="36" cy="50" r="1.5" fill="#FFC107"/>` +
+        `<text x="30" y="10" text-anchor="middle" font-size="5" font-weight="800" fill="white" font-family="sans-serif">🏫</text>`,
+        '0 0 60 60'),
+
+      childrenSign: S(
+        `<polygon points="30,2 56,50 4,50" fill="#FFC107" stroke="#333" stroke-width="2.5"/>` +
+        `<circle cx="24" cy="28" r="4" fill="#333"/><rect x="22" y="32" width="4" height="8" fill="#333"/>` +
+        `<line x1="24" y1="40" x2="20" y2="48" stroke="#333" stroke-width="2"/><line x1="24" y1="40" x2="28" y2="48" stroke="#333" stroke-width="2"/>` +
+        `<circle cx="36" cy="26" r="3.5" fill="#333"/><rect x="34" y="30" width="4" height="7" fill="#333"/>` +
+        `<line x1="36" y1="37" x2="33" y2="44" stroke="#333" stroke-width="1.8"/><line x1="36" y1="37" x2="39" y2="44" stroke="#333" stroke-width="1.8"/>` +
+        `<rect x="28" y="52" width="4" height="8" fill="#757575"/>`,
+        '0 0 60 62'),
+
+      schoolVan: S(
+        `<rect x="2" y="14" width="56" height="26" rx="6" fill="#FFA726" stroke="#333" stroke-width="2"/>` +
+        `<rect x="6" y="18" width="12" height="10" rx="2" fill="#B3E5FC" stroke="#333" stroke-width="1"/>` +
+        `<rect x="22" y="18" width="12" height="10" rx="2" fill="#B3E5FC" stroke="#333" stroke-width="1"/>` +
+        `<rect x="38" y="18" width="16" height="14" rx="2" fill="#B3E5FC" stroke="#333" stroke-width="1"/>` +
+        `<rect x="2" y="34" width="56" height="3" fill="#E65100"/>` +
+        `<circle cx="14" cy="44" r="5.5" fill="#444" stroke="#333" stroke-width="2"/><circle cx="14" cy="44" r="2.5" fill="#999"/>` +
+        `<circle cx="46" cy="44" r="5.5" fill="#444" stroke="#333" stroke-width="2"/><circle cx="46" cy="44" r="2.5" fill="#999"/>`,
+        '0 0 60 52'),
+
+      fatherWithKids: S(
+        `<circle cx="20" cy="6" r="8" fill="#FFCC80" stroke="#333" stroke-width="1.2"/>` +
+        `<path d="M14 4 Q14 -2 20 -2 Q26 -2 26 4" fill="#4E342E"/>` +
+        `<circle cx="17" cy="6" r="1.3" fill="#333"/><circle cx="23" cy="6" r="1.3" fill="#333"/>` +
+        `<rect x="12" y="14" width="16" height="20" rx="4" fill="#1565C0" stroke="#333" stroke-width="1.2"/>` +
+        `<rect x="12" y="34" width="7" height="16" rx="3" fill="#37474F"/><rect x="21" y="34" width="7" height="16" rx="3" fill="#37474F"/>` +
+        `<rect x="12" y="48" width="7" height="4" rx="2" fill="#333"/><rect x="21" y="48" width="7" height="4" rx="2" fill="#333"/>` +
+        `<circle cx="42" cy="18" r="6" fill="#FFCC80" stroke="#333" stroke-width="1"/>` +
+        `<path d="M37 16 Q37 12 42 12 Q47 12 47 16" fill="#5D4037"/>` +
+        `<rect x="37" y="24" width="10" height="12" rx="2" fill="#66BB6A" stroke="#333" stroke-width="0.8"/>` +
+        `<rect x="37" y="36" width="4" height="10" rx="2" fill="#1565C0"/><rect x="43" y="36" width="4" height="10" rx="2" fill="#1565C0"/>` +
+        `<line x1="28" y1="22" x2="37" y2="26" stroke="#1565C0" stroke-width="2" stroke-linecap="round"/>`,
+        '0 0 54 54'),
+
+      teacher: S(
+        `<circle cx="30" cy="8" r="8" fill="#FFCC80" stroke="#333" stroke-width="1.2"/>` +
+        `<path d="M22 6 Q22 -2 30 -2 Q38 -2 38 6" fill="#4E342E"/>` +
+        `<circle cx="27" cy="8" r="1.3" fill="#333"/><circle cx="33" cy="8" r="1.3" fill="#333"/>` +
+        `<path d="M28 12 Q30 14 32 12" stroke="#333" stroke-width="0.8" fill="none"/>` +
+        `<rect x="22" y="16" width="16" height="22" rx="4" fill="#C62828" stroke="#333" stroke-width="1.2"/>` +
+        `<rect x="22" y="38" width="7" height="14" rx="3" fill="#37474F" stroke="#333" stroke-width="0.8"/>` +
+        `<rect x="31" y="38" width="7" height="14" rx="3" fill="#37474F" stroke="#333" stroke-width="0.8"/>` +
+        `<rect x="22" y="50" width="7" height="4" rx="2" fill="#333"/><rect x="31" y="50" width="7" height="4" rx="2" fill="#333"/>` +
+        `<line x1="38" y1="22" x2="48" y2="18" stroke="#C62828" stroke-width="3" stroke-linecap="round"/>`,
+        '0 0 56 56'),
+
+      kidsWithBackpacks: S(
+        childBody('#4CAF50') +
+        `<rect x="34" y="20" width="10" height="16" rx="3" fill="#FF9800" stroke="#333" stroke-width="1"/>` +
+        `<line x1="36" y1="20" x2="36" y2="16" stroke="#FF9800" stroke-width="2" stroke-linecap="round"/>` +
+        `<line x1="42" y1="20" x2="42" y2="16" stroke="#FF9800" stroke-width="2" stroke-linecap="round"/>`,
+        '0 0 60 56'),
+
+      stopSign: S(
+        `<polygon points="30,2 46,12 46,32 30,42 14,32 14,12" fill="#D32F2F" stroke="#333" stroke-width="2"/>` +
+        `<polygon points="30,6 42,14 42,30 30,38 18,30 18,14" fill="#F44336" stroke="white" stroke-width="1.5"/>` +
+        `<rect x="28" y="42" width="4" height="18" rx="1" fill="#757575" stroke="#333" stroke-width="1"/>`,
+        '0 0 60 62'),
+
+      // === NIGHT SCENE SPRITES ===
+      childDark: S(
+        `<circle cx="30" cy="10" r="9" fill="#FFCC80" stroke="#333" stroke-width="1.5"/>` +
+        `<path d="M24 8 Q24 2 30 2 Q36 2 36 8" fill="#3E2723"/>` +
+        `<circle cx="27" cy="10" r="1.5" fill="#333"/><circle cx="33" cy="10" r="1.5" fill="#333"/>` +
+        `<rect x="21" y="20" width="18" height="18" rx="4" fill="#37474F" stroke="#333" stroke-width="1.5"/>` +
+        `<rect x="21" y="38" width="8" height="14" rx="3" fill="#263238" stroke="#333" stroke-width="1"/>` +
+        `<rect x="31" y="38" width="8" height="14" rx="3" fill="#263238" stroke="#333" stroke-width="1"/>` +
+        `<rect x="21" y="50" width="8" height="4" rx="2" fill="#222"/><rect x="31" y="50" width="8" height="4" rx="2" fill="#222"/>`,
+        '0 0 60 56'),
+
+      childWithVest: S(
+        `<circle cx="30" cy="10" r="9" fill="#FFCC80" stroke="#333" stroke-width="1.5"/>` +
+        `<path d="M24 8 Q24 2 30 2 Q36 2 36 8" fill="#3E2723"/>` +
+        `<circle cx="27" cy="10" r="1.5" fill="#333"/><circle cx="33" cy="10" r="1.5" fill="#333"/>` +
+        `<rect x="21" y="20" width="18" height="18" rx="4" fill="#FFEB3B" stroke="#333" stroke-width="1.5"/>` +
+        `<rect x="21" y="26" width="18" height="3" rx="1" fill="#FF6F00"/>` +
+        `<rect x="21" y="32" width="18" height="3" rx="1" fill="#FF6F00"/>` +
+        `<rect x="21" y="38" width="8" height="14" rx="3" fill="#263238" stroke="#333" stroke-width="1"/>` +
+        `<rect x="31" y="38" width="8" height="14" rx="3" fill="#263238" stroke="#333" stroke-width="1"/>` +
+        `<rect x="21" y="50" width="8" height="4" rx="2" fill="#222"/><rect x="31" y="50" width="8" height="4" rx="2" fill="#222"/>`,
+        '0 0 60 56'),
+
+      skateboardKid: S(
+        `<circle cx="28" cy="10" r="8" fill="#FFCC80" stroke="#333" stroke-width="1.2"/>` +
+        `<path d="M22 8 Q22 2 28 2 Q34 2 34 8" fill="#3E2723"/>` +
+        `<circle cx="26" cy="10" r="1.2" fill="#333"/><circle cx="30" cy="10" r="1.2" fill="#333"/>` +
+        `<rect x="20" y="18" width="16" height="14" rx="3" fill="#7B1FA2" stroke="#333" stroke-width="1"/>` +
+        `<rect x="20" y="32" width="7" height="12" rx="2.5" fill="#263238"/><rect x="29" y="32" width="7" height="12" rx="2.5" fill="#263238"/>` +
+        `<rect x="14" y="46" width="28" height="4" rx="2" fill="#8D6E63" stroke="#333" stroke-width="1.2"/>` +
+        `<circle cx="18" cy="52" r="3.5" fill="#444" stroke="#333" stroke-width="1"/><circle cx="38" cy="52" r="3.5" fill="#444" stroke="#333" stroke-width="1"/>`,
+        '0 0 56 58'),
+
+      moon: S(
+        `<circle cx="30" cy="30" r="18" fill="#FFF9C4"/>` +
+        `<circle cx="38" cy="24" r="14" fill="#0a1628"/>` +
+        `<circle cx="22" cy="24" r="2" fill="#FFF176" opacity="0.4"/><circle cx="28" cy="36" r="1.5" fill="#FFF176" opacity="0.3"/>`,
+        '0 0 60 60'),
+
+      star: S(`<polygon points="30,4 34,20 50,20 37,30 42,46 30,36 18,46 23,30 10,20 26,20" fill="#FFF9C4" opacity="0.8"/>`, '0 0 60 50'),
+
+      streetLamp: S(
+        `<rect x="27" y="16" width="6" height="44" rx="2" fill="#757575" stroke="#333" stroke-width="1.5"/>` +
+        `<rect x="20" y="10" width="20" height="10" rx="3" fill="#424242" stroke="#333" stroke-width="1.5"/>` +
+        `<ellipse cx="30" cy="22" rx="14" ry="20" fill="rgba(255,235,59,0.12)"/>` +
+        `<rect x="24" y="12" width="12" height="5" rx="2" fill="#FFE082"/>`,
+        '0 0 60 62'),
+
+      carNight: (color='#546E7A') => S(
+        `<rect x="2" y="20" width="56" height="22" rx="6" fill="${color}" stroke="#333" stroke-width="2"/>` +
+        `<path d="M12 20 Q15 6 30 6 Q45 6 48 20" fill="${color}" stroke="#333" stroke-width="2"/>` +
+        `<rect x="16" y="9" width="12" height="10" rx="2" fill="#37474F" stroke="#444" stroke-width="1"/>` +
+        `<rect x="32" y="9" width="12" height="10" rx="2" fill="#37474F" stroke="#444" stroke-width="1"/>` +
+        `<circle cx="14" cy="44" r="6.5" fill="#333" stroke="#222" stroke-width="2"/><circle cx="14" cy="44" r="3" fill="#666"/>` +
+        `<circle cx="46" cy="44" r="6.5" fill="#333" stroke="#222" stroke-width="2"/><circle cx="46" cy="44" r="3" fill="#666"/>` +
+        `<rect x="50" y="24" width="8" height="6" rx="2" fill="#FFEB3B"/><ellipse cx="58" cy="30" rx="8" ry="12" fill="rgba(255,235,59,0.15)"/>` +
+        `<rect x="0" y="24" width="5" height="5" rx="1.5" fill="#F44336"/>`,
+        '0 0 62 52'),
+
+      cat: S(
+        `<ellipse cx="30" cy="34" rx="12" ry="8" fill="#616161" stroke="#333" stroke-width="1.2"/>` +
+        `<circle cx="22" cy="28" r="6" fill="#616161" stroke="#333" stroke-width="1.2"/>` +
+        `<polygon points="17,22 15,14 20,20" fill="#616161" stroke="#333" stroke-width="1"/>` +
+        `<polygon points="27,22 29,14 24,20" fill="#616161" stroke="#333" stroke-width="1"/>` +
+        `<circle cx="20" cy="27" r="1.5" fill="#AED581"/><circle cx="24" cy="27" r="1.5" fill="#AED581"/>` +
+        `<path d="M42 32 Q52 28 50 36" fill="#616161" stroke="#333" stroke-width="1"/>` +
+        `<rect x="18" y="40" width="4" height="8" rx="1.5" fill="#616161"/><rect x="26" y="40" width="4" height="8" rx="1.5" fill="#616161"/>` +
+        `<rect x="34" y="40" width="4" height="8" rx="1.5" fill="#616161"/><rect x="38" y="40" width="4" height="8" rx="1.5" fill="#616161"/>`,
+        '0 0 56 50'),
+
+      houseNight: S(
+        `<rect x="10" y="26" width="40" height="30" rx="1" fill="#37474F" stroke="#222" stroke-width="2"/>` +
+        `<polygon points="6,28 30,4 54,28" fill="#4E342E" stroke="#222" stroke-width="2"/>` +
+        `<rect x="23" y="38" width="14" height="18" rx="1" fill="#3E2723" stroke="#222" stroke-width="1"/>` +
+        `<rect x="14" y="30" width="9" height="9" rx="1" fill="#FFF9C4" stroke="#333" stroke-width="0.8" opacity="0.7"/>` +
+        `<rect x="37" y="30" width="9" height="9" rx="1" fill="#FFF9C4" stroke="#333" stroke-width="0.8" opacity="0.7"/>`,
+        '0 0 60 58'),
+
+      buildingNight: (color='#37474F') => S(
+        `<rect x="5" y="2" width="50" height="56" rx="2" fill="${color}" stroke="#222" stroke-width="2"/>` +
+        `<rect x="12" y="8" width="10" height="10" rx="1.5" fill="#FFF9C4" stroke="#333" stroke-width="0.8" opacity="0.5"/>` +
+        `<rect x="28" y="8" width="10" height="10" rx="1.5" fill="#FFF9C4" stroke="#333" stroke-width="0.8" opacity="0.7"/>` +
+        `<rect x="12" y="24" width="10" height="10" rx="1.5" fill="#FFF9C4" stroke="#333" stroke-width="0.8" opacity="0.3"/>` +
+        `<rect x="28" y="24" width="10" height="10" rx="1.5" fill="#FFF9C4" stroke="#333" stroke-width="0.8" opacity="0.6"/>` +
+        `<rect x="12" y="40" width="10" height="10" rx="1.5" fill="#FFF9C4" stroke="#333" stroke-width="0.8" opacity="0.8"/>` +
+        `<rect x="28" y="40" width="10" height="10" rx="1.5" fill="#FFF9C4" stroke="#333" stroke-width="0.8" opacity="0.4"/>`,
+        '0 0 56 60')
     };
   }
 
@@ -6940,53 +7106,53 @@ class PedestrianGame {
       {
         id: 'school', label: 'Пред училището', cssClass: 'danger-scene-school',
         elements: [
-          // === ОПАСНОСТИ (5) — разпръснати, лесни за тапване ===
-          { emoji: '🧒🎧', x: 52, y: 42, isDanger: true, name: 'Дете със слушалки пресича', desc: 'Махни слушалките — трябва да чуваш колите!' },
-          { emoji: '🏃', x: 78, y: 50, isDanger: true, name: 'Дете тича зад автобус', desc: 'Не тичай зад автобус — шофьорите не те виждат!' },
-          { emoji: '🧒', x: 90, y: 38, isDanger: true, name: 'Дете пресича без пътека', desc: 'Избери безопасно място за пресичане! Ако наблизо има пешеходна пътека — използвай я!' },
-          { emoji: '📱', x: 28, y: 46, isDanger: true, name: 'Дете гледа телефон', desc: 'Телефонът чака — първо пресечи безопасно!' },
-          { emoji: '🛴', x: 42, y: 54, isDanger: true, name: 'Тротинетка между автомобилите', desc: 'Не се промъквай с тротинетка между автомобилите. Водачите може да не те видят.' },
+          // === ОПАСНОСТИ (5) ===
+          { emoji: '🧒🎧', x: 52, y: 38, isDanger: true, name: 'Дете със слушалки пресича', desc: 'Махни слушалките — трябва да чуваш колите!', spriteKey: 'childWithHeadphones' },
+          { emoji: '🏃', x: 78, y: 44, isDanger: true, name: 'Дете тича зад автобус', desc: 'Не тичай зад автобус — шофьорите не те виждат!', spriteKey: 'childRunning' },
+          { emoji: '🧒', x: 88, y: 36, isDanger: true, name: 'Дете пресича без пътека', desc: 'Избери безопасно място за пресичане! Ако наблизо има пешеходна пътека — използвай я!', spriteKey: 'child_green' },
+          { emoji: '📱', x: 28, y: 42, isDanger: true, name: 'Дете гледа телефон', desc: 'Телефонът чака — първо пресечи безопасно!', spriteKey: 'childWithPhone' },
+          { emoji: '🛴', x: 42, y: 48, isDanger: true, name: 'Тротинетка между автомобилите', desc: 'Не се промъквай с тротинетка между автомобилите. Водачите може да не те видят.', spriteKey: 'scooterOnRoad' },
           // === БЕЗОПАСНИ ===
-          { emoji: '🏫', x: 40, y: 3, isDanger: false, name: 'Училище', desc: '' },
-          { emoji: '🚸', x: 60, y: 10, isDanger: false, name: 'Знак Внимание деца', desc: '' },
-          { emoji: '🌳', x: 5, y: 6, isDanger: false, name: 'Дърво', desc: '' },
-          { emoji: '🌲', x: 92, y: 6, isDanger: false, name: 'Дърво', desc: '' },
-          { emoji: '🚐', x: 12, y: 50, isDanger: false, name: 'Училищен бус', desc: '' },
-          { emoji: '🚗', x: 65, y: 44, isDanger: false, name: 'Кола', desc: '' },
-          { emoji: '👨\u200d👧\u200d👦', x: 8, y: 22, isDanger: false, name: 'Баща довежда деца', desc: '' },
-          { emoji: '👩\u200d🏫', x: 75, y: 20, isDanger: false, name: 'Учителка посреща', desc: '' },
-          { emoji: '🎒', x: 25, y: 20, isDanger: false, name: 'Деца с раници', desc: '' },
-          { emoji: '🚶\u200d♀️', x: 10, y: 65, isDanger: false, name: 'Майка на тротоара', desc: '' },
-          { emoji: '🐕', x: 85, y: 68, isDanger: false, name: 'Куче', desc: '' },
-          { emoji: '🛑', x: 48, y: 30, isDanger: false, name: 'СТОП знак', desc: '' },
-          { emoji: '🧒', x: 55, y: 68, isDanger: false, name: 'Дете чака на тротоара', desc: '' },
+          { emoji: '🏫', x: 30, y: 2, isDanger: false, name: 'Училище', desc: '', spriteKey: 'schoolBuilding', sizeClass: 'size-building' },
+          { emoji: '🚸', x: 64, y: 20, isDanger: false, name: 'Знак Внимание деца', desc: '', spriteKey: 'childrenSign' },
+          { emoji: '🌳', x: 4, y: 6, isDanger: false, name: 'Дърво', desc: '', spriteKey: 'tree', sizeClass: 'size-building' },
+          { emoji: '🌲', x: 90, y: 8, isDanger: false, name: 'Дърво', desc: '', spriteKey: 'tree', sizeClass: 'size-building' },
+          { emoji: '🚐', x: 10, y: 44, isDanger: false, name: 'Училищен бус', desc: '', spriteKey: 'schoolVan', sizeClass: 'size-vehicle' },
+          { emoji: '🚗', x: 64, y: 40, isDanger: false, name: 'Кола', desc: '', spriteKey: 'car_blue', sizeClass: 'size-vehicle' },
+          { emoji: '👨\u200d👧\u200d👦', x: 6, y: 18, isDanger: false, name: 'Баща довежда деца', desc: '', spriteKey: 'fatherWithKids' },
+          { emoji: '👩\u200d🏫', x: 76, y: 18, isDanger: false, name: 'Учителка посреща', desc: '', spriteKey: 'teacher' },
+          { emoji: '🎒', x: 24, y: 20, isDanger: false, name: 'Деца с раници', desc: '', spriteKey: 'kidsWithBackpacks' },
+          { emoji: '🚶\u200d♀️', x: 8, y: 62, isDanger: false, name: 'Майка на тротоара', desc: '', spriteKey: 'pedestrian' },
+          { emoji: '🐕', x: 82, y: 64, isDanger: false, name: 'Куче', desc: '', spriteKey: 'dogOnLeash' },
+          { emoji: '🛑', x: 46, y: 26, isDanger: false, name: 'СТОП знак', desc: '', spriteKey: 'stopSign' },
+          { emoji: '🧒', x: 54, y: 62, isDanger: false, name: 'Дете чака на тротоара', desc: '', spriteKey: 'child_orange' },
         ]
       },
       {
         id: 'night', label: 'Нощна разходка', cssClass: 'danger-scene-night',
         elements: [
-          // === ОПАСНОСТИ (5) — разпръснати по целия екран ===
-          { emoji: '🚶', x: 18, y: 42, isDanger: true, name: 'Дете без жилетка', desc: 'Носи светлоотразителна жилетка нощем — шофьорите не те виждат!' },
-          { emoji: '🧒', x: 65, y: 50, isDanger: true, name: 'Дете ходи по пътя', desc: 'Ходи САМО по тротоара, особено на тъмно!' },
-          { emoji: '📱', x: 38, y: 38, isDanger: true, name: 'Дете гледа телефон', desc: 'Телефонът те заслепява нощем — не виждаш колите!' },
-          { emoji: '🛹', x: 82, y: 44, isDanger: true, name: 'Скейтборд на тъмно', desc: 'Не карай скейтборд нощем на пътя!' },
-          { emoji: '🧒🎧', x: 52, y: 48, isDanger: true, name: 'Слушалки на тъмно', desc: 'На тъмно чуването е още по-важно — махни слушалките!' },
+          // === ОПАСНОСТИ (5) ===
+          { emoji: '🚶', x: 18, y: 38, isDanger: true, name: 'Дете без жилетка', desc: 'Носи светлоотразителна жилетка нощем — шофьорите не те виждат!', spriteKey: 'childDark' },
+          { emoji: '🧒', x: 65, y: 44, isDanger: true, name: 'Дете ходи по пътя', desc: 'Ходи САМО по тротоара, особено на тъмно!', spriteKey: 'childDark' },
+          { emoji: '📱', x: 38, y: 36, isDanger: true, name: 'Дете гледа телефон', desc: 'Телефонът те заслепява нощем — не виждаш колите!', spriteKey: 'childWithPhone' },
+          { emoji: '🛹', x: 82, y: 42, isDanger: true, name: 'Скейтборд на тъмно', desc: 'Не карай скейтборд нощем на пътя!', spriteKey: 'skateboardKid' },
+          { emoji: '🧒🎧', x: 52, y: 46, isDanger: true, name: 'Слушалки на тъмно', desc: 'На тъмно чуването е още по-важно — махни слушалките!', spriteKey: 'childWithHeadphones' },
           // === БЕЗОПАСНИ ===
-          { emoji: '🌙', x: 85, y: 2, isDanger: false, name: 'Луна', desc: '' },
-          { emoji: '⭐', x: 72, y: 4, isDanger: false, name: 'Звезда', desc: '' },
-          { emoji: '⭐', x: 30, y: 2, isDanger: false, name: 'Звезда', desc: '' },
-          { emoji: '⭐', x: 55, y: 5, isDanger: false, name: 'Звезда', desc: '' },
-          { emoji: '🏠', x: 6, y: 10, isDanger: false, name: 'Къща', desc: '' },
-          { emoji: '🏢', x: 28, y: 8, isDanger: false, name: 'Сграда', desc: '' },
-          { emoji: '🏠', x: 68, y: 10, isDanger: false, name: 'Къща', desc: '' },
-          { emoji: '💡', x: 15, y: 22, isDanger: false, name: 'Лампа', desc: '' },
-          { emoji: '💡', x: 48, y: 22, isDanger: false, name: 'Лампа', desc: '' },
-          { emoji: '💡', x: 88, y: 22, isDanger: false, name: 'Лампа', desc: '' },
-          { emoji: '🚗', x: 42, y: 54, isDanger: false, name: 'Кола с фарове', desc: '' },
-          { emoji: '🚙', x: 75, y: 40, isDanger: false, name: 'Кола', desc: '' },
-          { emoji: '🧑\u200d🦺', x: 5, y: 62, isDanger: false, name: 'Човек с жилетка ✓', desc: '' },
-          { emoji: '👩\u200d👦', x: 90, y: 65, isDanger: false, name: 'Майка с дете', desc: '' },
-          { emoji: '🐈', x: 72, y: 70, isDanger: false, name: 'Котка', desc: '' },
+          { emoji: '🌙', x: 84, y: 1, isDanger: false, name: 'Луна', desc: '', spriteKey: 'moon', sizeClass: 'size-small' },
+          { emoji: '⭐', x: 72, y: 2, isDanger: false, name: 'Звезда', desc: '', spriteKey: 'star', sizeClass: 'size-small' },
+          { emoji: '⭐', x: 30, y: 1, isDanger: false, name: 'Звезда', desc: '', spriteKey: 'star', sizeClass: 'size-small' },
+          { emoji: '⭐', x: 55, y: 3, isDanger: false, name: 'Звезда', desc: '', spriteKey: 'star', sizeClass: 'size-small' },
+          { emoji: '🏠', x: 4, y: 6, isDanger: false, name: 'Къща', desc: '', spriteKey: 'houseNight', sizeClass: 'size-building' },
+          { emoji: '🏢', x: 26, y: 4, isDanger: false, name: 'Сграда', desc: '', spriteKey: 'buildingNight_dark', sizeClass: 'size-building' },
+          { emoji: '🏠', x: 66, y: 6, isDanger: false, name: 'Къща', desc: '', spriteKey: 'houseNight', sizeClass: 'size-building' },
+          { emoji: '💡', x: 14, y: 14, isDanger: false, name: 'Лампа', desc: '', spriteKey: 'streetLamp' },
+          { emoji: '💡', x: 46, y: 14, isDanger: false, name: 'Лампа', desc: '', spriteKey: 'streetLamp' },
+          { emoji: '💡', x: 86, y: 14, isDanger: false, name: 'Лампа', desc: '', spriteKey: 'streetLamp' },
+          { emoji: '🚗', x: 40, y: 44, isDanger: false, name: 'Кола с фарове', desc: '', spriteKey: 'carNight_grey', sizeClass: 'size-vehicle' },
+          { emoji: '🚙', x: 72, y: 38, isDanger: false, name: 'Кола', desc: '', spriteKey: 'carNight_blue', sizeClass: 'size-vehicle' },
+          { emoji: '🧑\u200d🦺', x: 4, y: 60, isDanger: false, name: 'Човек с жилетка ✓', desc: '', spriteKey: 'childWithVest' },
+          { emoji: '👩\u200d👦', x: 86, y: 62, isDanger: false, name: 'Майка с дете', desc: '', spriteKey: 'motherWithChild' },
+          { emoji: '🐈', x: 70, y: 66, isDanger: false, name: 'Котка', desc: '', spriteKey: 'cat', sizeClass: 'size-small' },
         ]
       }
     ];
@@ -7046,9 +7212,18 @@ class PedestrianGame {
       const sprites = this.dangerSprites;
       let spriteHtml = null;
       if (el.spriteKey) {
-        if (el.spriteKey === 'building_grey') spriteHtml = sprites.building('#78909C');
-        else if (el.spriteKey === 'car_red') spriteHtml = sprites.car('#E53935');
-        else if (el.spriteKey === 'car_blue') spriteHtml = sprites.car('#42A5F5');
+        // Parameterized sprite mapping
+        const paramMap = {
+          'building_grey': () => sprites.building('#78909C'),
+          'car_red': () => sprites.car('#E53935'),
+          'car_blue': () => sprites.car('#42A5F5'),
+          'child_green': () => sprites.child('#66BB6A'),
+          'child_orange': () => sprites.child('#FF9800'),
+          'carNight_grey': () => sprites.carNight('#546E7A'),
+          'carNight_blue': () => sprites.carNight('#37474F'),
+          'buildingNight_dark': () => sprites.buildingNight('#2C3E50'),
+        };
+        if (paramMap[el.spriteKey]) spriteHtml = paramMap[el.spriteKey]();
         else if (typeof sprites[el.spriteKey] === 'function') spriteHtml = sprites[el.spriteKey]();
         else if (typeof sprites[el.spriteKey] === 'string') spriteHtml = sprites[el.spriteKey];
       }
